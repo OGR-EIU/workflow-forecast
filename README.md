@@ -1,1 +1,1 @@
-# Template repository for `Forecasters`
+# Template repository for POC `forecasters`
