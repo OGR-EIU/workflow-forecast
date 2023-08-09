@@ -1,1 +1,1 @@
-# Template repository for POC `forecasters`
+# Workflow executer for model forecasts
