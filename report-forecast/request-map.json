@@ -1,0 +1,18 @@
+[
+    {
+        "key": "FRED.US.Q.S0LEV.RGDP",
+        "name": "US_Q_RGDP"
+    },
+    {
+        "key": "FRED.US.Q.S0LEV.NGDP",
+        "name": "US_Q_NGDP"
+    },
+    {
+        "key": "FRED.US.Q.SULEV.BOP_CA",
+        "name": "US_Q_BOP_CA_SU"
+    },
+    {
+        "key": "FRED.US.M.SULEV.NIR_ST",
+        "name": "US_M_NIR_ST"
+    }
+]
