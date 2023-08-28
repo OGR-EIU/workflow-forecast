@@ -1,4 +1,4 @@
-function run_forecast(model_dir, input_mapping_path, input_data_path, output_mapping_path, output_data_path, is_tc)
+function runner(model_dir, input_mapping_path, input_data_path, output_mapping_path, output_data_path, is_tc)
     addpath("../../iris");
     addpath("../../toolset");
     addpath("../../model-infra");
