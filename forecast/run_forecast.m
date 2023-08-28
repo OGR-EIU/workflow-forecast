@@ -1,7 +1,7 @@
 function run_forecast(model_dir, input_mapping_path, input_data_path, output_mapping_path, output_data_path, is_tc)
-    addpath ../iris -end
-    addpath ../toolset -end
-    addpath ../model-infra -end
+    addpath("../iris");
+    addpath("../toolset");
+    addpath("../model-infra");
     iris.startup;
 
     % check if running from TC
