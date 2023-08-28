@@ -16,11 +16,11 @@
         "name": "NER_USD"
     },
     {
-        "key": "PREM.EA.Q.SULEV.NIR_ST",
+        "key": "PREM.EA.Q.S0LEV.NIR_ST",
         "name": "NIR_ST"
     },
     {
-        "key": "PREM.EA.Q.SULEV.NIR_ST_TND",
+        "key": "PREM.EA.Q.S0LEV.NIR_ST_TND",
         "name": "NIR_ST_TND"
     },
     {

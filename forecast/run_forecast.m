@@ -1,7 +1,7 @@
 function run_forecast(model_dir, input_mapping_path, input_data_path, output_mapping_path, output_data_path, is_tc)
-    addpath("../../iris");
-    addpath("../../toolset");
-    addpath("../../model-infra");
+    addpath("C:\Users\Nguyen\OneDrive\Documents\GitHub\IRIS-Toolbox");
+    addpath("C:\Users\Nguyen\GitHub\toolset");
+    addpath("C:\Users\Nguyen\GitHub\model-infra");
     iris.startup;
 
     % check if running from TC
