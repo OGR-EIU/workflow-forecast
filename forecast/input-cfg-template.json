@@ -1,50 +1,52 @@
-[
-    {
-        "data_source": "PREM",
-        "geography": "@(geography)",
-        "frequency": "Q",
-        "transformation": "S0LEV",
-        "concept": "RGDP",
-        "snapshot_time": "@(snapshot_time)"
-    },
-    {
-        "data_source": "POSTP",
-        "geography": "@(geography)",
-        "frequency": "Q",
-        "transformation": "S0LEV",
-        "concept": "NGDP",
-        "snapshot_time": "@(snapshot_time)"
-    },
-    {
-        "data_source": "PREM",
-        "geography": "@(geography)",
-        "frequency": "Q",
-        "transformation": "S0LEV",
-        "concept": "RGDP_TND",
-        "snapshot_time": "@(snapshot_time)"
-    },
-    {
-        "data_source": "PREM",
-        "geography": "@(geography)",
-        "frequency": "Q",
-        "transformation": "SULEV",
-        "concept": "NIR_ST",
-        "snapshot_time": "@(snapshot_time)"
-    },
-    {
-        "data_source": "PREM",
-        "geography": "@(geography)",
-        "frequency": "Q",
-        "transformation": "SULEV",
-        "concept": "NIR_ST_TND",
-        "snapshot_time": "@(snapshot_time)"
-    },
-    {
-        "data_source": "POSTP",
-        "geography": "@(geography)",
-        "frequency": "Q",
-        "transformation": "S0LEV",
-        "concept": "BOP_CA",
-        "snapshot_time": "@(snapshot_time)"
-    }
-]
+{
+    "json_request": [
+        {
+            "data_source": "PREM",
+            "geography": "@(geography)",
+            "frequency": "Q",
+            "transformation": "S0LEV",
+            "concept": "RGDP",
+            "snapshot_time": "@(snapshot_time)"
+        },
+        {
+            "data_source": "POSTP",
+            "geography": "@(geography)",
+            "frequency": "Q",
+            "transformation": "S0LEV",
+            "concept": "NGDP",
+            "snapshot_time": "@(snapshot_time)"
+        },
+        {
+            "data_source": "PREM",
+            "geography": "@(geography)",
+            "frequency": "Q",
+            "transformation": "S0LEV",
+            "concept": "RGDP_TND",
+            "snapshot_time": "@(snapshot_time)"
+        },
+        {
+            "data_source": "PREM",
+            "geography": "@(geography)",
+            "frequency": "Q",
+            "transformation": "SULEV",
+            "concept": "NIR_ST",
+            "snapshot_time": "@(snapshot_time)"
+        },
+        {
+            "data_source": "PREM",
+            "geography": "@(geography)",
+            "frequency": "Q",
+            "transformation": "SULEV",
+            "concept": "NIR_ST_TND",
+            "snapshot_time": "@(snapshot_time)"
+        },
+        {
+            "data_source": "POSTP",
+            "geography": "@(geography)",
+            "frequency": "Q",
+            "transformation": "S0LEV",
+            "concept": "BOP_CA",
+            "snapshot_time": "@(snapshot_time)"
+        }
+    ]
+}
