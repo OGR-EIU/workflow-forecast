@@ -63,7 +63,7 @@ jobs:
         run: |
           forecast_branch_name=${{ steps.naming.outputs.forecast_branch_name }}
           echo "$forecast_branch_name" > ./forecast_branch_name
-          echo "${{ steps.naming.outputs }} > ./naming
+          echo "${{ steps.naming.outputs.* }}" > ./naming
           git add ./prepare_local_environment.py
           git add ./forecast_branch_name
           git add ./naming
