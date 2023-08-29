@@ -172,7 +172,7 @@ object ForecastRunner : BuildType({
             workingDir = "settings/report"
             command = file {
                 filename = "create_input.py"
-                scriptArguments = """--config-path input-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.adhoc.snapshot-time%","geography":"%workflow.forecast.country%"}'"""
+                scriptArguments = """--config-path %workflow.forecast.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.adhoc.snapshot-time%"}'"""
             }
         }
         python {
