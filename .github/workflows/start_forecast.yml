@@ -72,6 +72,7 @@ jobs:
 
       - name: Create and commit the analyst forecast branch
         run: |
-          git switch -c ${{ steps.naming.outputs.forecast_branch_name }}-analyst
+          forecast_branch_name=${{ steps.naming.outputs.forecast_branch_name }}
+          git switch -c "$forecast_branch_name-analyst"
           git push origin "$forecast_branch_name-analyst"
 
