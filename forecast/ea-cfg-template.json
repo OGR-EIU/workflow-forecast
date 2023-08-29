@@ -2,7 +2,7 @@
     "json_request": [
         {
             "data_source": "PREM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "RGDP",
@@ -10,7 +10,7 @@
         },
         {
             "data_source": "POSTP",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "NGDP",
@@ -18,7 +18,7 @@
         },
         {
             "data_source": "POSTP",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "SULEV",
             "concept": "NER_USD",
@@ -26,7 +26,7 @@
         },
         {
             "data_source": "PREM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "RGDP_TND",
@@ -34,7 +34,7 @@
         },
         {
             "data_source": "PREM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "NIR_ST",
@@ -42,7 +42,7 @@
         },
         {
             "data_source": "PREM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "NIR_ST_TND",
@@ -50,7 +50,7 @@
         },
         {
             "data_source": "POSTP",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "BOP_CA",
@@ -58,7 +58,7 @@
         },
         {
             "data_source": "CTRYM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "RES_RGDP_GAP",
@@ -66,7 +66,7 @@
         },
         {
             "data_source": "CTRYM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "RES_ROC_RGDP_TND",
@@ -74,7 +74,7 @@
         },
         {
             "data_source": "CTRYM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "RES_ROC_PGDP",
@@ -82,7 +82,7 @@
         },
         {
             "data_source": "CTRYM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "SULEV",
             "concept": "RES_ROC_NER_USD",
@@ -90,7 +90,7 @@
         },
         {
             "data_source": "CTRYM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "RES_FD_GAP",
@@ -98,7 +98,7 @@
         },
         {
             "data_source": "CTRYM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "RES_NIR_ST_GAP",
@@ -106,7 +106,7 @@
         },
         {
             "data_source": "CTRYM",
-            "geography": "@(geography)",
+            "geography": "EA",
             "frequency": "Q",
             "transformation": "S0LEV",
             "concept": "RES_NIR_ST_TND",
