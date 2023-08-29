@@ -1,5 +1,8 @@
 name: Prepare local forecast package
 
+permissions:
+  actions: write
+
 on:
   workflow_dispatch:
     inputs:
@@ -11,7 +14,7 @@ on:
            - "Model-US"
            - "Model-EA"
            - "Model-CZ"
-      model_repo_comittish:
+      model_repo_commitish:
           description: "Country model version"
           required: true
           type: string
@@ -21,17 +24,58 @@ jobs:
   create_local_environment_script:
 
     runs-on: ubuntu-latest
+    env:
+      CI_AUTHOR: Production workflow
+      CI_EMAIL: "noreply@ogresearch.com"
 
     steps:
       - name: Clone workflow repo
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+          token: ${{ secrets.token_with_all_access }}
+
+      - name: Establish identity
+        run: |
+          git config user.name "${{ env.CI_AUTHOR }}"
+          git config user.email "${{ env.CI_EMAIL }}"
+
+      - name: Create timestamp and branch name
+        id: naming
+        run: |
+          timestamp="$(date -uIseconds)U"
+          forecast_branch_name="forecast-${{ inputs.model_repo }}-$timestamp"
+          forecast_branch_name="${forecast_branch_name//:/-}"
+          echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
+          echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
+
+      - name: Create the main forecast branch
+        run: |
+          git switch -c ${{ steps.naming.outputs.forecast_branch_name }}-main
 
       - name: Populate script with input parameters
         run: |
           cp ./.github/workflows/prepare_local_environment.py ./prepare_local_environment.py
+          echo "*********************************"
+          echo ${{ inputs.model_repo_commitish }}
+          echo "*********************************"
           sed -i "s/@(model_repo)/${{ inputs.model_repo }}/g" ./prepare_local_environment.py
           sed -i "s/@(model_repo_commitish)/${{ inputs.model_repo_commitish }}/g" ./prepare_local_environment.py
 
+      - name: Commit the main forecast branch
+        run: |
+          forecast_branch_name=${{ steps.naming.outputs.forecast_branch_name }}
+          echo "$forecast_branch_name" > ./forecast_branch_name
+          echo "${{ steps.naming.outputs.* }}" > ./naming
+          git add ./prepare_local_environment.py
+          git add ./forecast_branch_name
+          git add ./naming
+          git commit -m "Prepared $forecast_branch_name-main"
+          git push origin "$forecast_branch_name-main"
+
+      - name: Create and commit the analyst forecast branch
+        run: |
+          forecast_branch_name=${{ steps.naming.outputs.forecast_branch_name }}
+          git switch -c "$forecast_branch_name-analyst"
+          git push origin "$forecast_branch_name-analyst"
 
