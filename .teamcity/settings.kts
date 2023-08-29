@@ -182,6 +182,8 @@ object ForecastRunner : BuildType({
         python {
             name = "Forecast step: Download tunes from Google Drive"
             workingDir = "toolset"
+            environment = venv {
+            }
             command = file {
                 filename = "download_file_from_gdrive.py"
                 scriptArguments = "--request-id %workflow.forecast.request-id% --output-path tunes.csv"
