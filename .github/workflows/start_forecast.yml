@@ -31,7 +31,7 @@ jobs:
       - name: Populate script with input parameters
         run: |
           cp ./.github/workflows/prepare_local_environment.py ./prepare_local_environment.py
-          sed -i "s/@(model_repo)/${{ inputs.model_repo }}" ./prepare_local_environment.py
-          sed -i "s/@(model_repo_commitish)/${{ inputs.model_repo_commitish }}" ./prepare_local_environment.py
+          sed -i "s/@(model_repo)/${{ inputs.model_repo }}/g" ./prepare_local_environment.py
+          sed -i "s/@(model_repo_commitish)/${{ inputs.model_repo_commitish }}/g" ./prepare_local_environment.py
 
 
