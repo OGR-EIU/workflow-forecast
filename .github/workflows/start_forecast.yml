@@ -1,0 +1,27 @@
+on:
+  workflow_dispatch:
+    inputs:
+      model_repo:
+         description: "Country model"
+         required: true
+         type: choice
+         options:
+           - "[US] United States"
+           - "[EA] Euro Area"
+           - "[CZ] Czech Republic"
+      model_repo_version:
+          description: "Country model version"
+          required: true
+          type: string
+          default: HEAD
+
+jobs:
+  create_local_environment_script:
+    runs-on: ubunut-latest
+    steps:
+      - name: Clone workflow repo
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0
+      - run: |
+        
