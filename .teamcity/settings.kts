@@ -42,6 +42,7 @@ object ForecastRunner : BuildType({
 
     params {
         text("email.subject", "EIU PoC Forecast Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
+        param("workflow.forecast.request-id", "")
         param("matlab.code.forecast", "runner(['../../model-' lower('%workflow.forecast.country%')], [lower('%workflow.forecast.country%') '-input-mapping.json'], '../../api-client/request-output.json', [lower('%workflow.forecast.country%') '-output-mapping.json'], 'forecast-output.json', true);")
         text("workflow.dependencies.iris.commit", "HEAD", label = "IRIS toolbox commit", description = "Commit id of the IRIS toolbox repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.settings.commit", "HEAD", label = "Workflow Settings commit", description = "Commit id of the Workflow Settings repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
