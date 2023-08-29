@@ -24,9 +24,9 @@ jobs:
 
     steps:
       - name: Clone workflow repo
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Create timestamp and branch name
         id: naming
