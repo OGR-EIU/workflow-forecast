@@ -179,6 +179,14 @@ object ForecastRunner : BuildType({
                 scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment './report/results/report-forecast.bundle.html'"
             }
         }
+        python {
+            name = "Forecast step: Download tunes from Google Drive"
+            workingDir = "toolset"
+            command = file {
+                filename = "download_file_from_gdrive.py"
+                scriptArguments = "--request-id %workflow.forecast.request-id% --output-path tunes.csv"
+            }
+        }
     }
 
     requirements {
