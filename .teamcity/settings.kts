@@ -93,6 +93,9 @@ object ForecastRunner : BuildType({
                 toolset=%workflow.dependencies.toolset.commit%
                 model_infra=%workflow.dependencies.model-infra.commit%
                 model_template=%workflow.dependencies.model-template.commit%
+                model_cz=%workflow.dependencies.model-cz.commit%
+                model_ea=%workflow.dependencies.model-ea.commit%
+                model_us=%workflow.dependencies.model-us.commit%
                 
                 cd api-client
                 if [ ${'$'}api_client != "HEAD" ]; then git checkout ${'$'}api_client; fi
@@ -106,6 +109,12 @@ object ForecastRunner : BuildType({
                 if [ ${'$'}model_infra != "HEAD" ]; then git checkout ${'$'}model_infra; fi
                 cd ../model-template
                 if [ ${'$'}model_template != "HEAD" ]; then git checkout ${'$'}model_template; fi
+                cd ../model-cz
+                if [ ${'$'}model_cz != "HEAD" ]; then git checkout ${'$'}model_cz; fi
+                cd ../model-ea
+                if [ ${'$'}model_ea != "HEAD" ]; then git checkout ${'$'}model_ea; fi
+                cd ../model-us
+                if [ ${'$'}model_us != "HEAD" ]; then git checkout ${'$'}model_us; fi
             """.trimIndent()
         }
         python {
