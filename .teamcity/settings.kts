@@ -44,7 +44,7 @@ object ForecastRunner : BuildType({
         text("email.subject", "EIU PoC Forecast Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
         select("workflow.forecast.request-id", "", label = "Request id", description = "Google Drive file id", display = ParameterDisplay.PROMPT,
                 options = listOf("CZ scenario 1" to "1M4r9Xp1aQ_ryFdt9qIL_zPLJ6NfitsKJ", "US scenario 2" to "1Lmr-yiVvfWZQFLbj3k0uwMK7k0OIOgUS", "CZ scenario 2" to "1LvEP-31khLkjC59HM_e2tGHbRgqwxNjE", "EA scenario 1" to "1Ljf8u1ExyLVNmgTSpWnKxyB5Aqn5feRn", "EA scenario 2" to "1LkB7ulgEB6XLiqvTJrPeAQtoWYCLeBtx", "US scenario 1" to "1Lp6E1CIxPqSy6wZ4NZDaf2KmNnLeuhRp"))
-        param("matlab.code.forecast", "runner(['../../model-' lower('%workflow.forecast.country%')], [lower('%workflow.forecast.country%') '-input-mapping.json'], '../../api-client/request-output.json', '../../toolset/tunes.csv', [lower('%workflow.forecast.country%') '-output-mapping.json'], 'forecast-output.json', true);")
+        param("matlab.code.forecast", "runner('../../model-%workflow.forecast.country%', '%workflow.forecast.country%-input-mapping.json', '../../api-client/request-output.json', '../../toolset/tunes.csv', '%workflow.forecast.country%-output-mapping.json', 'forecast-output.json', true);")
         text("workflow.dependencies.model-cz.commit", "HEAD", label = "Model CZ commit", description = "Commit id of the Model CZ repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.iris.commit", "HEAD", label = "IRIS toolbox commit", description = "Commit id of the IRIS toolbox repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.settings.commit", "HEAD", label = "Workflow Settings commit", description = "Commit id of the Workflow Settings repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
@@ -52,7 +52,7 @@ object ForecastRunner : BuildType({
         text("workflow.dependencies.model-template.commit", "HEAD", label = "Model template commit", description = "Commit id of the Model template repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.report.commit", "HEAD", label = "Report commit", description = "Commit id of the report repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.model-ea.commit", "HEAD", label = "Model EA commit", description = "Commit id of the Model EA repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
-        param("matlab.code.report", "runner('../api-client/post-output.json', ['../settings/report/' lower('%workflow.forecast.country%') '-input-mapping.json'], true);")
+        param("matlab.code.report", "runner('../api-client/post-output.json', '../settings/report/%workflow.forecast.country%-input-mapping.json', true);")
         text("workflow.dependencies.model-us.commit", "HEAD", label = "Model US commit", description = "Commit id of the Model US repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.adhoc.snapshot-time", "", label = "Snapshot time", description = "Snapshot time of the series requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ss.SSSZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ss.SSSZ")
@@ -60,7 +60,7 @@ object ForecastRunner : BuildType({
         text("workflow.dependencies.model-infra.commit", "HEAD", label = "Model infrastructure commit", description = "Commit id of the Model infrastructure repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("email.recipients", "ngocnam.nguyen@ogresearch.com, jaromir.benes@ogresearch.com, sergey.plotnikov@ogresearch.com", label = "Email recipients", description = "List of notification email recipients", allowEmpty = false)
         select("workflow.forecast.country", "", label = "Country code", description = "Country to be forecasted", display = ParameterDisplay.PROMPT,
-                options = listOf("CZ", "EA", "US"))
+                options = listOf("CZ" to "cz", "EA" to "ea", "US" to "us"))
         text("workflow.dependencies.toolset.commit", "HEAD", label = "Toolset commit", description = "Commit id of the Toolset repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
     }
 
@@ -172,7 +172,7 @@ object ForecastRunner : BuildType({
             workingDir = "settings/report"
             command = file {
                 filename = "create_input.py"
-                scriptArguments = """--config-path input-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.adhoc.snapshot-time%","geography":"%workflow.forecast.country%"}'"""
+                scriptArguments = """--config-path %workflow.forecast.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.adhoc.snapshot-time%"}'"""
             }
         }
         python {
