@@ -51,6 +51,7 @@ object ForecastRunner : BuildType({
         text("email.body", "Dear all, please find EIU PoC Forecast Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
         text("workflow.dependencies.model-template.commit", "HEAD", label = "Model template commit", description = "Commit id of the Model template repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.report.commit", "HEAD", label = "Report commit", description = "Commit id of the report repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text("workflow.dependencies.model-ea.commit", "HEAD", label = "Model EA commit", description = "Commit id of the Model EA repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         param("matlab.code.report", "runner('../api-client/post-output.json', ['../settings/report/' lower('%workflow.forecast.country%') '-input-mapping.json'], true);")
         text("workflow.adhoc.snapshot-time", "", label = "Snapshot time", description = "Snapshot time of the series requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ss.SSSZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ss.SSSZ")
