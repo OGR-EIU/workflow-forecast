@@ -45,8 +45,8 @@ object ForecastRunner : BuildType({
         param("matlab.code.forecast", "runner('../../model-template', [lower('%workflow.forecast.country%') '-input-mapping.json'], '../../api-client/request-output.json', [lower('%workflow.forecast.country%') '-output-mapping.json'], 'forecast-output.json', true);")
         text("workflow.dependencies.iris.commit", "HEAD", label = "IRIS toolbox commit", description = "Commit id of the IRIS toolbox repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.settings.commit", "HEAD", label = "Workflow Settings commit", description = "Commit id of the Workflow Settings repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
-        text("workflow.dependencies.model-template.commit", "HEAD", label = "Model template commit", description = "Commit id of the Model template repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("email.body", "Dear all, please find EIU PoC Forecast Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
+        text("workflow.dependencies.model-template.commit", "HEAD", label = "Model template commit", description = "Commit id of the Model template repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.report.commit", "HEAD", label = "Report commit", description = "Commit id of the report repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         param("matlab.code.report", "runner('../api-client/post-output.json', ['../settings/report/' lower('%workflow.forecast.country%') '-input-mapping.json'], true);")
         text("workflow.adhoc.snapshot-time", "", label = "Snapshot time", description = "Snapshot time of the series requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ss.SSSZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
