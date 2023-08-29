@@ -14,7 +14,7 @@ on:
            - "Model-US"
            - "Model-EA"
            - "Model-CZ"
-      model_repo_comittish:
+      model_repo_commitish:
           description: "Country model version"
           required: true
           type: string
