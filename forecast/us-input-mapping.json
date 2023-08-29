@@ -12,11 +12,11 @@
         "name": "RGDP_TND"
     },
     {
-        "key": "PREM.US.Q.S0LEV.NIR_ST",
+        "key": "PREM.US.Q.SULEV.NIR_ST",
         "name": "NIR_ST"
     },
     {
-        "key": "PREM.US.Q.S0LEV.NIR_ST_TND",
+        "key": "PREM.US.Q.SULEV.NIR_ST_TND",
         "name": "NIR_ST_TND"
     },
     {

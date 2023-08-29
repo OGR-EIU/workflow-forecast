@@ -36,7 +36,7 @@
             "data_source": "CTRYM",
             "geography": "US",
             "frequency": "Q",
-            "transformation": "S0LEV",
+            "transformation": "SULEV",
             "concept": "NIR_ST",
             "snapshot_time": "@(snapshot_time)"
         },
@@ -44,7 +44,7 @@
             "data_source": "CTRYM",
             "geography": "US",
             "frequency": "Q",
-            "transformation": "S0LEV",
+            "transformation": "SULEV",
             "concept": "NIR_ST_TND",
             "snapshot_time": "@(snapshot_time)"
         },
@@ -52,7 +52,7 @@
             "data_source": "CTRYM",
             "geography": "US",
             "frequency": "Q",
-            "transformation": "S0LEV",
+            "transformation": "SULEV",
             "concept": "NIR_ST_GAP",
             "snapshot_time": "@(snapshot_time)"
         },
@@ -100,7 +100,7 @@
             "data_source": "CTRYM",
             "geography": "US",
             "frequency": "Q",
-            "transformation": "S0LEV",
+            "transformation": "SULEV",
             "concept": "RES_NIR_ST_GAP",
             "snapshot_time": "@(snapshot_time)"
         },
@@ -108,7 +108,7 @@
             "data_source": "CTRYM",
             "geography": "US",
             "frequency": "Q",
-            "transformation": "S0LEV",
+            "transformation": "SULEV",
             "concept": "RES_NIR_ST_TND",
             "snapshot_time": "@(snapshot_time)"
         }

@@ -16,15 +16,15 @@
         "name": "RGDP_GAP"
     },
     {
-        "key": "CTRYM.US.Q.S0LEV.NIR_ST",
+        "key": "CTRYM.US.Q.SULEV.NIR_ST",
         "name": "NIR_ST"
     },
     {
-        "key": "CTRYM.US.Q.S0LEV.NIR_ST_TND",
+        "key": "CTRYM.US.Q.SULEV.NIR_ST_TND",
         "name": "NIR_ST_TND"
     },
     {
-        "key": "CTRYM.US.Q.S0LEV.NIR_ST_GAP",
+        "key": "CTRYM.US.Q.SULEV.NIR_ST_GAP",
         "name": "NIR_ST_GAP"
     },
     {
@@ -48,11 +48,11 @@
         "name": "RES_FD_GAP"
     },
     {
-        "key": "CTRYM.US.Q.S0LEV.RES_NIR_ST_GAP",
+        "key": "CTRYM.US.Q.SULEV.RES_NIR_ST_GAP",
         "name": "RES_NIR_ST_GAP"
     },
     {
-        "key": "CTRYM.US.Q.S0LEV.RES_NIR_ST_TND",
+        "key": "CTRYM.US.Q.SULEV.RES_NIR_ST_TND",
         "name": "RES_NIR_ST_TND"
     }
 ]
