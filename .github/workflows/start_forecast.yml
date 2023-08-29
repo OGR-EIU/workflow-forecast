@@ -28,10 +28,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Create timestamp and branch name
+        id: naming
+        run: |
+          timestamp="$(date -uIseconds)U"
+          forecast_branch_name="${{ inputs.model_repo }}-$timestamp-main"
+          forecast_branch_name="${forecast_branch_name//:/-}"
+          echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
+          echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
+
+      - name: Create forecast branch
+        run: |
+          git switch -c ${{ steps.naming.outputs.forecast_branch_name }}
+
       - name: Populate script with input parameters
         run: |
           cp ./.github/workflows/prepare_local_environment.py ./prepare_local_environment.py
           sed -i "s/@(model_repo)/${{ inputs.model_repo }}/g" ./prepare_local_environment.py
           sed -i "s/@(model_repo_commitish)/${{ inputs.model_repo_commitish }}/g" ./prepare_local_environment.py
 
+      - name: Commit the local prep script
+        run: |
+          echo "Committing"
 
