@@ -69,6 +69,7 @@ object ForecastRunner : BuildType({
         root(DslContext.settingsRoot, "+:. => settings")
         root(AbsoluteId("ExampleWorkflows_ModelTemplate"), "+:. => model-template")
         root(AbsoluteId("ExampleWorkflows_ReportForecast"), "+:. => report")
+        root(AbsoluteId("ExampleWorkflows_ModelCz"))
     }
 
     steps {
