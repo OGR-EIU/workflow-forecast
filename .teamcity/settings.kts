@@ -126,6 +126,16 @@ object ForecastRunner : BuildType({
                 scriptArguments = "--settings ../settings/forecast/adjusted-input-cfg.json --save-to request-output.json --username %api.username% --password %api.password%"
             }
         }
+        python {
+            name = "Forecast step: Download tunes from Google Drive"
+            workingDir = "toolset"
+            environment = venv {
+            }
+            command = file {
+                filename = "download_file_from_gdrive.py"
+                scriptArguments = "--request-id %workflow.forecast.request-id% --output-path tunes.csv"
+            }
+        }
         script {
             name = "Forecast step: Run forecast"
             workingDir = "settings/forecast"
@@ -177,16 +187,6 @@ object ForecastRunner : BuildType({
             command = file {
                 filename = "toolset/send_mail.py"
                 scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment './report/results/report-forecast.bundle.html'"
-            }
-        }
-        python {
-            name = "Forecast step: Download tunes from Google Drive"
-            workingDir = "toolset"
-            environment = venv {
-            }
-            command = file {
-                filename = "download_file_from_gdrive.py"
-                scriptArguments = "--request-id %workflow.forecast.request-id% --output-path tunes.csv"
             }
         }
     }
