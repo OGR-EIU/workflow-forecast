@@ -19,17 +19,19 @@ on:
 
 jobs:
   create_local_environment_script:
-  
-    runs-on: ubunut-latest
-    
+
+    runs-on: ubuntu-latest
+
     steps:
       - name: Clone workflow repo
         uses: actions/checkout@master
         with:
           fetch-depth: 0
 
-      - name: Populate script
+      - name: Populate script with input parameters
         run: |
           cp ./.github/workflows/prepare_local_environment.py ./prepare_local_environment.py
           sed -i "s/@(model_repo)/${{ inputs.model_repo }}" ./prepare_local_environment.py
+          sed -i "s/@(model_repo_commitish)/${{ inputs.model_repo_commitish }}" ./prepare_local_environment.py
+
 
