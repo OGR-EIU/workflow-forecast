@@ -2,26 +2,32 @@ on:
   workflow_dispatch:
     inputs:
       model_repo:
-         description: "Country model"
+         description: "Country model repo"
          required: true
          type: choice
          options:
-           - "[US] United States"
-           - "[EA] Euro Area"
-           - "[CZ] Czech Republic"
-      model_repo_version:
+           - "Model-US"
+           - "Model-EA"
+           - "Model-CZ"
+      model_repo_comittish:
           description: "Country model version"
           required: true
           type: string
-          default: HEAD
+          default: "HEAD"
 
 jobs:
   create_local_environment_script:
+  
     runs-on: ubunut-latest
+    
     steps:
       - name: Clone workflow repo
         uses: actions/checkout@master
         with:
           fetch-depth: 0
-      - run: |
-        
+
+      - name: Populate script
+        run: |
+          cp ./.github/workflows/prepare_local_environment.py ./prepare_local_environment.py
+          sed -i "s/@(model_repo)/${{ inputs.model_repo }}" ./prepare_local_environment.py
+
