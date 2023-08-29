@@ -32,14 +32,14 @@ jobs:
         id: naming
         run: |
           timestamp="$(date -uIseconds)U"
-          forecast_branch_name="${{ inputs.model_repo }}-$timestamp-main"
+          forecast_branch_name="forecast-${{ inputs.model_repo }}-$timestamp"
           forecast_branch_name="${forecast_branch_name//:/-}"
           echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
           echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
 
-      - name: Create forecast branch
+      - name: Create the main forecast branch
         run: |
-          git switch -c ${{ steps.naming.outputs.forecast_branch_name }}
+          git switch -c ${{ steps.naming.outputs.forecast_branch_name }}-main
 
       - name: Populate script with input parameters
         run: |
@@ -47,7 +47,17 @@ jobs:
           sed -i "s/@(model_repo)/${{ inputs.model_repo }}/g" ./prepare_local_environment.py
           sed -i "s/@(model_repo_commitish)/${{ inputs.model_repo_commitish }}/g" ./prepare_local_environment.py
 
-      - name: Commit the local prep script
+      - name: Commit the main forecast branch
         run: |
-          echo "Committing"
+          forecast_branch_name=${{ steps.naming.outputs.forecast_branch_name }}
+          echo "$forecast_branch_name" >> ./forecast_branch_name
+          git add ./prepare_local_environment.py
+          git add ./forecast_branch_name
+          git commit -m "Prepared $forecast_branch_name-main"
+          git push origin "$forecast_branch_name-main"
+
+      - name: Create and commit the analyst forecast branch
+        run: |
+          git switch -c ${{ steps.naming.outputs.forecast_branch_name }}-analyst
+          git push origin "$forecast_branch_name-analyst
 
