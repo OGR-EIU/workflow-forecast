@@ -42,7 +42,9 @@ object ForecastRunner : BuildType({
 
     params {
         text("email.subject", "EIU PoC Forecast Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
-        param("matlab.code.forecast", "runner(['../../model-' lower('%workflow.forecast.country%')], [lower('%workflow.forecast.country%') '-input-mapping.json'], '../../api-client/request-output.json', [lower('%workflow.forecast.country%') '-output-mapping.json'], 'forecast-output.json', true);")
+        select("workflow.forecast.request-id", "", label = "Request id", description = "Google Drive file id", display = ParameterDisplay.PROMPT,
+                options = listOf("CZ scenario 1" to "1M4r9Xp1aQ_ryFdt9qIL_zPLJ6NfitsKJ", "US scenario 2" to "1Lmr-yiVvfWZQFLbj3k0uwMK7k0OIOgUS", "CZ scenario 2" to "1LvEP-31khLkjC59HM_e2tGHbRgqwxNjE", "EA scenario 1" to "1Ljf8u1ExyLVNmgTSpWnKxyB5Aqn5feRn", "EA scenario 2" to "1LkB7ulgEB6XLiqvTJrPeAQtoWYCLeBtx", "US scenario 1" to "1Lp6E1CIxPqSy6wZ4NZDaf2KmNnLeuhRp"))
+        param("matlab.code.forecast", "runner(['../../model-' lower('%workflow.forecast.country%')], [lower('%workflow.forecast.country%') '-input-mapping.json'], '../../api-client/request-output.json','../../toolset/tunes.csv', [lower('%workflow.forecast.country%') '-output-mapping.json'], 'forecast-output.json', true);")
         text("workflow.dependencies.iris.commit", "HEAD", label = "IRIS toolbox commit", description = "Commit id of the IRIS toolbox repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.settings.commit", "HEAD", label = "Workflow Settings commit", description = "Commit id of the Workflow Settings repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("email.body", "Dear all, please find EIU PoC Forecast Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
@@ -55,7 +57,7 @@ object ForecastRunner : BuildType({
         text("workflow.dependencies.model-infra.commit", "HEAD", label = "Model infrastructure commit", description = "Commit id of the Model infrastructure repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("email.recipients", "ngocnam.nguyen@ogresearch.com, jaromir.benes@ogresearch.com, sergey.plotnikov@ogresearch.com", label = "Email recipients", description = "List of notification email recipients", allowEmpty = false)
         select("workflow.forecast.country", "", label = "Country code", description = "Country to be forecasted", display = ParameterDisplay.PROMPT,
-                options = listOf("EA"))
+                options = listOf("CZ", "EA", "US"))
         text("workflow.dependencies.toolset.commit", "HEAD", label = "Toolset commit", description = "Commit id of the Toolset repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
     }
 
@@ -122,6 +124,16 @@ object ForecastRunner : BuildType({
             command = file {
                 filename = "retrieve_data.py"
                 scriptArguments = "--settings ../settings/forecast/adjusted-input-cfg.json --save-to request-output.json --username %api.username% --password %api.password%"
+            }
+        }
+        python {
+            name = "Forecast step: Download tunes from Google Drive"
+            workingDir = "toolset"
+            environment = venv {
+            }
+            command = file {
+                filename = "download_file_from_gdrive.py"
+                scriptArguments = "--request-id %workflow.forecast.request-id% --output-path tunes.csv"
             }
         }
         script {
