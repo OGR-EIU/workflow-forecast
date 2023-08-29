@@ -47,54 +47,6 @@
             "transformation": "S0LEV",
             "concept": "BOP_CA",
             "snapshot_time": "@(snapshot_time)"
-        },
-        {
-            "data_source": "CTRYM",
-            "geography": "US",
-            "frequency": "Q",
-            "transformation": "S0LEV",
-            "concept": "RES_RGDP_GAP",
-            "snapshot_time": "@(snapshot_time)"
-        },
-        {
-            "data_source": "CTRYM",
-            "geography": "US",
-            "frequency": "Q",
-            "transformation": "S0LEV",
-            "concept": "RES_ROC_RGDP_TND",
-            "snapshot_time": "@(snapshot_time)"
-        },
-        {
-            "data_source": "CTRYM",
-            "geography": "US",
-            "frequency": "Q",
-            "transformation": "S0LEV",
-            "concept": "RES_ROC_PGDP",
-            "snapshot_time": "@(snapshot_time)"
-        },
-        {
-            "data_source": "CTRYM",
-            "geography": "US",
-            "frequency": "Q",
-            "transformation": "S0LEV",
-            "concept": "RES_FD_GAP",
-            "snapshot_time": "@(snapshot_time)"
-        },
-        {
-            "data_source": "CTRYM",
-            "geography": "US",
-            "frequency": "Q",
-            "transformation": "S0LEV",
-            "concept": "RES_NIR_ST_GAP",
-            "snapshot_time": "@(snapshot_time)"
-        },
-        {
-            "data_source": "CTRYM",
-            "geography": "US",
-            "frequency": "Q",
-            "transformation": "S0LEV",
-            "concept": "RES_NIR_ST_TND",
-            "snapshot_time": "@(snapshot_time)"
         }
     ]
 }
