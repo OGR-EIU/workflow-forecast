@@ -1,3 +1,5 @@
+name: Prepare local forecast package
+
 on:
   workflow_dispatch:
     inputs:
