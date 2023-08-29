@@ -57,7 +57,7 @@ object ForecastRunner : BuildType({
         text("workflow.dependencies.model-infra.commit", "HEAD", label = "Model infrastructure commit", description = "Commit id of the Model infrastructure repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("email.recipients", "ngocnam.nguyen@ogresearch.com, jaromir.benes@ogresearch.com, sergey.plotnikov@ogresearch.com", label = "Email recipients", description = "List of notification email recipients", allowEmpty = false)
         select("workflow.forecast.country", "", label = "Country code", description = "Country to be forecasted", display = ParameterDisplay.PROMPT,
-                options = listOf("EA"))
+                options = listOf("CZ", "EA", "US"))
         text("workflow.dependencies.toolset.commit", "HEAD", label = "Toolset commit", description = "Commit id of the Toolset repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
     }
 
