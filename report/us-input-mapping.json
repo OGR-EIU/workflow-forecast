@@ -16,6 +16,10 @@
         "name": "RGDP_GAP"
     },
     {
+        "key": "CTRYM.US.Q.SULEV.NER_USD",
+        "name": "NER_USD"
+    },
+    {
         "key": "CTRYM.US.Q.SULEV.NIR_ST",
         "name": "NIR_ST"
     },
@@ -42,6 +46,10 @@
     {
         "key": "CTRYM.US.Q.S0LEV.RES_ROC_PGDP",
         "name": "RES_ROC_PGDP"
+    },
+    {
+        "key": "CTRYM.US.Q.SULEV.RES_ROC_NER_USD",
+        "name": "RES_ROC_NER_USD"
     },
     {
         "key": "CTRYM.US.Q.S0LEV.RES_FD_GAP",
