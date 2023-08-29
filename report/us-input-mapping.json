@@ -1,0 +1,59 @@
+[
+    {
+        "key": "CTRYM.US.Q.S0LEV.RGDP",
+        "name": "RGDP"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.NGDP",
+        "name": "NGDP"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.RGDP_TND",
+        "name": "RGDP_TND"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.RGDP_GAP",
+        "name": "RGDP_GAP"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.NIR_ST",
+        "name": "NIR_ST"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.NIR_ST_TND",
+        "name": "NIR_ST_TND"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.NIR_ST_GAP",
+        "name": "NIR_ST_GAP"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.BOP_CA",
+        "name": "BOP_CA"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.RES_RGDP_GAP",
+        "name": "RES_RGDP_GAP"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.RES_ROC_RGDP_TND",
+        "name": "RES_ROC_RGDP_TND"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.RES_ROC_PGDP",
+        "name": "RES_ROC_PGDP"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.RES_FD_GAP",
+        "name": "RES_FD_GAP"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.RES_NIR_ST_GAP",
+        "name": "RES_NIR_ST_GAP"
+    },
+    {
+        "key": "CTRYM.US.Q.S0LEV.RES_NIR_ST_TND",
+        "name": "RES_NIR_ST_TND"
+    }
+]
+
