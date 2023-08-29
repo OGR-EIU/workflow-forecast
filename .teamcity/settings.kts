@@ -71,7 +71,7 @@ object ForecastRunner : BuildType({
         root(AbsoluteId("ExampleWorkflows_ReportForecast"), "+:. => report")
         root(AbsoluteId("ExampleWorkflows_ModelCz"), "+:. => model-cz")
         root(AbsoluteId("ExampleWorkflows_ModelEa"), "+:. => model-ea")
-        root(AbsoluteId("ExampleWorkflows_ModelUs"))
+        root(AbsoluteId("ExampleWorkflows_ModelUs"), "+:. => model-us")
     }
 
     steps {
