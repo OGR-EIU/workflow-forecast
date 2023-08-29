@@ -62,14 +62,16 @@ jobs:
       - name: Commit the main forecast branch
         run: |
           forecast_branch_name=${{ steps.naming.outputs.forecast_branch_name }}
-          echo "$forecast_branch_name" >> ./forecast_branch_name
+          echo "$forecast_branch_name" > ./forecast_branch_name
+          echo "${{ steps.naming.outputs }} > ./naming
           git add ./prepare_local_environment.py
           git add ./forecast_branch_name
+          git add ./naming
           git commit -m "Prepared $forecast_branch_name-main"
           git push origin "$forecast_branch_name-main"
 
       - name: Create and commit the analyst forecast branch
         run: |
           git switch -c ${{ steps.naming.outputs.forecast_branch_name }}-analyst
-          git push origin "$forecast_branch_name-analyst
+          git push origin "$forecast_branch_name-analyst"
 
