@@ -53,6 +53,7 @@ object ForecastRunner : BuildType({
         text("workflow.dependencies.report.commit", "HEAD", label = "Report commit", description = "Commit id of the report repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.model-ea.commit", "HEAD", label = "Model EA commit", description = "Commit id of the Model EA repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         param("matlab.code.report", "runner('../api-client/post-output.json', ['../settings/report/' lower('%workflow.forecast.country%') '-input-mapping.json'], true);")
+        text("workflow.dependencies.model-us.commit", "HEAD", label = "Model US commit", description = "Commit id of the Model US repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.adhoc.snapshot-time", "", label = "Snapshot time", description = "Snapshot time of the series requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ss.SSSZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ss.SSSZ")
         text("workflow.dependencies.data-warehouse-client.commit", "HEAD", label = "Data Warehouse Client commit", description = "Commit id of the Data Warehouse Client repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
