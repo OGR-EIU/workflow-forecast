@@ -55,7 +55,6 @@ jobs:
     env:
       CI_AUTHOR: Production workflow
       CI_EMAIL: "noreply@ogresearch.com"
-      MODEL_REPO_SHA: ${{ needs.identify_model_repo.outputs.SHA }}
       
     steps:
       - name: Clone workflow repo
@@ -76,13 +75,15 @@ jobs:
 
       - name: Config workflow-forecast and get SHA
         id: workflow_forecast_repo
+        env:
+          MODEL_REPO_SHA: ${{ needs.identify_model_repo.outputs.SHA }}
         run: |
           cd $GITHUB_WORKSPACE/workflow-forecast
           git config user.name "${{ env.CI_AUTHOR }}"
           git config user.email "${{ env.CI_EMAIL }}"
           SHA="$(git rev-parse --short HEAD)"
           echo *************************************
-          echo ${{ env.MODEL_REPO_SHA }}
+          echo $MODEL_REPO_SHA
           pwd
           git status
           echo $SHA
