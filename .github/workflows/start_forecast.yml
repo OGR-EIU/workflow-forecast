@@ -24,6 +24,8 @@ jobs:
 
   identify_model_repo:
     runs-on: ubuntu-latest
+    outputs:
+      model_repo_SHA: ${{ steps.model_repo.outputs.SHA }}
     steps:
       - name: Clone country model repo
         uses: actions/checkout@v3
@@ -53,7 +55,8 @@ jobs:
     env:
       CI_AUTHOR: Production workflow
       CI_EMAIL: "noreply@ogresearch.com"
-
+      MODEL_REPO_SHA: ${{ needs.identify_model_repo.outputs.SHA }}
+      
     steps:
       - name: Clone workflow repo
         uses: actions/checkout@v3
@@ -79,7 +82,7 @@ jobs:
           git config user.email "${{ env.CI_EMAIL }}"
           SHA="$(git rev-parse --short HEAD)"
           echo *************************************
-          echo ${{ jobs.identify_model_repo.steps.model_repo.outputs.SHA }}
+          echo ${{ env.MODEL_REPO_SHA }}
           pwd
           git status
           echo $SHA
