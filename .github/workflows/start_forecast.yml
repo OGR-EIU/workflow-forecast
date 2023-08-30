@@ -125,7 +125,7 @@ jobs:
           #
           forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
           timestamp=${{ steps.stamp.outputs.timestamp }}
-          workflow_forecast_repo={{ env.WORKFLOW_FORECAST_REPO }}
+          workflow_forecast_repo=${{ env.WORKFLOW_FORECAST_REPO }}
           workflow_forecast_repo_SHA=${{ steps.workflow_forecast_repo.outputs.SHA }}
           model_repo=${{ inputs.model_repo }}
           model_repo_SHA=${{ steps.model_repo.outputs.SHA }}
