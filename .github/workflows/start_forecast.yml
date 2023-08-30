@@ -39,10 +39,11 @@ jobs:
       - name: Clone country model repo
         uses: actions/checkout@v3
         with:
-          fetch-depth: 1
-          path: "./${{ inputs.model_repo }}"
-          token: ${{ secrets.token_with_all_access }}
+          repository: OGR-EIU/${{ inputs.model_repo }}
           ref: ${{ inputs.model_repo_ref }}
+          fetch-depth: 1
+          path: ./${{ inputs.model_repo }}
+          token: ${{ secrets.token_with_all_access }}
 
       - name: Config workflow-forecast and get SHA
         id: workflow_forecast_repo
