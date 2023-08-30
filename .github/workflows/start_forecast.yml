@@ -77,6 +77,7 @@ jobs:
         id: workflow_forecast_repo
         env:
           MODEL_REPO_SHA: ${{ needs.identify_model_repo.outputs.SHA }}
+          XXX: 1
         run: |
           cd $GITHUB_WORKSPACE/workflow-forecast
           git config user.name "${{ env.CI_AUTHOR }}"
@@ -84,6 +85,7 @@ jobs:
           SHA="$(git rev-parse --short HEAD)"
           echo *************************************
           echo $MODEL_REPO_SHA
+          echo $XXX
           pwd
           git status
           echo $SHA
