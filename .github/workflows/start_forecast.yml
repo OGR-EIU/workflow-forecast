@@ -85,7 +85,6 @@ jobs:
           echo "$timestamp" > ./analyst/timestamp
           git add ./analyst/prepare_local_environment.py
           git add ./analyst/forecast_branch_name
-          git add ./analyst/naming
           git commit -m "Prepared $forecast_branch_name-MAIN"
           git push origin "$forecast_branch_name-MAIN"
           cd $GITHUB_WORKSPACE
