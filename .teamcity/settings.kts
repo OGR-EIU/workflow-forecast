@@ -148,7 +148,7 @@ object ForecastRunner : BuildType({
             }
             command = file {
                 filename = "download_file_from_gdrive.py"
-                scriptArguments = "--request-id %workflow.forecast.request-id% --output-path tunes.csv"
+                scriptArguments = "--request-id %workflow.forecast.scenario% --output-path tunes.csv"
             }
         }
         script {
