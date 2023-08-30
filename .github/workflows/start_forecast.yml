@@ -50,14 +50,14 @@ jobs:
           cd $GITHUB_WORKSPACE/workflow-forecast
           git config user.name "${{ env.CI_AUTHOR }}"
           git config user.email "${{ env.CI_EMAIL }}"
-          echo "workflow_forecast_repo_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
 
       - name: Get SHA of model repo
         id: model_repo
         run: |
           cd $GITHUB_WORKSPACE/${{ inputs.model_repo }}
-          echo "model_repo_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
 
       - name: Create timestamp, branch name and the MAIN forecast branch
@@ -86,8 +86,8 @@ jobs:
           forecast_branch_name=${{ steps.forecast_branch.outputs.forecast_branch_name }}
           echo "${{ steps.forecast_branch.outputs.forecast_branch_name }}" > ./analyst/forecast_branch_name
           echo "${{ steps.forecast_branch.outputs.timestamp }}" > ./analyst/timestamp
-          echo "${{ steps.workflow_forecast_repo.workflow_forecast_repo_sha }}" > ./analyst/workflow_forecast_repo_sha
-          echo "${{ steps.model_repo.model_repo_sha }}" > ./analyst/model_repo_sha
+          echo "${{ steps.workflow_forecast_repo.outputs.SHA }}" > ./analyst/workflow_forecast_repo_sha
+          echo "${{ steps.model_repo.outputs.SHA }}" > ./analyst/model_repo_sha
           git add ./analyst/
           git commit -m "Prepared $forecast_branch_name-MAIN"
           git push origin "$forecast_branch_name-MAIN"
