@@ -37,7 +37,6 @@ jobs:
           token: ${{ secrets.token_with_all_access }}
           ref: ${{ inputs.model_repo_ref }}
 
-    steps:
       - name: Config workflow-forecast and get ref
         id: workflow_forecast_repo
         run: |
