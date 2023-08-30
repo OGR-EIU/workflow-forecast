@@ -68,8 +68,6 @@ jobs:
           git config user.name "${{ env.CI_AUTHOR }}"
           git config user.email "${{ env.CI_EMAIL }}"
           SHA="$(git rev-parse --short HEAD)"
-          echo ******************
-          echo ${{ env.MODEL_REPO_SHA }}
           echo "SHA=$SHA" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
 
@@ -92,7 +90,7 @@ jobs:
           sed -i "s/@(workflow_forecast_repo)/workflow_forecast/g" ./analyst/prepare_local_environment.py
           sed -i "s/@(workflow_forecast_repo_sha)/${{ steps.workflow_forecast_repo.outputs.SHA }}/g" ./analyst/prepare_local_environment.py
           sed -i "s/@(model_repo)/${{ inputs.model_repo }}/g" ./analyst/prepare_local_environment.py
-          sed -i "s/@(model_repo_sha)/${{ steps.model_repo.outputs.SHA }}/g" ./analyst/prepare_local_environment.py
+          sed -i "s/@(model_repo_sha)/${{ env.MODEL_REPO_SHA }}/g" ./analyst/prepare_local_environment.py
           cd $GITHUB_WORKSPACE
 
       - name: Commit the MAIN forecast branch
@@ -102,7 +100,7 @@ jobs:
           echo "${{ steps.forecast_branch.outputs.forecast_branch_name }}" > ./analyst/forecast_branch_name
           echo "${{ steps.forecast_branch.outputs.timestamp }}" > ./analyst/timestamp
           echo "${{ steps.workflow_forecast_repo.outputs.SHA }}" > ./analyst/workflow_forecast_repo_sha
-          echo "${{ steps.model_repo.outputs.SHA }}" > ./analyst/model_repo_sha
+          echo "${{ env.MODEL_REPO_SHA }}" > ./analyst/model_repo_sha
           git add ./analyst/
           git commit -m "Prepared $forecast_branch_name-MAIN"
           git push origin "$forecast_branch_name-MAIN"
