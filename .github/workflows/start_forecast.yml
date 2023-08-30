@@ -16,7 +16,7 @@ on:
            - "Model-CZ"
       model_repo_ref:
           description: "Country model version"
-          required: true
+          required: false
           type: string
           default: ""
 
