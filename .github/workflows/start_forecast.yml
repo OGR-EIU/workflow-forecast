@@ -21,7 +21,7 @@ on:
           default: "HEAD"
 
 jobs:
-  create_local_environment_script:
+  create_local_environment:
 
     runs-on: ubuntu-latest
     env:
