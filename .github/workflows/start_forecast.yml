@@ -83,8 +83,9 @@ jobs:
       - name: Commit the MAIN forecast branch
         run: |
           cd $GITHUB_WORKSPACE/workflow-forecast
-          echo "${{ steps.naming.outputs.forecast_branch_name }}" > ./analyst/forecast_branch_name
-          echo "${{ steps.naming.outputs.timestamp }}" > ./analyst/timestamp
+          forecast_branch_name=${{ steps.forecast_branch.outputs.forecast_branch_name }}
+          echo "${{ steps.forecast_branch.outputs.forecast_branch_name }}" > ./analyst/forecast_branch_name
+          echo "${{ steps.forecast_branch.outputs.timestamp }}" > ./analyst/timestamp
           echo "${{ steps.workflow_forecast_repo.workflow_forecast_repo_sha }}" > ./analyst/workflow_forecast_repo_sha
           echo "${{ steps.model_repo.model_repo_sha }}" > ./analyst/model_repo_sha
           git add ./analyst/
@@ -95,7 +96,7 @@ jobs:
       - name: Create and commit the ANALYST forecast branch
         run: |
           cd $GITHUB_WORKSPACE/workflow-forecast
-          forecast_branch_name=${{ steps.naming.outputs.forecast_branch_name }}
+          forecast_branch_name=${{ steps.forecast_branch.outputs.forecast_branch_name }}
           git switch -c "$forecast_branch_name-ANALYST"
           git push origin "$forecast_branch_name-ANALYST"
           cd $GITHUB_WORKSPACE
