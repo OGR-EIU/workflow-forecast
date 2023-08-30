@@ -14,7 +14,7 @@ on:
            - "Model-US"
            - "Model-EA"
            - "Model-CZ"
-      model_repo_commitish:
+      model_repo_ref:
           description: "Country model version"
           required: true
           type: string
@@ -35,10 +35,16 @@ jobs:
           fetch-depth: 1
           path: "./workflow-forecast"
           token: ${{ secrets.token_with_all_access }}
+          ref: ${{ inputs.model_repo_ref }}
+
+    steps:
+      - name: Config workflow-forecast and get ref
+        id: workflow_forecast_repo
         run: |
           cd $GITHUB_WORKSPACE/workflow-forecast
           git config user.name "${{ env.CI_AUTHOR }}"
           git config user.email "${{ env.CI_EMAIL }}"
+          echo "workflow_forecast_repo_sha=$(git rev-parse --short HEAD)"
           cd $GITHUB_WORKSPACE
 
       - name: Create the MAIN forecast branch
@@ -63,7 +69,7 @@ jobs:
           cd $GITHUB_WORKSPACE/workflow-forecast
           cp ./.github/workflows/prepare_local_environment.py ./analyst/prepare_local_environment.py
           sed -i "s/@(model_repo)/${{ inputs.model_repo }}/g" ./analyst/prepare_local_environment.py
-          sed -i "s/@(model_repo_commitish)/${{ inputs.model_repo_commitish }}/g" ./analyst/prepare_local_environment.py
+          sed -i "s/@(model_repo_ref)/${{ inputs.model_repo_ref }}/g" ./analyst/prepare_local_environment.py
           cd $GITHUB_WORKSPACE
 
       - name: Commit the MAIN forecast branch
