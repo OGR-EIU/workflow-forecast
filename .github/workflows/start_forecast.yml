@@ -18,7 +18,7 @@ on:
           description: "Country model version"
           required: true
           type: string
-          default: "HEAD"
+          default: ""
 
 jobs:
   create_local_environment:
@@ -35,6 +35,13 @@ jobs:
           fetch-depth: 1
           path: "./workflow-forecast"
           token: ${{ secrets.token_with_all_access }}
+
+      - name: Clone country model repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+          path: "./${{ inputs.model_repo }}"
+          token: ${{ secrets.token_with_all_access }}
           ref: ${{ inputs.model_repo_ref }}
 
       - name: Config workflow-forecast and get ref
@@ -43,7 +50,7 @@ jobs:
           cd $GITHUB_WORKSPACE/workflow-forecast
           git config user.name "${{ env.CI_AUTHOR }}"
           git config user.email "${{ env.CI_EMAIL }}"
-          echo "workflow_forecast_repo_sha=$(git rev-parse --short HEAD)"
+          echo "workflow_forecast_repo_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
 
       - name: Create the MAIN forecast branch
