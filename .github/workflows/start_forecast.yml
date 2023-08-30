@@ -29,6 +29,12 @@ on:
           required: false
           type: string
           default: ""
+      toolset_repo_ref:
+          description: "Toolset version"
+          required: false
+          type: string
+          default: ""
+
 
 jobs:
 
@@ -37,8 +43,9 @@ jobs:
     env:
       CI_AUTHOR: "Production workflow"
       CI_EMAIL: "noreply@ogresearch.com"
-      MODEL_INFRA_REPO: "model-infra"
       WORKFLOW_FORECAST_REPO: "workflow-forecast"
+      MODEL_INFRA_REPO: "model-infra"
+      TOOLSET_REPO: "toolset"
 
     steps:
 
@@ -77,6 +84,26 @@ jobs:
           SHA="$(git rev-parse --short HEAD)"
           echo "SHA=$SHA" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
+
+
+
+      - name: Clone toolset repo
+        uses: actions/checkout@v3
+        with:
+          repository: OGR-EIU/toolset
+          ref: ${{ inputs.toolset_repo_ref }}
+          fetch-depth: 1
+          path: ./toolset
+          token: ${{ secrets.token_with_all_access }}
+
+      - name: Get SHA of toolset repo
+        id: toolset_repo
+        run: |
+          cd $GITHUB_WORKSPACE/toolset
+          SHA="$(git rev-parse --short HEAD)"
+          echo "SHA=$SHA" >> $GITHUB_OUTPUT
+          cd $GITHUB_WORKSPACE
+
 
 
       - name: Clone workflow repo
@@ -131,6 +158,8 @@ jobs:
           model_repo_SHA=${{ steps.model_repo.outputs.SHA }}
           model_infra_repo=${{ env.MODEL_INFRA_REPO }}
           model_infra_repo_SHA=${{ steps.model_infra_repo.outputs.SHA }}
+          toolset_repo=${{ env.TOOLSET_REPO }}
+          toolset_repo_SHA=${{ steps.toolset_repo.outputs.SHA }}
           echo '{' > ./artifact/config.json
           printf '    "%s": "%s",\n' forecast_branch_name $forecast_branch_name >> ./artifact/config.json
           printf '    "%s": "%s",\n' timestamp $timestamp >> ./artifact/config.json
@@ -140,6 +169,8 @@ jobs:
           printf '    "%s": "%s",\n' model_repo_SHA $model_repo_SHA >> ./artifact/config.json
           printf '    "%s": "%s",\n' model_infra_repo $model_infra_repo >> ./artifact/config.json
           printf '    "%s": "%s",\n' model_infra_repo_SHA $model_infra_repo_SHA >> ./artifact/config.json
+          printf '    "%s": "%s",\n' toolset_repo $toolset_repo >> ./artifact/config.json
+          printf '    "%s": "%s",\n' toolset_repo_SHA $toolset_repo_SHA >> ./artifact/config.json
           echo '    "end": ""' >> ./artifact/config.json
           echo '}' >> ./artifact/config.json
 
