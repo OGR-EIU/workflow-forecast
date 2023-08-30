@@ -21,8 +21,34 @@ on:
           default: ""
 
 jobs:
-  create_local_environment:
 
+  identify_model_repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone country model repo
+        uses: actions/checkout@v3
+        with:
+          repository: OGR-EIU/${{ inputs.model_repo }}
+          ref: ${{ inputs.model_repo_ref }}
+          fetch-depth: 1
+          path: ./${{ inputs.model_repo }}
+          token: ${{ secrets.token_with_all_access }}
+
+      - name: Get SHA of model repo
+        id: model_repo
+        run: |
+          cd $GITHUB_WORKSPACE/${{ inputs.model_repo }}
+          SHA="$(git rev-parse --short HEAD)"
+          echo *************************************
+          pwd
+          git status
+          echo $SHA          
+          echo "SHA=$SHA" >> $GITHUB_OUTPUT
+          cd $GITHUB_WORKSPACE
+
+
+  create_local_environment:
+    needs: identify_model_repo
     runs-on: ubuntu-latest
     env:
       CI_AUTHOR: Production workflow
@@ -53,6 +79,7 @@ jobs:
           git config user.email "${{ env.CI_EMAIL }}"
           SHA="$(git rev-parse --short HEAD)"
           echo *************************************
+          echo ${{ jobs.identify_model_repo.steps.model_repo.outputs.SHA }}
           pwd
           git status
           echo $SHA
