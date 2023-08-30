@@ -50,14 +50,24 @@ jobs:
           cd $GITHUB_WORKSPACE/workflow-forecast
           git config user.name "${{ env.CI_AUTHOR }}"
           git config user.email "${{ env.CI_EMAIL }}"
-          echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          SHA="$(git rev-parse --short HEAD)"
+          echo *************************************
+          pwd
+          git status
+          echo $SHA
+          echo "SHA=$SHA" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
 
       - name: Get SHA of model repo
         id: model_repo
         run: |
           cd $GITHUB_WORKSPACE/${{ inputs.model_repo }}
-          echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          SHA="$(git rev-parse --short HEAD)"
+          echo *************************************
+          pwd
+          git status
+          echo $SHA          
+          echo "SHA=$SHA" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
 
       - name: Create timestamp, branch name and the MAIN forecast branch
