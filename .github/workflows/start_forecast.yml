@@ -54,37 +54,41 @@ jobs:
           path: "./workflow-forecast"
           token: ${{ secrets.token_with_all_access }}
 
-      - name: Config workflow-forecast and get SHA
-        id: workflow_forecast_repo
+      - name: Create timestamp and branch name
+        id: stamp
         run: |
-          cd $GITHUB_WORKSPACE/workflow-forecast
-          git config user.name "${{ env.CI_AUTHOR }}"
-          git config user.email "${{ env.CI_EMAIL }}"
-          SHA="$(git rev-parse --short HEAD)"
-          echo "SHA=$SHA" >> $GITHUB_OUTPUT
-          cd $GITHUB_WORKSPACE
-
-      - name: Create timestamp, branch name and the main forecast branch
-        id: forecast_branch
-        run: |
-          cd $GITHUB_WORKSPACE/workflow-forecast
           timestamp="$(date -uIseconds)U"
           forecast_branch_name="forecast-${{ inputs.model_repo }}-$timestamp"
           forecast_branch_name="${forecast_branch_name//:/-}"
           echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
           echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
+
+      - name: Create main forecast branch on workflow-forecast repo and get its SHA
+        id: workflow_forecast_repo
+        run: |
+          cd $GITHUB_WORKSPACE/workflow-forecast
+          forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
+          #
+          git config user.name "${{ env.CI_AUTHOR }}"
+          git config user.email "${{ env.CI_EMAIL }}"
+          #
           git switch -c "$forecast_branch_name"
+          git commit -m "Prepared $forecast_branch_name"
+          git push origin "$forecast_branch_name"
+          SHA="$(git rev-parse --short HEAD)"
+          echo "SHA=$SHA" >> $GITHUB_OUTPUT
+          #
           cd $GITHUB_WORKSPACE
 
-      - name: Prepare artifacts for local envi
+      - name: Prepare artifact for local envi
         run: |
           cd $GITHUB_WORKSPACE
           mkdir ./artifact
           #
           cp ./workflow-forecast/.github/workflows/prepare_local_environment.py ./artifact/prepare_local_environment.py
           #
-          forecast_branch_name=${{ steps.forecast_branch.outputs.forecast_branch_name }}
-          timestamp=${{ steps.forecast_branch.outputs.timestamp }}
+          forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
+          timestamp=${{ steps.stamp.outputs.timestamp }}
           model_repo=${{ inputs.model_repo }}
           model_repo_SHA=${{ steps.model_repo.outputs.SHA }}
           workflow_forecast_repo="workflow-forecast"
@@ -98,29 +102,18 @@ jobs:
           printf '    "%s": "%s",\n' workflow_forecast_repo_SHA $workflow_forecast_repo_SHA >> ./artifact/config.json
           echo '    "end": ""' >> ./artifact/config.json
           echo '}' >> ./artifact/config.json
-          #
-          git add ./analyst
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: start-${{ steps.forecast_branch.outputs.forecast_branch_name }}
+          name: start-${{ steps.stamp.outputs.forecast_branch_name }}
           path: ./artifact
-
-      - name: Commit the main forecast branch
-        run: |
-          cd $GITHUB_WORKSPACE/workflow-forecast
-          #
-          git commit -m "Prepared $forecast_branch_name"
-          git push origin "$forecast_branch_name"
-          #
-          cd $GITHUB_WORKSPACE
 
       - name: Create and commit the ANALYST forecast branch
         run: |
           cd $GITHUB_WORKSPACE/workflow-forecast
           #
-          forecast_branch_name=${{ steps.forecast_branch.outputs.forecast_branch_name }}
+          forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
           git switch -c "$forecast_branch_name-ANALYST"
           git push origin "$forecast_branch_name-ANALYST"
           #
