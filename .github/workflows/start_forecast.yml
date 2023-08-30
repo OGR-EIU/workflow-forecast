@@ -89,12 +89,12 @@ jobs:
           workflow_forecast_repo="workflow-forecast"
           workflow_forecast_repo_SHA=${{ steps.workflow_forecast_repo.outputs.SHA }}
           echo '{' > ./analyst/config.json
-          printf '    "%s": "%s",' forecast_branch_name $forecast_branch_name >> ./analyst/config.json
-          printf '    "%s": "%s",' timestamp $timestamp >> ./analyst/config.json
-          printf '    "%s": "%s",' model_repo $model_repo >> ./analyst/config.json
-          printf '    "%s": "%s",' model_repo_SHA $model_repo_SHA >> ./analyst/config.json
-          printf '    "%s": "%s",' workflow_forecast_repo $workflow_forecast_repo >> ./analyst/config.json
-          printf '    "%s": "%s",' workflow_forecast_repo_SHA $workflow_forecast_repo_SHA >> ./analyst/config.json
+          printf '    "%s": "%s",\n' forecast_branch_name $forecast_branch_name >> ./analyst/config.json
+          printf '    "%s": "%s",\n' timestamp $timestamp >> ./analyst/config.json
+          printf '    "%s": "%s",\n' model_repo $model_repo >> ./analyst/config.json
+          printf '    "%s": "%s",\n' model_repo_SHA $model_repo_SHA >> ./analyst/config.json
+          printf '    "%s": "%s",\n' workflow_forecast_repo $workflow_forecast_repo >> ./analyst/config.json
+          printf '    "%s": "%s",\n' workflow_forecast_repo_SHA $workflow_forecast_repo_SHA >> ./analyst/config.json
           echo '    "end": ""' >> ./analyst/config.json
           echo '}' >> ./analyst/config.json
           #
