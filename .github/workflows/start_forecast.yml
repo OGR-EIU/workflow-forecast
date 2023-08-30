@@ -19,6 +19,11 @@ on:
           required: false
           type: string
           default: ""
+      model_infra_repo_ref:
+          description: "Model infrastructure version"
+          required: false
+          type: string
+          default: ""
 
 jobs:
 
@@ -46,6 +51,26 @@ jobs:
           SHA="$(git rev-parse --short HEAD)"
           echo "SHA=$SHA" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
+
+
+
+      - name: Clone model infra repo
+        uses: actions/checkout@v3
+        with:
+          repository: OGR-EIU/model-infra
+          ref: ${{ inputs.model_infra_repo_ref }}
+          fetch-depth: 1
+          path: ./model-infra
+          token: ${{ secrets.token_with_all_access }}
+
+      - name: Get SHA of model infra repo
+        id: model_infra_repo
+        run: |
+          cd $GITHUB_WORKSPACE/model-infra
+          SHA="$(git rev-parse --short HEAD)"
+          echo "SHA=$SHA" >> $GITHUB_OUTPUT
+          cd $GITHUB_WORKSPACE
+
 
       - name: Clone workflow repo
         uses: actions/checkout@v3
@@ -89,17 +114,21 @@ jobs:
           #
           forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
           timestamp=${{ steps.stamp.outputs.timestamp }}
-          model_repo=${{ inputs.model_repo }}
-          model_repo_SHA=${{ steps.model_repo.outputs.SHA }}
           workflow_forecast_repo="workflow-forecast"
           workflow_forecast_repo_SHA=${{ steps.workflow_forecast_repo.outputs.SHA }}
+          model_repo=${{ inputs.model_repo }}
+          model_repo_SHA=${{ steps.model_repo.outputs.SHA }}
+          model_infra_repo=${{ inputs.model_infra_repo }}
+          model_infra_repo_SHA=${{ steps.model_infra_repo.outputs.SHA }}
           echo '{' > ./artifact/config.json
           printf '    "%s": "%s",\n' forecast_branch_name $forecast_branch_name >> ./artifact/config.json
           printf '    "%s": "%s",\n' timestamp $timestamp >> ./artifact/config.json
-          printf '    "%s": "%s",\n' model_repo $model_repo >> ./artifact/config.json
-          printf '    "%s": "%s",\n' model_repo_SHA $model_repo_SHA >> ./artifact/config.json
           printf '    "%s": "%s",\n' workflow_forecast_repo $workflow_forecast_repo >> ./artifact/config.json
           printf '    "%s": "%s",\n' workflow_forecast_repo_SHA $workflow_forecast_repo_SHA >> ./artifact/config.json
+          printf '    "%s": "%s",\n' model_repo $model_repo >> ./artifact/config.json
+          printf '    "%s": "%s",\n' model_repo_SHA $model_repo_SHA >> ./artifact/config.json
+          printf '    "%s": "%s",\n' model_infra_repo $model_infra_repo >> ./artifact/config.json
+          printf '    "%s": "%s",\n' model_infra_repo_SHA $model_infra_repo_SHA >> ./artifact/config.json
           echo '    "end": ""' >> ./artifact/config.json
           echo '}' >> ./artifact/config.json
 
