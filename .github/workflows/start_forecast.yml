@@ -25,7 +25,7 @@ jobs:
   identify_model_repo:
     runs-on: ubuntu-latest
     outputs:
-      model_repo_SHA: ${{ steps.model_repo.outputs.SHA }}
+      SHA: ${{ steps.model_repo.outputs.SHA }}
     steps:
       - name: Clone country model repo
         uses: actions/checkout@v3
