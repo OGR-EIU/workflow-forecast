@@ -76,11 +76,12 @@ jobs:
           git switch -c "$forecast_branch_name"
           cd $GITHUB_WORKSPACE
 
-      - name: Commit the main forecast branch
+      - name: Prepare artifacts for local envi
         run: |
-          cd $GITHUB_WORKSPACE/workflow-forecast
+          cd $GITHUB_WORKSPACE
+          mkdir ./artifact
           #
-          cp ./.github/workflows/prepare_local_environment.py ./analyst/prepare_local_environment.py
+          cp ./workflow-forecast/.github/workflows/prepare_local_environment.py ./artifact/prepare_local_environment.py
           #
           forecast_branch_name=${{ steps.forecast_branch.outputs.forecast_branch_name }}
           timestamp=${{ steps.forecast_branch.outputs.timestamp }}
@@ -88,17 +89,28 @@ jobs:
           model_repo_SHA=${{ steps.model_repo.outputs.SHA }}
           workflow_forecast_repo="workflow-forecast"
           workflow_forecast_repo_SHA=${{ steps.workflow_forecast_repo.outputs.SHA }}
-          echo '{' > ./analyst/config.json
-          printf '    "%s": "%s",\n' forecast_branch_name $forecast_branch_name >> ./analyst/config.json
-          printf '    "%s": "%s",\n' timestamp $timestamp >> ./analyst/config.json
-          printf '    "%s": "%s",\n' model_repo $model_repo >> ./analyst/config.json
-          printf '    "%s": "%s",\n' model_repo_SHA $model_repo_SHA >> ./analyst/config.json
-          printf '    "%s": "%s",\n' workflow_forecast_repo $workflow_forecast_repo >> ./analyst/config.json
-          printf '    "%s": "%s",\n' workflow_forecast_repo_SHA $workflow_forecast_repo_SHA >> ./analyst/config.json
-          echo '    "end": ""' >> ./analyst/config.json
-          echo '}' >> ./analyst/config.json
+          echo '{' > ./artifact/config.json
+          printf '    "%s": "%s",\n' forecast_branch_name $forecast_branch_name >> ./artifact/config.json
+          printf '    "%s": "%s",\n' timestamp $timestamp >> ./artifact/config.json
+          printf '    "%s": "%s",\n' model_repo $model_repo >> ./artifact/config.json
+          printf '    "%s": "%s",\n' model_repo_SHA $model_repo_SHA >> ./artifact/config.json
+          printf '    "%s": "%s",\n' workflow_forecast_repo $workflow_forecast_repo >> ./artifact/config.json
+          printf '    "%s": "%s",\n' workflow_forecast_repo_SHA $workflow_forecast_repo_SHA >> ./artifact/config.json
+          echo '    "end": ""' >> ./artifact/config.json
+          echo '}' >> ./artifact/config.json
           #
           git add ./analyst
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: start-${{ steps.forecast_branch.outputs.forecast_branch_name }}
+          path: ./artifact
+
+      - name: Commit the main forecast branch
+        run: |
+          cd $GITHUB_WORKSPACE/workflow-forecast
+          #
           git commit -m "Prepared $forecast_branch_name"
           git push origin "$forecast_branch_name"
           #
@@ -107,9 +119,11 @@ jobs:
       - name: Create and commit the ANALYST forecast branch
         run: |
           cd $GITHUB_WORKSPACE/workflow-forecast
+          #
           forecast_branch_name=${{ steps.forecast_branch.outputs.forecast_branch_name }}
           git switch -c "$forecast_branch_name-ANALYST"
           git push origin "$forecast_branch_name-ANALYST"
+          #
           cd $GITHUB_WORKSPACE
 
 
