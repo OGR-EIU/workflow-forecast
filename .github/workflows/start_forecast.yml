@@ -76,8 +76,10 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/workflow-forecast
           cp ./.github/workflows/prepare_local_environment.py ./analyst/prepare_local_environment.py
+          sed -i "s/@(workflow_forecast_repo)/workflow_forecast/g" ./analyst/prepare_local_environment.py
+          sed -i "s/@(workflow_forecast_repo_sha)/${{ steps.workflow_forecast_repo.outputs.SHA }}/g" ./analyst/prepare_local_environment.py
           sed -i "s/@(model_repo)/${{ inputs.model_repo }}/g" ./analyst/prepare_local_environment.py
-          sed -i "s/@(model_repo_ref)/${{ inputs.model_repo_ref }}/g" ./analyst/prepare_local_environment.py
+          sed -i "s/@(model_repo_sha)/${{ steps.model_repo.outputs.SHA }}/g" ./analyst/prepare_local_environment.py
           cd $GITHUB_WORKSPACE
 
       - name: Commit the MAIN forecast branch
