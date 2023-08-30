@@ -3,7 +3,10 @@ import argparse
 from datetime import datetime
 
 
-def process_settings(config_path, output_file, params={}):
+def process_settings(config_path, output_file, params=None, ):
+
+    params = params or {}
+    
     # load json file with settings
     with open(config_path) as f:
         settings = json.load(f)
