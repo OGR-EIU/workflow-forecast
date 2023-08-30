@@ -34,6 +34,11 @@ on:
           required: false
           type: string
           default: ""
+      data_warehouse_repo_ref:
+          description: "Data warehouse version"
+          required: false
+          type: string
+          default: ""
 
 
 jobs:
@@ -46,6 +51,7 @@ jobs:
       WORKFLOW_FORECAST_REPO: "workflow-forecast"
       MODEL_INFRA_REPO: "model-infra"
       TOOLSET_REPO: "toolset"
+      DATA_WAREHOUSE_REPO: "data-warehouse"
 
     steps:
 
@@ -106,6 +112,25 @@ jobs:
 
 
 
+      - name: Clone data warehosue repo
+        uses: actions/checkout@v3
+        with:
+          repository: OGR-EIU/data-warehouse
+          ref: ${{ inputs.data_warehouse_repo_ref }}
+          fetch-depth: 1
+          path: ./data-warehouse
+          token: ${{ secrets.token_with_all_access }}
+
+      - name: Get SHA of data warehouse repo
+        id: data_warehouse_repo
+        run: |
+          cd $GITHUB_WORKSPACE/data-warehouse
+          SHA="$(git rev-parse --short HEAD)"
+          echo "SHA=$SHA" >> $GITHUB_OUTPUT
+          cd $GITHUB_WORKSPACE
+
+
+
       - name: Clone workflow repo
         uses: actions/checkout@v3
         with:
@@ -160,6 +185,8 @@ jobs:
           model_infra_repo_SHA=${{ steps.model_infra_repo.outputs.SHA }}
           toolset_repo=${{ env.TOOLSET_REPO }}
           toolset_repo_SHA=${{ steps.toolset_repo.outputs.SHA }}
+          data_warehouse_repo=${{ env.DATA_WAREHOUSE_REPO }}
+          data_warehouse_repo_SHA=${{ steps.data_warehouse_repo.outputs.SHA }}
           echo '{' > ./artifact/config.json
           printf '    "%s": "%s",\n' forecast_branch_name $forecast_branch_name >> ./artifact/config.json
           printf '    "%s": "%s",\n' timestamp $timestamp >> ./artifact/config.json
@@ -171,13 +198,15 @@ jobs:
           printf '    "%s": "%s",\n' model_infra_repo_SHA $model_infra_repo_SHA >> ./artifact/config.json
           printf '    "%s": "%s",\n' toolset_repo $toolset_repo >> ./artifact/config.json
           printf '    "%s": "%s",\n' toolset_repo_SHA $toolset_repo_SHA >> ./artifact/config.json
+          printf '    "%s": "%s",\n' data_warehouse_repo $data_warehouse_repo >> ./artifact/config.json
+          printf '    "%s": "%s",\n' data_warehouse_repo_SHA $data_warehouse_repo_SHA >> ./artifact/config.json
           echo '    "end": ""' >> ./artifact/config.json
           echo '}' >> ./artifact/config.json
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: start-${{ steps.stamp.outputs.forecast_branch_name }}
+          name: ${{ steps.stamp.outputs.forecast_branch_name }}
           path: ./artifact
 
       - name: Create and commit the ANALYST forecast branch
