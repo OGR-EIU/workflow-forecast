@@ -60,19 +60,16 @@ jobs:
           echo "model_repo_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
 
-      - name: Create timestamp and branch name
-        id: naming
+      - name: Create timestamp, branch name and the MAIN forecast branch
+        id: forecast_branch
         run: |
+          cd $GITHUB_WORKSPACE/workflow-forecast
           timestamp="$(date -uIseconds)U"
           forecast_branch_name="forecast-${{ inputs.model_repo }}-$timestamp"
           forecast_branch_name="${forecast_branch_name//:/-}"
           echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
           echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
-
-      - name: Create the MAIN forecast branch
-        run: |
-          cd $GITHUB_WORKSPACE/workflow-forecast
-          git switch -c ${{ steps.naming.outputs.forecast_branch_name }}-MAIN
+          git switch -c "$forecast_branch_name-MAIN"
           cd $GITHUB_WORKSPACE
 
       - name: Populate script with input parameters
