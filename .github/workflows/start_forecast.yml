@@ -44,13 +44,20 @@ jobs:
           token: ${{ secrets.token_with_all_access }}
           ref: ${{ inputs.model_repo_ref }}
 
-      - name: Config workflow-forecast and get ref
+      - name: Config workflow-forecast and get SHA
         id: workflow_forecast_repo
         run: |
           cd $GITHUB_WORKSPACE/workflow-forecast
           git config user.name "${{ env.CI_AUTHOR }}"
           git config user.email "${{ env.CI_EMAIL }}"
           echo "workflow_forecast_repo_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          cd $GITHUB_WORKSPACE
+
+      - name: Get SHA of model repo
+        id: model_repo
+        run: |
+          cd $GITHUB_WORKSPACE/${{ inputs.model_repo }}
+          echo "model_repo_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
 
       - name: Create timestamp and branch name
@@ -79,12 +86,11 @@ jobs:
       - name: Commit the MAIN forecast branch
         run: |
           cd $GITHUB_WORKSPACE/workflow-forecast
-          forecast_branch_name=${{ steps.naming.outputs.forecast_branch_name }}
-          timestamp=${{ steps.naming.outputs.timestamp }}
-          echo "$forecast_branch_name" > ./analyst/forecast_branch_name
-          echo "$timestamp" > ./analyst/timestamp
-          git add ./analyst/prepare_local_environment.py
-          git add ./analyst/forecast_branch_name
+          echo "${{ steps.naming.outputs.forecast_branch_name }}" > ./analyst/forecast_branch_name
+          echo "${{ steps.naming.outputs.timestamp }}" > ./analyst/timestamp
+          echo "${{ steps.workflow_forecast_repo.workflow_forecast_repo_sha }}" > ./analyst/workflow_forecast_repo_sha
+          echo "${{ steps.model_repo.model_repo_sha }}" > ./analyst/model_repo_sha
+          git add ./analyst/
           git commit -m "Prepared $forecast_branch_name-MAIN"
           git push origin "$forecast_branch_name-MAIN"
           cd $GITHUB_WORKSPACE
