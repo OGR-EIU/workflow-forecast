@@ -30,8 +30,10 @@ jobs:
   prepare_local_environment:
     runs-on: ubuntu-latest
     env:
-      CI_AUTHOR: Production workflow
+      CI_AUTHOR: "Production workflow"
       CI_EMAIL: "noreply@ogresearch.com"
+      MODEL_INFRA_REPO: "model-infra"
+      WORKFLOW_FORECAST_REPO: "workflow-forecast"
 
     steps:
 
@@ -114,11 +116,11 @@ jobs:
           #
           forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
           timestamp=${{ steps.stamp.outputs.timestamp }}
-          workflow_forecast_repo="workflow-forecast"
+          workflow_forecast_repo={{ env.WORKFLOW_FORECAST_REPO }}
           workflow_forecast_repo_SHA=${{ steps.workflow_forecast_repo.outputs.SHA }}
           model_repo=${{ inputs.model_repo }}
           model_repo_SHA=${{ steps.model_repo.outputs.SHA }}
-          model_infra_repo=${{ inputs.model_infra_repo }}
+          model_infra_repo=${{ env.MODEL_INFRA_REPO }}
           model_infra_repo_SHA=${{ steps.model_infra_repo.outputs.SHA }}
           echo '{' > ./artifact/config.json
           printf '    "%s": "%s",\n' forecast_branch_name $forecast_branch_name >> ./artifact/config.json
