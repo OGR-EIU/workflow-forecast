@@ -33,49 +33,59 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
+          path: "./workflow-forecast"
           token: ${{ secrets.token_with_all_access }}
-
-      - name: Establish identity
         run: |
+          cd $GITHUB_WORKSPACE/workflow-forecast
           git config user.name "${{ env.CI_AUTHOR }}"
           git config user.email "${{ env.CI_EMAIL }}"
+          cd $GITHUB_WORKSPACE
+
+      - name: Create the MAIN forecast branch
+        run: |
+          cd $GITHUB_WORKSPACE/workflow-forecast
+          git switch -c ${{ steps.naming.outputs.forecast_branch_name }}-MAIN
+          cd $GITHUB_WORKSPACE
 
       - name: Create timestamp and branch name
         id: naming
         run: |
+          cd $GITHUB_WORKSPACE/workflow-forecast
           timestamp="$(date -uIseconds)U"
           forecast_branch_name="forecast-${{ inputs.model_repo }}-$timestamp"
           forecast_branch_name="${forecast_branch_name//:/-}"
           echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
           echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
-
-      - name: Create the main forecast branch
-        run: |
-          git switch -c ${{ steps.naming.outputs.forecast_branch_name }}-main
+          cd $GITHUB_WORKSPACE
 
       - name: Populate script with input parameters
         run: |
-          cp ./.github/workflows/prepare_local_environment.py ./prepare_local_environment.py
-          echo "*********************************"
-          echo ${{ inputs.model_repo_commitish }}
-          echo "*********************************"
-          sed -i "s/@(model_repo)/${{ inputs.model_repo }}/g" ./prepare_local_environment.py
-          sed -i "s/@(model_repo_commitish)/${{ inputs.model_repo_commitish }}/g" ./prepare_local_environment.py
+          cd $GITHUB_WORKSPACE/workflow-forecast
+          cp ./.github/workflows/prepare_local_environment.py ./analyst/prepare_local_environment.py
+          sed -i "s/@(model_repo)/${{ inputs.model_repo }}/g" ./analyst/prepare_local_environment.py
+          sed -i "s/@(model_repo_commitish)/${{ inputs.model_repo_commitish }}/g" ./analyst/prepare_local_environment.py
+          cd $GITHUB_WORKSPACE
 
-      - name: Commit the main forecast branch
+      - name: Commit the MAIN forecast branch
         run: |
+          cd $GITHUB_WORKSPACE/workflow-forecast
           forecast_branch_name=${{ steps.naming.outputs.forecast_branch_name }}
-          echo "$forecast_branch_name" > ./forecast_branch_name
-          echo "${{ steps.naming.outputs.* }}" > ./naming
-          git add ./prepare_local_environment.py
-          git add ./forecast_branch_name
-          git add ./naming
-          git commit -m "Prepared $forecast_branch_name-main"
-          git push origin "$forecast_branch_name-main"
+          timestamp=${{ steps.naming.outputs.timestamp }}
+          echo "$forecast_branch_name" > ./analyst/forecast_branch_name
+          echo "$timestamp" > ./analyst/timestamp
+          git add ./analyst/prepare_local_environment.py
+          git add ./analyst/forecast_branch_name
+          git add ./analyst/naming
+          git commit -m "Prepared $forecast_branch_name-MAIN"
+          git push origin "$forecast_branch_name-MAIN"
+          cd $GITHUB_WORKSPACE
 
-      - name: Create and commit the analyst forecast branch
+      - name: Create and commit the ANALYST forecast branch
         run: |
+          cd $GITHUB_WORKSPACE/workflow-forecast
           forecast_branch_name=${{ steps.naming.outputs.forecast_branch_name }}
-          git switch -c "$forecast_branch_name-analyst"
-          git push origin "$forecast_branch_name-analyst"
+          git switch -c "$forecast_branch_name-ANALYST"
+          git push origin "$forecast_branch_name-ANALYST"
+          cd $GITHUB_WORKSPACE
+
 
