@@ -11,8 +11,8 @@ on:
          required: true
          type: choice
          options:
-           - "Model-US"
            - "Model-EA"
+           - "Model-US"
            - "Model-CZ"
       model_repo_ref:
           description: "Country model version"
@@ -167,7 +167,8 @@ jobs:
         id: stamp
         run: |
           if [[ _${{ inputs.input_data_snapshot_time }} == "_" ]]; then
-            timestamp="$(date -uIseconds)U"
+            timestamp="$(date -uIseconds)"
+            timestamp="${timestamp/+00:00/}Z"
           else
             timestamp=${{ inputs.input_data_snapshot_time }}
           fi
