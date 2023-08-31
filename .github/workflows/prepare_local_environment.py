@@ -4,6 +4,33 @@ import json
 import os
 import shutil
 import logging
+import requests
+import sys
+
+
+BASE_URL = "https://eiu-dev.ogresearch.com/api"
+USERNAME = "test-user"
+PASSWORD = "t3stT#st"
+
+
+def request_data(base_url, username, password, request, save_to):
+    # authenticate to get a token (JWT)
+    url = f'{base_url}/authenticate'
+    payload = {
+        'username': username,
+        'password': password
+    }
+    headers = {'content-type': 'application/json'}
+    response = requests.post(url, data=json.dumps(payload), headers=headers)
+    token = response.json()['id_token']
+    response.raise_for_status()
+    #
+    # Post the data request
+    url = f'{base_url}/data-requests/series/retrieve'
+    headers = {'Authorization': 'Bearer ' + token, 'content-type': 'application/json'}
+    response = requests.post(url, data=json.dumps(request), headers=headers)
+    return response
+
 
 
 if __name__ == "__main__":
@@ -62,5 +89,22 @@ if __name__ == "__main__":
     shutil.rmtree(f"{_DATA_WAREHOUSE_CLIENT_REPO}", ignore_errors=True, )
     data_warehouse_client_repo = git.Repo.clone_from(f"git@github.com:OGR-EIU/{_DATA_WAREHOUSE_CLIENT_REPO}.git", f"{_DATA_WAREHOUSE_CLIENT_REPO}", filter="tree:0", no_checkout=True, )
     data_warehouse_client_repo.git.checkout(f"{_DATA_WAREHOUSE_CLIENT_REPO_SHA}")
+
+    logging.info("Requesting forecast input data")
+    with open(os.path.join(_MODEL_REPO, "requests", "input-data-request.json"), "rt") as f:
+        request = json.load(f)
+
+    response = request_data(BASE_URL, USERNAME, PASSWORD, request, ):
+
+    if response.status_code == 200:
+        logging.info("Successfully retrieved forecast input data")
+        print(json.dumps(response.json(), indent=4, ))
+        with open("forecast-input-data.json", 'wt') as f:
+            json.dump(response.json(), f, indent=4, )
+    elif response.status_code == 400:
+        loggin.critical("Bad request: please check if the requested keys exist")
+    else:
+        print(response.json(), file=sys.stderr)
+    response.raise_for_status()
 
 
