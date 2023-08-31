@@ -223,6 +223,17 @@ jobs:
           done
           echo '    "end": ""' >> ./artifact/config.json
           echo '}' >> ./artifact/config.json
+          #
+          cd $GITHUB_WORKSPACE
+
+      - name: Add analyst judgment file to artifact
+        run: |
+          cd $GITHUB_WORKSPACE
+          #
+          cp ./model-infra/+modeler/apply_new_judgment.m ./artifact/apply_new_judgment.m
+          #
+          cd $GITHUB_WORKSPACE
+
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
