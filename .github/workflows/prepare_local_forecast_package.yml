@@ -194,12 +194,17 @@ jobs:
           #
           cd $GITHUB_WORKSPACE
 
+      - name: Prepare artifact
+        run: |
+          cd $GITHUB_WORKSPACE
+          #
+          cp -r ./workflow-forecast/artifact ./
+          #
+          cd $GITHUB_WORKSPACE
+
       - name: Prepare artifact for local envi
         run: |
           cd $GITHUB_WORKSPACE
-          mkdir ./artifact
-          #
-          cp ./workflow-forecast/.github/workflows/prepare_local_environment.py ./artifact/prepare_local_environment.py
           #
           declare -A map
           map[forecast_branch_name]=${{ steps.stamp.outputs.forecast_branch_name }}
@@ -223,14 +228,6 @@ jobs:
           done
           echo '    "end": ""' >> ./artifact/config.json
           echo '}' >> ./artifact/config.json
-          #
-          cd $GITHUB_WORKSPACE
-
-      - name: Add analyst judgment file to artifact
-        run: |
-          cd $GITHUB_WORKSPACE
-          #
-          cp ./model-infra/+modeler/apply_new_judgment.m ./artifact/apply_new_judgment.m
           #
           cd $GITHUB_WORKSPACE
 
