@@ -1,4 +1,8 @@
 name: Create pull request
+
+permissions:
+    actions: write
+
 on:
   push:
     branches:
@@ -6,7 +10,6 @@ on:
 jobs:
     create_pull_request:
         runs-on: ubuntu-latest
-        permissions: write-all
         env:
             GH_TOKEN: ${{ github.token }}
         steps:
@@ -18,7 +21,7 @@ jobs:
             - name: get target branch name removing "-ANALYST"
               id: get_branch_name
               run: |
-                echo "::set-output name=branch_name::$(echo ${{ github.ref }} | sed 's/-ANALYST//g')"
+                echo "branch_name=$(echo ${{ github.ref }} | sed 's/-ANALYST//g')" >> $GITHUB_OUTPUT
 
             - name: Create pull request to target branch using gh cli
               run: |
