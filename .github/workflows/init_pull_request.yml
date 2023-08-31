@@ -9,10 +9,15 @@ jobs:
         env:
             GH_TOKEN: ${{ github.token }}
         steps:
+            - name: Clone country model repo
+              uses: actions/checkout@v3
+              with:
+                ref: ${{ github.ref }}
+
             - name: get target branch name removing "-ANALYST"
               id: get_branch_name
               run: |
-                echo "::set-output name=branch_name::$(echo ${{ github.ref }} | sed 's/ANALYST//g')"
+                echo "::set-output name=branch_name::$(echo ${{ github.ref }} | sed 's/-ANALYST//g')"
 
             - name: Create pull request to target branch using gh cli
               run: |
