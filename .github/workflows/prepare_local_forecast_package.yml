@@ -218,7 +218,7 @@ jobs:
 
           echo '{' > ./artifact/config.json
           for n in ${!map[@]}; do
-            printf '    "%s": "%s",\n' $n ${map[$n]} #>> ./artifact/config.json
+            printf '    "%s": "%s",\n' $n ${map[$n]} >> ./artifact/config.json
           done
           echo '    "end": ""' >> ./artifact/config.json
           echo '}' >> ./artifact/config.json
