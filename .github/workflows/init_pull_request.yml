@@ -1,0 +1,17 @@
+name: Create pull request
+on:
+  push:
+    branches:
+      - 'forecast-*-ANALYST'
+jobs:
+    create_pull_request:
+        runs-on: ubuntu-latest
+        steps:
+            - name: get target branch name removing "-ANALYST"
+              id: get_branch_name
+              run: |
+                echo "::set-output name=branch_name::$(echo ${{ github.ref }} | sed 's/ANALYST//g')"
+
+            - name: Create pull request to target branch using gh cli
+              run: |
+                gh pr create --title "Merging ${{ github.ref }}" --body "Merging ${{ github.ref }} to ${{ steps.get_branch_name.outputs.branch_name }}" --base ${{ steps.get_branch_name.outputs.branch_name }} --head ${{ github.ref }}
