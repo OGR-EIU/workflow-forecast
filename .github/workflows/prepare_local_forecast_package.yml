@@ -219,8 +219,8 @@ jobs:
           map[toolset_repo_SHA]=${{ steps.toolset_repo.outputs.SHA }}
           map[data_warehouse_client_repo]=${{ env.DATA_WAREHOUSE_CLIENT_REPO }}
           map[data_warehouse_client_repo_SHA]=${{ steps.data_warehouse_client_repo.outputs.SHA }}
-          map[iris_repo]=${{ env.IRIS_TOOLBOX_REPO }}
-          map[iris_repo_SHA]=${{ steps.iris_repo.outputs.SHA }}
+          map[iris_toolbox_repo]=${{ env.IRIS_TOOLBOX_REPO }}
+          map[iris_toolbox_repo_SHA]=${{ steps.iris_repo.outputs.SHA }}
 
           echo '{' > ./artifact/config.json
           for n in ${!map[@]}; do
