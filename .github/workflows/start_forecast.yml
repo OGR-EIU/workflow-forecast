@@ -43,20 +43,7 @@ on:
 
 jobs:
 
-  job1:
-    runs-on: ubuntu-latest
-    steps:
-      - name: aaa
-        run: echo aaa
-  
-  job2:
-    runs-on: ubuntu-latest
-    steps:
-      - name: bbb
-        run: echo bbb
-
   prepare_local_environment:
-    needs: [job1, job2]
     runs-on: ubuntu-latest
     env:
       CI_AUTHOR: "Production workflow"
