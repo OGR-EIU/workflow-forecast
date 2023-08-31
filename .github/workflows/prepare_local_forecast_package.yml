@@ -34,8 +34,8 @@ on:
           required: false
           type: string
           default: ""
-      data_warehouse_repo_ref:
-          description: "Data warehouse version"
+      data_warehouse_client_repo_ref:
+          description: "Data warehouse client version"
           required: false
           type: string
           default: ""
@@ -56,7 +56,7 @@ jobs:
       WORKFLOW_FORECAST_REPO: "workflow-forecast"
       MODEL_INFRA_REPO: "model-infra"
       TOOLSET_REPO: "toolset"
-      DATA_WAREHOUSE_REPO: "data-warehouse"
+      DATA_WAREHOUSE_CLIENT_REPO: "data-warehouse-client"
       IRIS_TOOLBOX_REPO: "iris-toolbox"
 
     steps:
@@ -118,19 +118,19 @@ jobs:
 
 
 
-      - name: Clone data warehouse repo
+      - name: Clone data warehouse client repo
         uses: actions/checkout@v3
         with:
-          repository: OGR-EIU/data-warehouse
-          ref: ${{ inputs.data_warehouse_repo_ref }}
+          repository: OGR-EIU/data-warehouse-client
+          ref: ${{ inputs.data_warehouse_client_repo_ref }}
           fetch-depth: 1
-          path: ./data-warehouse
+          path: ./data-warehouse-client
           token: ${{ secrets.token_with_all_access }}
 
-      - name: Get SHA of data warehouse repo
-        id: data_warehouse_repo
+      - name: Get SHA of data warehouse client repo
+        id: data_warehouse_client_repo
         run: |
-          cd $GITHUB_WORKSPACE/data-warehouse
+          cd $GITHUB_WORKSPACE/data-warehouse-client
           SHA="$(git rev-parse --short HEAD)"
           echo "SHA=$SHA" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
@@ -211,8 +211,8 @@ jobs:
           map[model_infra_repo_SHA]=${{ steps.model_infra_repo.outputs.SHA }}
           map[toolset_repo]=${{ env.TOOLSET_REPO }}
           map[toolset_repo_SHA]=${{ steps.toolset_repo.outputs.SHA }}
-          map[data_warehouse_repo]=${{ env.DATA_WAREHOUSE_REPO }}
-          map[data_warehouse_repo_SHA]=${{ steps.data_warehouse_repo.outputs.SHA }}
+          map[data_warehouse_client_repo]=${{ env.DATA_WAREHOUSE_CLIENT_REPO }}
+          map[data_warehouse_client_repo_SHA]=${{ steps.data_warehouse_client_repo.outputs.SHA }}
           map[iris_repo]=${{ env.IRIS_TOOLBOX_REPO }}
           map[iris_repo_SHA]=${{ steps.iris_repo.outputs.SHA }}
 
