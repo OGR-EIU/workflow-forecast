@@ -39,6 +39,11 @@ on:
           required: false
           type: string
           default: ""
+      iris_repo_ref:
+          description: "Iris toolbox version"
+          required: false
+          type: string
+          default: ""
 
 
 jobs:
@@ -52,6 +57,7 @@ jobs:
       MODEL_INFRA_REPO: "model-infra"
       TOOLSET_REPO: "toolset"
       DATA_WAREHOUSE_REPO: "data-warehouse"
+      IRIS_TOOLBOX_REPO: "iris-toolbox"
 
     steps:
 
@@ -112,7 +118,7 @@ jobs:
 
 
 
-      - name: Clone data warehosue repo
+      - name: Clone data warehouse repo
         uses: actions/checkout@v3
         with:
           repository: OGR-EIU/data-warehouse
@@ -125,6 +131,25 @@ jobs:
         id: data_warehouse_repo
         run: |
           cd $GITHUB_WORKSPACE/data-warehouse
+          SHA="$(git rev-parse --short HEAD)"
+          echo "SHA=$SHA" >> $GITHUB_OUTPUT
+          cd $GITHUB_WORKSPACE
+
+
+
+      - name: Clone Iris toolbox
+        uses: actions/checkout@v3
+        with:
+          repository: IRIS-Solutions-Team/IRIS-Toolbox
+          ref: ${{ inputs.iris_repo_ref }}
+          fetch-depth: 1
+          path: ./{{ env.IRIS_TOOLBOX_REPO }}
+          token: ${{ secrets.token_with_all_access }}
+
+      - name: Get SHA of Iris toolbox repo
+        id: iris_repo
+        run: |
+          cd $GITHUB_WORKSPACE/{{ env.IRIS_TOOLBOX_REPO }}
           SHA="$(git rev-parse --short HEAD)"
           echo "SHA=$SHA" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
@@ -175,31 +200,26 @@ jobs:
           #
           cp ./workflow-forecast/.github/workflows/prepare_local_environment.py ./artifact/prepare_local_environment.py
           #
-          forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
-          timestamp=${{ steps.stamp.outputs.timestamp }}
-          workflow_forecast_repo=${{ env.WORKFLOW_FORECAST_REPO }}
-          workflow_forecast_repo_SHA=${{ steps.workflow_forecast_repo.outputs.SHA }}
-          model_repo=${{ inputs.model_repo }}
-          model_repo_SHA=${{ steps.model_repo.outputs.SHA }}
-          model_infra_repo=${{ env.MODEL_INFRA_REPO }}
-          model_infra_repo_SHA=${{ steps.model_infra_repo.outputs.SHA }}
-          toolset_repo=${{ env.TOOLSET_REPO }}
-          toolset_repo_SHA=${{ steps.toolset_repo.outputs.SHA }}
-          data_warehouse_repo=${{ env.DATA_WAREHOUSE_REPO }}
-          data_warehouse_repo_SHA=${{ steps.data_warehouse_repo.outputs.SHA }}
+          declare -A map
+          map[forecast_branch_name]=${{ steps.stamp.outputs.forecast_branch_name }}
+          map[timestamp]=${{ steps.stamp.outputs.timestamp }}
+          map[workflow_forecast_repo]=${{ env.WORKFLOW_FORECAST_REPO }}
+          map[workflow_forecast_repo_SHA]=${{ steps.workflow_forecast_repo.outputs.SHA }}
+          map[model_repo]=${{ inputs.model_repo }}
+          map[model_repo_SHA]=${{ steps.model_repo.outputs.SHA }}
+          map[model_infra_repo]=${{ env.MODEL_INFRA_REPO }}
+          map[model_infra_repo_SHA]=${{ steps.model_infra_repo.outputs.SHA }}
+          map[toolset_repo]=${{ env.TOOLSET_REPO }}
+          map[toolset_repo_SHA]=${{ steps.toolset_repo.outputs.SHA }}
+          map[data_warehouse_repo]=${{ env.DATA_WAREHOUSE_REPO }}
+          map[data_warehouse_repo_SHA]=${{ steps.data_warehouse_repo.outputs.SHA }}
+          map[iris_repo]=${{ env.IRIS_TOOLBOX_REPO }}
+          map[iris_repo_SHA]=${{ steps.iris_repo.outputs.SHA }}
+
           echo '{' > ./artifact/config.json
-          printf '    "%s": "%s",\n' forecast_branch_name $forecast_branch_name >> ./artifact/config.json
-          printf '    "%s": "%s",\n' timestamp $timestamp >> ./artifact/config.json
-          printf '    "%s": "%s",\n' workflow_forecast_repo $workflow_forecast_repo >> ./artifact/config.json
-          printf '    "%s": "%s",\n' workflow_forecast_repo_SHA $workflow_forecast_repo_SHA >> ./artifact/config.json
-          printf '    "%s": "%s",\n' model_repo $model_repo >> ./artifact/config.json
-          printf '    "%s": "%s",\n' model_repo_SHA $model_repo_SHA >> ./artifact/config.json
-          printf '    "%s": "%s",\n' model_infra_repo $model_infra_repo >> ./artifact/config.json
-          printf '    "%s": "%s",\n' model_infra_repo_SHA $model_infra_repo_SHA >> ./artifact/config.json
-          printf '    "%s": "%s",\n' toolset_repo $toolset_repo >> ./artifact/config.json
-          printf '    "%s": "%s",\n' toolset_repo_SHA $toolset_repo_SHA >> ./artifact/config.json
-          printf '    "%s": "%s",\n' data_warehouse_repo $data_warehouse_repo >> ./artifact/config.json
-          printf '    "%s": "%s",\n' data_warehouse_repo_SHA $data_warehouse_repo_SHA >> ./artifact/config.json
+          for n in ${!map[@]}; do
+            printf '    "%s": "%s",\n' $n ${map[$n]} #>> ./artifact/config.json
+          done
           echo '    "end": ""' >> ./artifact/config.json
           echo '}' >> ./artifact/config.json
 
