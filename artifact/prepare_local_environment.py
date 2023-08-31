@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     logging.info(f"Cloning {_IRIS_TOOLBOX_REPO} repo")
     shutil.rmtree(f"{_IRIS_TOOLBOX_REPO}", ignore_errors=True, )
-    iris_toolbox_repo = git.Repo.clone_from(f"git@github.com:IRIS-Solutions-Team/IRIS-Toolbox.git", f"{_IRIS_TOOLBOX_REPO}", filter="tree:0", no_checkout=True, )
+    iris_toolbox_repo = git.Repo.clone_from(f"git@githumb.com:IRIS-Solutions-Team/IRIS-Toolbox.git", f"{_IRIS_TOOLBOX_REPO}", filter="tree:0", no_checkout=True, )
     iris_toolbox_repo.git.checkout(f"{_IRIS_TOOLBOX_REPO_SHA}")
 
     logging.info(f"Cloning {_DATA_WAREHOUSE_CLIENT_REPO} repo")
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     with open(os.path.join(_MODEL_REPO, "requests", "input-data-request.json"), "rt") as f:
         request = json.load(f)
 
-    response = request_data(BASE_URL, USERNAME, PASSWORD, request, )
+    response = request_data(BASE_URL, USERNAME, PASSWORD, request, ):
 
     if response.status_code == 200:
         logging.info("Successfully retrieved forecast input data")
