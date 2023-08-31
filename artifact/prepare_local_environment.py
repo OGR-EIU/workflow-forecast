@@ -13,7 +13,7 @@ USERNAME = "test-user"
 PASSWORD = "t3stT#st"
 
 
-def request_data(base_url, username, password, request, save_to):
+def request_data(base_url, username, password, request, ):
     # authenticate to get a token (JWT)
     url = f'{base_url}/authenticate'
     payload = {
@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     logging.info(f"Cloning {_IRIS_TOOLBOX_REPO} repo")
     shutil.rmtree(f"{_IRIS_TOOLBOX_REPO}", ignore_errors=True, )
-    iris_toolbox_repo = git.Repo.clone_from(f"git@githumb.com:IRIS-Solutions-Team/IRIS-Toolbox.git", f"{_IRIS_TOOLBOX_REPO}", filter="tree:0", no_checkout=True, )
+    iris_toolbox_repo = git.Repo.clone_from(f"git@github.com:IRIS-Solutions-Team/IRIS-Toolbox.git", f"{_IRIS_TOOLBOX_REPO}", filter="tree:0", no_checkout=True, )
     iris_toolbox_repo.git.checkout(f"{_IRIS_TOOLBOX_REPO_SHA}")
 
     logging.info(f"Cloning {_DATA_WAREHOUSE_CLIENT_REPO} repo")
@@ -90,11 +90,14 @@ if __name__ == "__main__":
     data_warehouse_client_repo = git.Repo.clone_from(f"git@github.com:OGR-EIU/{_DATA_WAREHOUSE_CLIENT_REPO}.git", f"{_DATA_WAREHOUSE_CLIENT_REPO}", filter="tree:0", no_checkout=True, )
     data_warehouse_client_repo.git.checkout(f"{_DATA_WAREHOUSE_CLIENT_REPO_SHA}")
 
+    from IPython import embed; embed()
     logging.info("Requesting forecast input data")
     with open(os.path.join(_MODEL_REPO, "requests", "input-data-request.json"), "rt") as f:
         request = json.load(f)
 
-    response = request_data(BASE_URL, USERNAME, PASSWORD, request, ):
+    for i in request:
+        i["snapshot_time"] = config["timestamp"]
+    response = request_data(BASE_URL, USERNAME, PASSWORD, request, )
 
     if response.status_code == 200:
         logging.info("Successfully retrieved forecast input data")
@@ -102,7 +105,7 @@ if __name__ == "__main__":
         with open("forecast-input-data.json", 'wt') as f:
             json.dump(response.json(), f, indent=4, )
     elif response.status_code == 400:
-        loggin.critical("Bad request: please check if the requested keys exist")
+        logging.critical("Bad request: please check if the requested keys exist")
     else:
         print(response.json(), file=sys.stderr)
     response.raise_for_status()
