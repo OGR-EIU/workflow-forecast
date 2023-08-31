@@ -3,11 +3,14 @@ import git
 import json
 import os
 import shutil
+import logging
+
 
 if __name__ == "__main__":
 
     this_dir = os.path.dirname(os.path.abspath(__file__))
     config_path = os.path.join(this_dir, "config.json")
+    logging.basicConfig(level=logging.INFO, )
 
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -19,17 +22,45 @@ if __name__ == "__main__":
     _MODEL_REPO_SHA = config["model_repo_SHA"]
 
     _MODEL_INFRA_REPO = config["model_infra_repo"]
-    _MODEL_INFRA_SHA = config["model_infra_repo_SHA"]
+    _MODEL_INFRA_REPO_SHA = config["model_infra_repo_SHA"]
 
+    _IRIS_TOOLBOX_REPO = config["iris_toolbox_repo"]
+    _IRIS_TOOLBOX_REPO_SHA = config["iris_toolbox_repo_SHA"]
+
+    _TOOLSET_REPO = config["toolset_repo"]
+    _TOOLSET_REPO_SHA = config["toolset_repo_SHA"]
+
+    _DATA_WAREHOUSE_CLIENT_REPO = config["data_warehouse_client_repo"]
+    _DATA_WAREHOUSE_CLIENT_REPO_SHA = config["data_warehouse_client_repo_SHA"]
+
+    logging.info(f"Cloning {_WORKFLOW_FORECAST_REPO} repo")
     shutil.rmtree(f"{_WORKFLOW_FORECAST_REPO}", ignore_errors=True, )
     workflow_forecast_repo = git.Repo.clone_from(f"git@github.com:OGR-EIU/{_WORKFLOW_FORECAST_REPO}.git", f"{_WORKFLOW_FORECAST_REPO}", filter="tree:0", no_checkout=True, )
     workflow_forecast_repo.git.checkout(f"{_WORKFLOW_FORECAST_REPO_SHA}")
 
+    logging.info(f"Cloning {_MODEL_REPO} repo")
     shutil.rmtree(f"{_MODEL_REPO}", ignore_errors=True, )
     model_repo = git.Repo.clone_from(f"git@github.com:OGR-EIU/{_MODEL_REPO}.git", f"{_MODEL_REPO}", filter="tree:0", no_checkout=True, )
     model_repo.git.checkout(f"{_MODEL_REPO_SHA}")
 
+    logging.info(f"Cloning {_MODEL_INFRA_REPO} repo")
     shutil.rmtree(f"{_MODEL_INFRA_REPO}", ignore_errors=True, )
-    model_repo = git.Repo.clone_from(f"git@github.com:OGR-EIU/{_MODEL_INFRA_REPO}.git", f"{_MODEL_INFRA_REPO}", filter="tree:0", no_checkout=True, )
-    model_repo.git.checkout(f"{_MODEL_INFR_REPO_SHA}")
+    model_infra_repo = git.Repo.clone_from(f"git@github.com:OGR-EIU/{_MODEL_INFRA_REPO}.git", f"{_MODEL_INFRA_REPO}", filter="tree:0", no_checkout=True, )
+    model_infra_repo.git.checkout(f"{_MODEL_INFRA_REPO_SHA}")
+
+    logging.info(f"Cloning {_TOOLSET_REPO} repo")
+    shutil.rmtree(f"{_TOOLSET_REPO}", ignore_errors=True, )
+    toolset_repo = git.Repo.clone_from(f"git@github.com:OGR-EIU/{_TOOLSET_REPO}.git", f"{_TOOLSET_REPO}", filter="tree:0", no_checkout=True, )
+    toolset_repo.git.checkout(f"{_TOOLSET_REPO_SHA}")
+
+    logging.info(f"Cloning {_IRIS_TOOLBOX_REPO} repo")
+    shutil.rmtree(f"{_IRIS_TOOLBOX_REPO}", ignore_errors=True, )
+    iris_toolbox_repo = git.Repo.clone_from(f"git@githumb.com:IRIS-Solutions-Team/IRIS-Toolbox.git", f"{_IRIS_TOOLBOX_REPO}", filter="tree:0", no_checkout=True, )
+    iris_toolbox_repo.git.checkout(f"{_IRIS_TOOLBOX_REPO_SHA}")
+
+    logging.info(f"Cloning {_DATA_WAREHOUSE_CLIENT_REPO} repo")
+    shutil.rmtree(f"{_DATA_WAREHOUSE_CLIENT_REPO}", ignore_errors=True, )
+    data_warehouse_client_repo = git.Repo.clone_from(f"git@github.com:OGR-EIU/{_DATA_WAREHOUSE_CLIENT_REPO}.git", f"{_DATA_WAREHOUSE_CLIENT_REPO}", filter="tree:0", no_checkout=True, )
+    data_warehouse_client_repo.git.checkout(f"{_DATA_WAREHOUSE_CLIENT_REPO_SHA}")
+
 
