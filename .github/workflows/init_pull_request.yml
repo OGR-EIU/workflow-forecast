@@ -27,4 +27,10 @@ jobs:
 
             - name: Create pull request to target branch using gh cli
               run: |
-                gh pr create --title "Merging ${{ github.ref }}" --body "Merging ${{ github.ref }} to ${{ steps.get_branch_name.outputs.branch_name }}" --base ${{ steps.get_branch_name.outputs.branch_name }} --head ${{ github.ref }}
+                gh pr create \
+                  --title "Merging ${{ github.ref }}" \
+                  --body "Merging ${{ github.ref }} to ${{ steps.get_branch_name.outputs.branch_name }}" \
+                  --base ${{ steps.get_branch_name.outputs.branch_name }} \
+                  --head ${{ github.ref }}\
+                  --assignee nul0m
+                  --assignee jaromir-benes
