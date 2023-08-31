@@ -17,4 +17,4 @@ Function create_input is used to assign the current snapshot time (in addition t
 
 ## Link to the TC project
 
-Pre-model workflows can be found here: https://tc-eiu.ogresearch.com/project/ExampleWorkflows_ModelForecasts?mode=builds
+Pre-model workflows can be found here: https://tc-eiu.ogresearch.com/project/ExampleWorkflows_ModelForecasts?mode=builds 
