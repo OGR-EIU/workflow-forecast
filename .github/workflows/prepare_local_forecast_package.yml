@@ -225,8 +225,15 @@ jobs:
           for n in ${!map[@]}; do
             printf '    "%s": "%s",\n' $n ${map[$n]} >> ./artifact/config.json
           done
+          echo 1==============================
           printf '    "dependencies": [\n' >> ./artifact/config.json
+          echo 2==============================
           cat ./artifact/config.json
+          echo 3==============================
+          echo ${{ inputs.model_repo }}
+          echo 4==============================
+          ${{ env.MODEL_INFRA_REPO }}
+          echo 5==============================
           for d in \
             ${{ inputs.model_repo }} \
             ${{ env.MODEL_INFRA_REPO }} \
