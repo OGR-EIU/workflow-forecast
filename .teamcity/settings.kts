@@ -153,17 +153,6 @@ object ForecastInitializer : BuildType({
             workingDir = "settings/forecast"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
         }
-        python {
-            name = "Forecast step: Submit daily data to data warehouse"
-            workingDir = "api-client"
-            environment = venv {
-                requirementsFile = ""
-            }
-            command = file {
-                filename = "submit_data.py"
-                scriptArguments = "--json-request ../settings/forecast/forecast-output.json --username %api.username% --password %api.password%"
-            }
-        }
     }
 
     requirements {
