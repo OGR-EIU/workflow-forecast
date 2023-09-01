@@ -148,11 +148,6 @@ object ForecastInitializer : BuildType({
                 scriptArguments = "--request-id %workflow.forecast.scenario% --output-path tunes.csv"
             }
         }
-        script {
-            name = "Forecast step: Run forecast"
-            workingDir = "settings/forecast"
-            scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
-        }
     }
 
     requirements {
