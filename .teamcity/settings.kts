@@ -35,11 +35,7 @@ project {
 object ForecastInitializer : BuildType({
     name = "Forecast initializer"
 
-    artifactRules = """
-        build-params.json
-        settings/forecast/forecast-output.json
-        report/results/report-forecast.bundle.html
-    """.trimIndent()
+    artifactRules = "build-params.json"
 
     params {
         text("email.subject", "EIU PoC Forecast Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
