@@ -63,106 +63,13 @@ jobs:
 
         steps:
 
-            - name: Clone country model repo
-              uses: actions/checkout@v3
-              with:
-                  repository: OGR-EIU/${{ inputs.model_repo }}
-                  ref: ${{ inputs.model_repo_ref }}
-                  fetch-depth: 1
-                  path: ./${{ inputs.model_repo }}
-                  token: ${{ secrets.token_with_all_access }}
-
-            - name: Get SHA of model repo
-              id: model_repo
-              run: |
-                  cd $GITHUB_WORKSPACE/${{ inputs.model_repo }}
-                  SHA="$(git rev-parse --short HEAD)"
-                  echo "SHA=$SHA" >> $GITHUB_OUTPUT
-                  cd $GITHUB_WORKSPACE
-
-
-            - name: Clone model infra repo
-              uses: actions/checkout@v3
-              with:
-                  repository: OGR-EIU/${{ env.MODEL_INFRA_REPO }}
-                  ref: ${{ inputs.model_infra_repo_ref }}
-                  fetch-depth: 1
-                  path: ./${{ env.MODEL_INFRA_REPO }}
-                  token: ${{ secrets.token_with_all_access }}
-
-            - name: Get SHA of model infra repo
-              id: model_infra_repo
-              run: |
-                  cd $GITHUB_WORKSPACE/${{ env.MODEL_INFRA_REPO }}
-                  SHA="$(git rev-parse --short HEAD)"
-                  echo "SHA=$SHA" >> $GITHUB_OUTPUT
-                  cd $GITHUB_WORKSPACE
-  
-  
-            - name: Clone toolset repo
-              uses: actions/checkout@v3
-              with:
-                  repository: OGR-EIU/toolset
-                  ref: ${{ inputs.toolset_repo_ref }}
-                  fetch-depth: 1
-                  path: ./toolset
-                  token: ${{ secrets.token_with_all_access }}
-  
-            - name: Get SHA of toolset repo
-              id: toolset_repo
-              run: |
-                  cd $GITHUB_WORKSPACE/toolset
-                  SHA="$(git rev-parse --short HEAD)"
-                  echo "SHA=$SHA" >> $GITHUB_OUTPUT
-                  cd $GITHUB_WORKSPACE
-  
-  
-  
-            - name: Clone data warehouse client repo
-              uses: actions/checkout@v3
-              with:
-                  repository: OGR-EIU/data-warehouse-client
-                  ref: ${{ inputs.data_warehouse_client_repo_ref }}
-                  fetch-depth: 1
-                  path: ./data-warehouse-client
-                  token: ${{ secrets.token_with_all_access }}
-  
-            - name: Get SHA of data warehouse client repo
-              id: data_warehouse_client_repo
-              run: |
-                  cd $GITHUB_WORKSPACE/data-warehouse-client
-                  SHA="$(git rev-parse --short HEAD)"
-                  echo "SHA=$SHA" >> $GITHUB_OUTPUT
-                  cd $GITHUB_WORKSPACE
-  
-  
-  
-            - name: Clone Iris toolbox
-              uses: actions/checkout@v3
-              with:
-                  repository: IRIS-Solutions-Team/IRIS-Toolbox
-                  ref: ${{ inputs.iris_repo_ref }}
-                  fetch-depth: 1
-                  path: ./${{ env.IRIS_TOOLBOX_REPO }}
-                  token: ${{ secrets.token_with_all_access }}
-  
-            - name: Get SHA of Iris toolbox repo
-              id: iris_repo
-              run: |
-                  cd $GITHUB_WORKSPACE/${{ env.IRIS_TOOLBOX_REPO }}
-                  SHA="$(git rev-parse --short HEAD)"
-                  echo "SHA=$SHA" >> $GITHUB_OUTPUT
-                  cd $GITHUB_WORKSPACE
-  
-  
-  
             - name: Clone workflow repo
               uses: actions/checkout@v3
               with:
                   fetch-depth: 1
                   path: "./workflow-forecast"
                   token: ${{ secrets.token_with_all_access }}
-  
+
             - name: Create timestamp and branch name
               id: stamp
               run: |
@@ -176,7 +83,7 @@ jobs:
                   forecast_branch_name="${forecast_branch_name//:/-}"
                   echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
                   echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
-  
+
             - name: Create main forecast branch on workflow-forecast repo and get its SHA
               id: workflow_forecast_repo
               run: |
@@ -192,7 +99,7 @@ jobs:
                   echo "SHA=$SHA" >> $GITHUB_OUTPUT
                   #
                   cd $GITHUB_WORKSPACE
-  
+
             - name: Prepare artifact
               run: |
                   cd $GITHUB_WORKSPACE
@@ -200,7 +107,7 @@ jobs:
                   cp -r ./workflow-forecast/artifact ./
                   #
                   cd $GITHUB_WORKSPACE
-  
+
             - name: Prepare artifact for local environment
               run: |
                   cd $GITHUB_WORKSPACE
@@ -223,29 +130,23 @@ jobs:
                   ; do
                       cd $GITHUB_WORKSPACE/$d
                       url=$(git remote get-url origin)
-                      ref=$(git rev-parse --short HEAD)
+                      commit=$(git rev-parse --short HEAD)
                       cd $GITHUB_WORKSPACE
-                      printf '        {"dir": "%s", "url": "%s", "ref": "%s"},\n' $d $url $ref >> $CONFIG_FILE
+                      printf '        {"dir": "%s", "url": "%s", "commit": "%s"},\n' $d $url $commit >> $CONFIG_FILE
                   done
                   printf '    ],\n' >> $CONFIG_FILE
                   echo '    "end": ""' >> $CONFIG_FILE
                   echo '}' >> $CONFIG_FILE
                   #
                   cd $GITHUB_WORKSPACE
-  
+
             - name: Upload artifact
               uses: actions/upload-artifact@v3
               with:
                   name: ${{ steps.stamp.outputs.forecast_branch_name }}
                   path: ./artifact
-  
-            - name: Print out config.json
-              run: |
-                  echo ****************************************************************
-                  cat ./artifact/config.json
-                  echo ****************************************************************
-  
-            - name: Create and commit the ANALYST forecast branch
+
+            - name: Create and push the ANALYST forecast branch
               run: |
                   cd $GITHUB_WORKSPACE/workflow-forecast
                   #
@@ -254,4 +155,4 @@ jobs:
                   git push origin "$forecast_branch_name-ANALYST"
                   #
                   cd $GITHUB_WORKSPACE
-  
+
