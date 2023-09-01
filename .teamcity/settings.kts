@@ -164,14 +164,6 @@ object ForecastInitializer : BuildType({
                 scriptArguments = "--json-request ../settings/forecast/forecast-output.json --username %api.username% --password %api.password%"
             }
         }
-        python {
-            name = "Report step: Load settings"
-            workingDir = "settings/report"
-            command = file {
-                filename = "create_input.py"
-                scriptArguments = """--config-path %workflow.forecast.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.adhoc.snapshot-time%"}'"""
-            }
-        }
     }
 
     requirements {
