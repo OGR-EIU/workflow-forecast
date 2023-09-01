@@ -125,19 +125,6 @@ object ForecastInitializer : BuildType({
                 scriptArguments = """--config-path %workflow.forecast.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.adhoc.snapshot-time%"}'"""
             }
         }
-        python {
-            name = "Forecast step: Request data from data warehouse"
-            workingDir = "api-client"
-            pythonVersion = customPython {
-                executable = "/usr/bin/python3.11"
-            }
-            environment = venv {
-            }
-            command = file {
-                filename = "retrieve_data.py"
-                scriptArguments = "--settings ../settings/forecast/adjusted-input-cfg.json --save-to request-output.json --username %api.username% --password %api.password%"
-            }
-        }
     }
 
     requirements {
