@@ -230,12 +230,17 @@ jobs:
           #
           cd $GITHUB_WORKSPACE
 
-
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.stamp.outputs.forecast_branch_name }}
           path: ./artifact
+
+      - name: Print out config.json
+        run: |
+          echo ****************************************************************
+          cat ./artifact/config.json
+          echo ****************************************************************
 
       - name: Create and commit the ANALYST forecast branch
         run: |
