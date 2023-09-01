@@ -138,16 +138,6 @@ object ForecastInitializer : BuildType({
                 scriptArguments = "--settings ../settings/forecast/adjusted-input-cfg.json --save-to request-output.json --username %api.username% --password %api.password%"
             }
         }
-        python {
-            name = "Forecast step: Download tunes from Google Drive"
-            workingDir = "toolset"
-            environment = venv {
-            }
-            command = file {
-                filename = "download_file_from_gdrive.py"
-                scriptArguments = "--request-id %workflow.forecast.scenario% --output-path tunes.csv"
-            }
-        }
     }
 
     requirements {
