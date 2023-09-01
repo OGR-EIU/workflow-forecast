@@ -234,10 +234,10 @@ jobs:
             ${{ env.MODEL_INFRA_REPO }} \
             ; do
               cd $GITHUB_WORKSPACE/$d
-              pwd
               url=$(git remote get-url origin)
-              #ref=$(git rev-parse HEAD --short)
-              #printf '        {"directory": "$d", "url": "$url", "ref": "$ref"}\n' >> ./artifact/config.json
+              ref=$(git rev-parse HEAD --short)
+              cd $GITHUB_WORKSPACE
+              printf '        {"directory": "$d", "url": "$url", "ref": "$ref"}\n' >> ./artifact/config.json
           done
           printf '    ],\n' >> ./artifact/config.json
           echo '    "end": ""' >> ./artifact/config.json
