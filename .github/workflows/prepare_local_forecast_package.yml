@@ -63,12 +63,63 @@ jobs:
 
         steps:
 
+            - name: Clone country model repo
+              uses: actions/checkout@v3
+              with:
+                  repository: OGR-EIU/${{ inputs.model_repo }}
+                  ref: ${{ inputs.model_repo_ref }}
+                  fetch-depth: 1
+                  path: ./${{ inputs.model_repo }}
+                  token: ${{ secrets.token_with_all_access }}
+
+
+            - name: Clone model infra repo
+              uses: actions/checkout@v3
+              with:
+                  repository: OGR-EIU/${{ env.MODEL_INFRA_REPO }}
+                  ref: ${{ inputs.model_infra_repo_ref }}
+                  fetch-depth: 1
+                  path: ./${{ env.MODEL_INFRA_REPO }}
+                  token: ${{ secrets.token_with_all_access }}
+
+
+            - name: Clone toolset repo
+              uses: actions/checkout@v3
+              with:
+                  repository: OGR-EIU/toolset
+                  ref: ${{ inputs.toolset_repo_ref }}
+                  fetch-depth: 1
+                  path: ./toolset
+                  token: ${{ secrets.token_with_all_access }}
+
+
+            - name: Clone data warehouse client repo
+              uses: actions/checkout@v3
+              with:
+                  repository: OGR-EIU/data-warehouse-client
+                  ref: ${{ inputs.data_warehouse_client_repo_ref }}
+                  fetch-depth: 1
+                  path: ./data-warehouse-client
+                  token: ${{ secrets.token_with_all_access }}
+
+
+            - name: Clone Iris toolbox
+              uses: actions/checkout@v3
+              with:
+                  repository: IRIS-Solutions-Team/IRIS-Toolbox
+                  ref: ${{ inputs.iris_repo_ref }}
+                  fetch-depth: 1
+                  path: ./${{ env.IRIS_TOOLBOX_REPO }}
+                  token: ${{ secrets.token_with_all_access }}
+
+
             - name: Clone workflow repo
               uses: actions/checkout@v3
               with:
                   fetch-depth: 1
                   path: "./workflow-forecast"
                   token: ${{ secrets.token_with_all_access }}
+
 
             - name: Create timestamp and branch name
               id: stamp
@@ -83,6 +134,7 @@ jobs:
                   forecast_branch_name="${forecast_branch_name//:/-}"
                   echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
                   echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
+
 
             - name: Create main forecast branch on workflow-forecast repo and get its SHA
               id: workflow_forecast_repo
@@ -100,6 +152,7 @@ jobs:
                   #
                   cd $GITHUB_WORKSPACE
 
+
             - name: Prepare artifact
               run: |
                   cd $GITHUB_WORKSPACE
@@ -107,6 +160,7 @@ jobs:
                   cp -r ./workflow-forecast/artifact ./
                   #
                   cd $GITHUB_WORKSPACE
+
 
             - name: Prepare artifact for local environment
               run: |
@@ -140,13 +194,22 @@ jobs:
                   #
                   cd $GITHUB_WORKSPACE
 
+
             - name: Upload artifact
               uses: actions/upload-artifact@v3
               with:
                   name: ${{ steps.stamp.outputs.forecast_branch_name }}
                   path: ./artifact
 
-            - name: Create and push the ANALYST forecast branch
+
+            - name: Print out config.json
+              run: |
+                  echo ****************************************************************
+                  cat ./artifact/config.json
+                  echo ****************************************************************
+
+
+            - name: Create and commit the ANALYST forecast branch
               run: |
                   cd $GITHUB_WORKSPACE/workflow-forecast
                   #
