@@ -83,16 +83,16 @@ jobs:
       - name: Clone model infra repo
         uses: actions/checkout@v3
         with:
-          repository: OGR-EIU/model-infra
+          repository: OGR-EIU/${{ env.MODEL_INFRA_REPO }}
           ref: ${{ inputs.model_infra_repo_ref }}
           fetch-depth: 1
-          path: ./model-infra
+          path: ./${{ env.MODEL_INFRA_REPO }}
           token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of model infra repo
         id: model_infra_repo
         run: |
-          cd $GITHUB_WORKSPACE/model-infra
+          cd $GITHUB_WORKSPACE/${{ env.MODEL_INFRA_REPO }}
           SHA="$(git rev-parse --short HEAD)"
           echo "SHA=$SHA" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
@@ -201,7 +201,7 @@ jobs:
           #
           cd $GITHUB_WORKSPACE
 
-      - name: Prepare artifact for local envi
+      - name: Prepare artifact for local env
         run: |
           cd $GITHUB_WORKSPACE
           #
@@ -225,6 +225,17 @@ jobs:
           for n in ${!map[@]}; do
             printf '    "%s": "%s",\n' $n ${map[$n]} >> ./artifact/config.json
           done
+          printf '    "dependencies": [\n' >> ./artifact/config.json
+          for d in \
+            ${{ inputs.model_repo }} \
+            ${{ env.MODEL_INFRA_REPO }} \
+            ; do
+              cd $GITHUB_WORKSPACE/$d
+              url=$(git remote get-url origin)
+              ref=$(git rev-parse HEAD --short)
+              printf '        {"directory": "$d", "url": "$url", "ref": $ref}\n' >> ./artifact/config.json
+          done
+          printf '    ],'
           echo '    "end": ""' >> ./artifact/config.json
           echo '}' >> ./artifact/config.json
           #
