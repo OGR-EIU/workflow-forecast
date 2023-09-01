@@ -233,7 +233,7 @@ jobs:
               cd $GITHUB_WORKSPACE/$d
               url=$(git remote get-url origin)
               ref=$(git rev-parse HEAD --short)
-              printf '        {"directory": "$d", "url": "$url", "ref": $ref}\n' >> ./artifact/config.json
+              printf '        {"directory": "$d", "url": "$url", "ref": "$ref"}\n' >> ./artifact/config.json
           done
           printf '    ],'
           echo '    "end": ""' >> ./artifact/config.json
