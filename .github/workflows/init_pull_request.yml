@@ -1,12 +1,17 @@
 name: Create pull request
+
+permissions:
+    actions: write
+    pull-requests: write
+
 on:
   push:
     branches:
       - 'forecast-*-ANALYST'
 jobs:
     create_pull_request:
-        runs-on: ubuntu-latest
         permissions: write-all
+        runs-on: ubuntu-latest
         env:
             GH_TOKEN: ${{ github.token }}
         steps:
@@ -18,8 +23,14 @@ jobs:
             - name: get target branch name removing "-ANALYST"
               id: get_branch_name
               run: |
-                echo "::set-output name=branch_name::$(echo ${{ github.ref }} | sed 's/-ANALYST//g')"
+                echo "branch_name=$(echo ${{ github.ref }} | sed 's/-ANALYST//g')" >> $GITHUB_OUTPUT
 
             - name: Create pull request to target branch using gh cli
               run: |
-                gh pr create --title "Merging ${{ github.ref }}" --body "Merging ${{ github.ref }} to ${{ steps.get_branch_name.outputs.branch_name }}" --base ${{ steps.get_branch_name.outputs.branch_name }} --head ${{ github.ref }}
+                gh pr create \
+                  --title "Merging ${{ github.ref }}" \
+                  --body "Merging ${{ github.ref }} to ${{ steps.get_branch_name.outputs.branch_name }}" \
+                  --base ${{ steps.get_branch_name.outputs.branch_name }} \
+                  --head ${{ github.ref }} \
+                  --assignee nul0m \
+                  --assignee jaromir-benes
