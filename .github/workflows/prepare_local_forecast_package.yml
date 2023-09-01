@@ -1,71 +1,71 @@
 name: Prepare local forecast package
 
 permissions:
-  actions: write
+    actions: write
 
 on:
-  workflow_dispatch:
-    inputs:
-      model_repo:
-         description: "Country model repo"
-         required: true
-         type: choice
-         options:
-           - "Model-EA"
+    workflow_dispatch:
+        inputs:
+            model_repo:
+                description: "Country model repo"
+        required: true
+        type: choice
+        options:
+            - "Model-EA"
            - "Model-US"
            - "Model-CZ"
-      model_repo_ref:
-          description: "Country model version"
-          required: false
-          type: string
-          default: ""
-      input_data_snapshot_time:
-          description: "Input data snapshot time"
-          required: false
-          type: string
-          default: ""
-      model_infra_repo_ref:
-          description: "Model infrastructure version"
-          required: false
-          type: string
-          default: ""
-      toolset_repo_ref:
-          description: "Toolset version"
-          required: false
-          type: string
-          default: ""
-      data_warehouse_client_repo_ref:
-          description: "Data warehouse client version"
-          required: false
-          type: string
-          default: ""
-      iris_repo_ref:
-          description: "Iris toolbox version"
-          required: false
-          type: string
-          default: ""
-
+    model_repo_ref:
+        description: "Country model version"
+        required: false
+        type: string
+        default: ""
+    input_data_snapshot_time:
+        description: "Input data snapshot time"
+        required: false
+        type: string
+        default: ""
+    model_infra_repo_ref:
+        description: "Model infrastructure version"
+        required: false
+        type: string
+        default: ""
+    toolset_repo_ref:
+        description: "Toolset version"
+        required: false
+        type: string
+        default: ""
+    data_warehouse_client_repo_ref:
+        description: "Data warehouse client version"
+        required: false
+        type: string
+        default: ""
+    iris_repo_ref:
+        description: "Iris toolbox version"
+        required: false
+        type: string
+        default: ""
 
 jobs:
 
-  prepare_local_forecast_package:
-    runs-on: ubuntu-latest
+    prepare_local_forecast_package:
+        runs-on: ubuntu-latest
 
     env:
-      CI_AUTHOR: "Production workflow"
-      CI_EMAIL: "noreply@ogresearch.com"
-      WORKFLOW_FORECAST_REPO: "workflow-forecast"
-      MODEL_INFRA_REPO: "model-infra"
-      TOOLSET_REPO: "toolset"
-      DATA_WAREHOUSE_CLIENT_REPO: "data-warehouse-client"
-      IRIS_TOOLBOX_REPO: "iris-toolbox"
+        CI_AUTHOR: "Production workflow"
+    CI_EMAIL: "noreply@ogresearch.com"
+    WORKFLOW_FORECAST_REPO: "workflow-forecast"
+    MODEL_REPO: ${{ inputs.model_repo }}
+    MODEL_INFRA_REPO: "model-infra"
+    TOOLSET_REPO: "toolset"
+    DATA_WAREHOUSE_CLIENT_REPO: "data-warehouse-client"
+    IRIS_TOOLBOX_REPO: "iris-toolbox"
 
     steps:
 
-      - name: Clone country model repo
-        uses: actions/checkout@v3
-        with:
-          repository: OGR-EIU/${{ inputs.model_repo }}
+        - name: Clone country model repo
+          uses: actions/checkout@v3
+          with:
+              repository: OGR-EIU/${{ inputs.model_repo }}
           ref: ${{ inputs.model_repo_ref }}
           fetch-depth: 1
           path: ./${{ inputs.model_repo }}
@@ -74,193 +74,184 @@ jobs:
       - name: Get SHA of model repo
         id: model_repo
         run: |
-          cd $GITHUB_WORKSPACE/${{ inputs.model_repo }}
-          SHA="$(git rev-parse --short HEAD)"
-          echo "SHA=$SHA" >> $GITHUB_OUTPUT
-          cd $GITHUB_WORKSPACE
+            cd $GITHUB_WORKSPACE/${{ inputs.model_repo }}
+            SHA="$(git rev-parse --short HEAD)"
+            echo "SHA=$SHA" >> $GITHUB_OUTPUT
+            cd $GITHUB_WORKSPACE
 
 
       - name: Clone model infra repo
         uses: actions/checkout@v3
         with:
-          repository: OGR-EIU/${{ env.MODEL_INFRA_REPO }}
-          ref: ${{ inputs.model_infra_repo_ref }}
-          fetch-depth: 1
-          path: ./${{ env.MODEL_INFRA_REPO }}
-          token: ${{ secrets.token_with_all_access }}
+            repository: OGR-EIU/${{ env.MODEL_INFRA_REPO }}
+        ref: ${{ inputs.model_infra_repo_ref }}
+        fetch-depth: 1
+        path: ./${{ env.MODEL_INFRA_REPO }}
+        token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of model infra repo
         id: model_infra_repo
         run: |
-          cd $GITHUB_WORKSPACE/${{ env.MODEL_INFRA_REPO }}
-          SHA="$(git rev-parse --short HEAD)"
-          echo "SHA=$SHA" >> $GITHUB_OUTPUT
-          cd $GITHUB_WORKSPACE
+            cd $GITHUB_WORKSPACE/${{ env.MODEL_INFRA_REPO }}
+            SHA="$(git rev-parse --short HEAD)"
+            echo "SHA=$SHA" >> $GITHUB_OUTPUT
+            cd $GITHUB_WORKSPACE
 
 
       - name: Clone toolset repo
         uses: actions/checkout@v3
         with:
-          repository: OGR-EIU/toolset
-          ref: ${{ inputs.toolset_repo_ref }}
-          fetch-depth: 1
-          path: ./toolset
-          token: ${{ secrets.token_with_all_access }}
+            repository: OGR-EIU/toolset
+        ref: ${{ inputs.toolset_repo_ref }}
+        fetch-depth: 1
+        path: ./toolset
+        token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of toolset repo
         id: toolset_repo
         run: |
-          cd $GITHUB_WORKSPACE/toolset
-          SHA="$(git rev-parse --short HEAD)"
-          echo "SHA=$SHA" >> $GITHUB_OUTPUT
-          cd $GITHUB_WORKSPACE
+            cd $GITHUB_WORKSPACE/toolset
+            SHA="$(git rev-parse --short HEAD)"
+            echo "SHA=$SHA" >> $GITHUB_OUTPUT
+            cd $GITHUB_WORKSPACE
 
 
 
       - name: Clone data warehouse client repo
         uses: actions/checkout@v3
         with:
-          repository: OGR-EIU/data-warehouse-client
-          ref: ${{ inputs.data_warehouse_client_repo_ref }}
-          fetch-depth: 1
-          path: ./data-warehouse-client
-          token: ${{ secrets.token_with_all_access }}
+            repository: OGR-EIU/data-warehouse-client
+        ref: ${{ inputs.data_warehouse_client_repo_ref }}
+        fetch-depth: 1
+        path: ./data-warehouse-client
+        token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of data warehouse client repo
         id: data_warehouse_client_repo
         run: |
-          cd $GITHUB_WORKSPACE/data-warehouse-client
-          SHA="$(git rev-parse --short HEAD)"
-          echo "SHA=$SHA" >> $GITHUB_OUTPUT
-          cd $GITHUB_WORKSPACE
+            cd $GITHUB_WORKSPACE/data-warehouse-client
+            SHA="$(git rev-parse --short HEAD)"
+            echo "SHA=$SHA" >> $GITHUB_OUTPUT
+            cd $GITHUB_WORKSPACE
 
 
 
       - name: Clone Iris toolbox
         uses: actions/checkout@v3
         with:
-          repository: IRIS-Solutions-Team/IRIS-Toolbox
-          ref: ${{ inputs.iris_repo_ref }}
-          fetch-depth: 1
-          path: ./${{ env.IRIS_TOOLBOX_REPO }}
-          token: ${{ secrets.token_with_all_access }}
+            repository: IRIS-Solutions-Team/IRIS-Toolbox
+        ref: ${{ inputs.iris_repo_ref }}
+        fetch-depth: 1
+        path: ./${{ env.IRIS_TOOLBOX_REPO }}
+        token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of Iris toolbox repo
         id: iris_repo
         run: |
-          cd $GITHUB_WORKSPACE/${{ env.IRIS_TOOLBOX_REPO }}
-          SHA="$(git rev-parse --short HEAD)"
-          echo "SHA=$SHA" >> $GITHUB_OUTPUT
-          cd $GITHUB_WORKSPACE
+            cd $GITHUB_WORKSPACE/${{ env.IRIS_TOOLBOX_REPO }}
+            SHA="$(git rev-parse --short HEAD)"
+            echo "SHA=$SHA" >> $GITHUB_OUTPUT
+            cd $GITHUB_WORKSPACE
 
 
 
       - name: Clone workflow repo
         uses: actions/checkout@v3
         with:
-          fetch-depth: 1
-          path: "./workflow-forecast"
-          token: ${{ secrets.token_with_all_access }}
+            fetch-depth: 1
+        path: "./workflow-forecast"
+        token: ${{ secrets.token_with_all_access }}
 
       - name: Create timestamp and branch name
         id: stamp
         run: |
-          if [[ _${{ inputs.input_data_snapshot_time }} == "_" ]]; then
+            if [[ _${{ inputs.input_data_snapshot_time }} == "_" ]]; then
             timestamp="$(date -uIseconds)"
             timestamp="${timestamp/+00:00/}Z"
-          else
+            else
             timestamp=${{ inputs.input_data_snapshot_time }}
-          fi
-          forecast_branch_name="forecast-${{ inputs.model_repo }}-$timestamp"
-          forecast_branch_name="${forecast_branch_name//:/-}"
-          echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
-          echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
+            fi
+            forecast_branch_name="forecast-${{ inputs.model_repo }}-$timestamp"
+            forecast_branch_name="${forecast_branch_name//:/-}"
+            echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
+            echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
 
       - name: Create main forecast branch on workflow-forecast repo and get its SHA
         id: workflow_forecast_repo
         run: |
-          cd $GITHUB_WORKSPACE/workflow-forecast
-          forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
-          #
-          git config user.name "${{ env.CI_AUTHOR }}"
-          git config user.email "${{ env.CI_EMAIL }}"
-          #
-          git switch -c "$forecast_branch_name"
-          # git commit -m "Prepared $forecast_branch_name"
-          git push origin "$forecast_branch_name"
-          SHA="$(git rev-parse --short HEAD)"
-          echo "SHA=$SHA" >> $GITHUB_OUTPUT
-          #
-          cd $GITHUB_WORKSPACE
+            cd $GITHUB_WORKSPACE/workflow-forecast
+            forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
+            #
+            git config user.name "${{ env.CI_AUTHOR }}"
+            git config user.email "${{ env.CI_EMAIL }}"
+            #
+            git switch -c "$forecast_branch_name"
+            git push origin "$forecast_branch_name"
+            SHA="$(git rev-parse --short HEAD)"
+            echo "SHA=$SHA" >> $GITHUB_OUTPUT
+            #
+            cd $GITHUB_WORKSPACE
 
       - name: Prepare artifact
         run: |
-          cd $GITHUB_WORKSPACE
-          #
-          cp -r ./workflow-forecast/artifact ./
-          #
-          cd $GITHUB_WORKSPACE
+            cd $GITHUB_WORKSPACE
+            #
+            cp -r ./workflow-forecast/artifact ./
+            #
+            cd $GITHUB_WORKSPACE
 
       - name: Prepare artifact for local environment
         run: |
-          cd $GITHUB_WORKSPACE
-          #
-          declare -A map
-          map[forecast_branch_name]=${{ steps.stamp.outputs.forecast_branch_name }}
-          map[timestamp]=${{ steps.stamp.outputs.timestamp }}
-          map[workflow_forecast_repo]=${{ env.WORKFLOW_FORECAST_REPO }}
-          map[workflow_forecast_repo_SHA]=${{ steps.workflow_forecast_repo.outputs.SHA }}
-          map[toolset_repo]=${{ env.TOOLSET_REPO }}
-          map[toolset_repo_SHA]=${{ steps.toolset_repo.outputs.SHA }}
-          map[data_warehouse_client_repo]=${{ env.DATA_WAREHOUSE_CLIENT_REPO }}
-          map[data_warehouse_client_repo_SHA]=${{ steps.data_warehouse_client_repo.outputs.SHA }}
-          map[iris_toolbox_repo]=${{ env.IRIS_TOOLBOX_REPO }}
-          map[iris_toolbox_repo_SHA]=${{ steps.iris_repo.outputs.SHA }}
-          #
-          echo '{' > ./artifact/config.json
-          for n in ${!map[@]}; do
-            printf '    "%s": "%s",\n' $n ${map[$n]} >> ./artifact/config.json
-          done
-          printf '    "dependencies": [\n' >> ./artifact/config.json
-          cat ./artifact/config.json
-          echo ${{ inputs.model_repo }}
-          echo ${{ env.MODEL_INFRA_REPO }}
-          for d in \
-            ${{ inputs.model_repo }} \
-            ${{ env.MODEL_INFRA_REPO }} \
+            cd $GITHUB_WORKSPACE
+            #
+            CONFIG_FILE=./artifact/config.json
+            echo '{' > $CONFIG_FILE
+            printf '    "forecast_branch_name": "%s",\n' ${{ steps.stamp.outputs.forecast_branch_name }} >> $CONFIG_FILE
+            printf '    "timestamp": "%s",\n' ${{ steps.stamp.outputs.timestamp }} >> $CONFIG_FILE
+            printf '    "dependencies": [\n' >> $CONFIG_FILE
+            cat ./artifact/config.json
+            echo ${{ inputs.model_repo }}
+            echo ${{ env.MODEL_INFRA_REPO }}
+            for d in \
+                ${{ env.WORKFLOW_FORECAST_REPO }} \
+                ${{ env.MODEL_REPO }} \
+                ${{ env.MODEL_INFRA_REPO }} \
+                ${{ env.TOOLSET_REPO }} \
+                ${{ env.DATA_WAREHOUSE_CLIENT_REPO }} \
+                ${{ env.IRIS_TOOLBOX_REPO }} \
             ; do
-              cd $GITHUB_WORKSPACE/$d
-              url=$(git remote get-url origin)
-              ref=$(git rev-parse --short HEAD)
-              cd $GITHUB_WORKSPACE
-              printf '        {"dir": "%s", "url": "%s", "ref": "%s"},\n' $d $url $ref >> ./artifact/config.json
-          done
-          printf '    ],\n' >> ./artifact/config.json
-          echo '    "end": ""' >> ./artifact/config.json
-          echo '}' >> ./artifact/config.json
-          #
-          cd $GITHUB_WORKSPACE
+                cd $GITHUB_WORKSPACE/$d
+                url=$(git remote get-url origin)
+                ref=$(git rev-parse --short HEAD)
+                cd $GITHUB_WORKSPACE
+                printf '        {"dir": "%s", "url": "%s", "ref": "%s"},\n' $d $url $ref >> $CONFIG_FILE
+            done
+            printf '    ],\n' >> $CONFIG_FILE
+            echo '    "end": ""' >> $CONFIG_FILE
+            echo '}' >> $CONFIG_FILE
+            #
+            cd $GITHUB_WORKSPACE
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.stamp.outputs.forecast_branch_name }}
-          path: ./artifact
+            name: ${{ steps.stamp.outputs.forecast_branch_name }}
+        path: ./artifact
 
       - name: Print out config.json
         run: |
-          echo ****************************************************************
-          cat ./artifact/config.json
-          echo ****************************************************************
+            echo ****************************************************************
+            cat ./artifact/config.json
+            echo ****************************************************************
 
       - name: Create and commit the ANALYST forecast branch
         run: |
-          cd $GITHUB_WORKSPACE/workflow-forecast
-          #
-          forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
-          git switch -c "$forecast_branch_name-ANALYST"
-          git push origin "$forecast_branch_name-ANALYST"
-          #
-          cd $GITHUB_WORKSPACE
+            cd $GITHUB_WORKSPACE/workflow-forecast
+            #
+            forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
+            git switch -c "$forecast_branch_name-ANALYST"
+            git push origin "$forecast_branch_name-ANALYST"
+            #
+            cd $GITHUB_WORKSPACE
 
 
