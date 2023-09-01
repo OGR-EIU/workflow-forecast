@@ -12,8 +12,8 @@ on:
         type: choice
         options:
             - "Model-EA"
-           - "Model-US"
-           - "Model-CZ"
+            - "Model-US"
+            - "Model-CZ"
     model_repo_ref:
         description: "Country model version"
         required: false
@@ -52,13 +52,13 @@ jobs:
 
     env:
         CI_AUTHOR: "Production workflow"
-    CI_EMAIL: "noreply@ogresearch.com"
-    WORKFLOW_FORECAST_REPO: "workflow-forecast"
-    MODEL_REPO: ${{ inputs.model_repo }}
-    MODEL_INFRA_REPO: "model-infra"
-    TOOLSET_REPO: "toolset"
-    DATA_WAREHOUSE_CLIENT_REPO: "data-warehouse-client"
-    IRIS_TOOLBOX_REPO: "iris-toolbox"
+        CI_EMAIL: "noreply@ogresearch.com"
+        WORKFLOW_FORECAST_REPO: "workflow-forecast"
+        MODEL_REPO: ${{ inputs.model_repo }}
+        MODEL_INFRA_REPO: "model-infra"
+        TOOLSET_REPO: "toolset"
+        DATA_WAREHOUSE_CLIENT_REPO: "data-warehouse-client"
+        IRIS_TOOLBOX_REPO: "iris-toolbox"
 
     steps:
 
@@ -66,10 +66,10 @@ jobs:
           uses: actions/checkout@v3
           with:
               repository: OGR-EIU/${{ inputs.model_repo }}
-          ref: ${{ inputs.model_repo_ref }}
-          fetch-depth: 1
-          path: ./${{ inputs.model_repo }}
-          token: ${{ secrets.token_with_all_access }}
+              ref: ${{ inputs.model_repo_ref }}
+              fetch-depth: 1
+              path: ./${{ inputs.model_repo }}
+              token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of model repo
         id: model_repo
@@ -84,10 +84,10 @@ jobs:
         uses: actions/checkout@v3
         with:
             repository: OGR-EIU/${{ env.MODEL_INFRA_REPO }}
-        ref: ${{ inputs.model_infra_repo_ref }}
-        fetch-depth: 1
-        path: ./${{ env.MODEL_INFRA_REPO }}
-        token: ${{ secrets.token_with_all_access }}
+            ref: ${{ inputs.model_infra_repo_ref }}
+            fetch-depth: 1
+            path: ./${{ env.MODEL_INFRA_REPO }}
+            token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of model infra repo
         id: model_infra_repo
@@ -102,10 +102,10 @@ jobs:
         uses: actions/checkout@v3
         with:
             repository: OGR-EIU/toolset
-        ref: ${{ inputs.toolset_repo_ref }}
-        fetch-depth: 1
-        path: ./toolset
-        token: ${{ secrets.token_with_all_access }}
+            ref: ${{ inputs.toolset_repo_ref }}
+            fetch-depth: 1
+            path: ./toolset
+            token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of toolset repo
         id: toolset_repo
@@ -121,10 +121,10 @@ jobs:
         uses: actions/checkout@v3
         with:
             repository: OGR-EIU/data-warehouse-client
-        ref: ${{ inputs.data_warehouse_client_repo_ref }}
-        fetch-depth: 1
-        path: ./data-warehouse-client
-        token: ${{ secrets.token_with_all_access }}
+            ref: ${{ inputs.data_warehouse_client_repo_ref }}
+            fetch-depth: 1
+            path: ./data-warehouse-client
+            token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of data warehouse client repo
         id: data_warehouse_client_repo
@@ -140,10 +140,10 @@ jobs:
         uses: actions/checkout@v3
         with:
             repository: IRIS-Solutions-Team/IRIS-Toolbox
-        ref: ${{ inputs.iris_repo_ref }}
-        fetch-depth: 1
-        path: ./${{ env.IRIS_TOOLBOX_REPO }}
-        token: ${{ secrets.token_with_all_access }}
+            ref: ${{ inputs.iris_repo_ref }}
+            fetch-depth: 1
+            path: ./${{ env.IRIS_TOOLBOX_REPO }}
+            token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of Iris toolbox repo
         id: iris_repo
@@ -159,8 +159,8 @@ jobs:
         uses: actions/checkout@v3
         with:
             fetch-depth: 1
-        path: "./workflow-forecast"
-        token: ${{ secrets.token_with_all_access }}
+            path: "./workflow-forecast"
+            token: ${{ secrets.token_with_all_access }}
 
       - name: Create timestamp and branch name
         id: stamp
@@ -236,7 +236,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
             name: ${{ steps.stamp.outputs.forecast_branch_name }}
-        path: ./artifact
+            path: ./artifact
 
       - name: Print out config.json
         run: |
@@ -253,5 +253,4 @@ jobs:
             git push origin "$forecast_branch_name-ANALYST"
             #
             cd $GITHUB_WORKSPACE
-
 
