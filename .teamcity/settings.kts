@@ -185,11 +185,6 @@ object ForecastInitializer : BuildType({
                 scriptArguments = "--settings ../settings/report/adjusted-input-cfg.json --save-to post-output.json --username %api.username% --password %api.password%"
             }
         }
-        script {
-            name = "Report step: Generate report"
-            workingDir = "report"
-            scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.report%"; exit ${'$'}?"""
-        }
     }
 
     requirements {
