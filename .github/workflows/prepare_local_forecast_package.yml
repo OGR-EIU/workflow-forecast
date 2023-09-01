@@ -210,10 +210,6 @@ jobs:
           map[timestamp]=${{ steps.stamp.outputs.timestamp }}
           map[workflow_forecast_repo]=${{ env.WORKFLOW_FORECAST_REPO }}
           map[workflow_forecast_repo_SHA]=${{ steps.workflow_forecast_repo.outputs.SHA }}
-          map[model_repo]=${{ inputs.model_repo }}
-          map[model_repo_SHA]=${{ steps.model_repo.outputs.SHA }}
-          map[model_infra_repo]=${{ env.MODEL_INFRA_REPO }}
-          map[model_infra_repo_SHA]=${{ steps.model_infra_repo.outputs.SHA }}
           map[toolset_repo]=${{ env.TOOLSET_REPO }}
           map[toolset_repo_SHA]=${{ steps.toolset_repo.outputs.SHA }}
           map[data_warehouse_client_repo]=${{ env.DATA_WAREHOUSE_CLIENT_REPO }}
@@ -237,7 +233,7 @@ jobs:
               url=$(git remote get-url origin)
               ref=$(git rev-parse --short HEAD)
               cd $GITHUB_WORKSPACE
-              printf '        {"directory": "$d", "url": "$url", "ref": "$ref"}\n' >> ./artifact/config.json
+              printf '        {"dir": "%s", "url": "%s", "ref": "%s"},\n' $d $url $ref >> ./artifact/config.json
           done
           printf '    ],\n' >> ./artifact/config.json
           echo '    "end": ""' >> ./artifact/config.json
