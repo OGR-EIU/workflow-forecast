@@ -1,8 +1,13 @@
-function runner(model_dir, input_mapping_path, input_data_path, input_tunes_path, output_mapping_path, output_data_path, is_tc)
-    addpath("../../iris");
+function runner(model_dir, input_data_path, input_tunes_path, output_data_path, is_tc)
+    addpath("../../iris-toolset");
     addpath("../../toolset");
     addpath("../../model-infra");
     iris.startup;
+
+    % mapping files are located in the model directory
+    ccy = split(model_dir, "-")
+    input_mapping_path = fullfile(model_dir, "mappings", [ccy '-input-mapping.json']);
+    output_mapping_path = fullfile(model_dir, "mappings", [ccy '-output-mapping.json']);
 
     % check if running from TC
     if is_tc
