@@ -60,9 +60,6 @@ jobs:
       DATA_WAREHOUSE_CLIENT_REPO: "data-warehouse-client"
       IRIS_TOOLBOX_REPO: "iris-toolbox"
 
-    secrets:
-      token: ${{ secrets.token_with_all_access }}
-
     steps:
 
       - name: Clone country model repo
@@ -72,7 +69,7 @@ jobs:
           ref: ${{ inputs.model_repo_ref }}
           fetch-depth: 1
           path: ./${{ inputs.model_repo }}
-          token: ${{ secrets.token }}
+          token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of model repo
         id: model_repo
@@ -90,7 +87,7 @@ jobs:
           ref: ${{ inputs.model_infra_repo_ref }}
           fetch-depth: 1
           path: ./model-infra
-          token: ${{ secrets.token }}
+          token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of model infra repo
         id: model_infra_repo
@@ -108,7 +105,7 @@ jobs:
           ref: ${{ inputs.toolset_repo_ref }}
           fetch-depth: 1
           path: ./toolset
-          token: ${{ secrets.token }}
+          token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of toolset repo
         id: toolset_repo
@@ -127,7 +124,7 @@ jobs:
           ref: ${{ inputs.data_warehouse_client_repo_ref }}
           fetch-depth: 1
           path: ./data-warehouse-client
-          token: ${{ secrets.token }}
+          token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of data warehouse client repo
         id: data_warehouse_client_repo
@@ -146,7 +143,7 @@ jobs:
           ref: ${{ inputs.iris_repo_ref }}
           fetch-depth: 1
           path: ./${{ env.IRIS_TOOLBOX_REPO }}
-          token: ${{ secrets.token }}
+          token: ${{ secrets.token_with_all_access }}
 
       - name: Get SHA of Iris toolbox repo
         id: iris_repo
@@ -163,7 +160,7 @@ jobs:
         with:
           fetch-depth: 1
           path: "./workflow-forecast"
-          token: ${{ secrets.token }}
+          token: ${{ secrets.token_with_all_access }}
 
       - name: Create timestamp and branch name
         id: stamp
