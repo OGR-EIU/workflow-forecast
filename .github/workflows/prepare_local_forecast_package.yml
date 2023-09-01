@@ -48,8 +48,9 @@ on:
 
 jobs:
 
-  prepare_local_environment:
+  prepare_local_forecast_package:
     runs-on: ubuntu-latest
+
     env:
       CI_AUTHOR: "Production workflow"
       CI_EMAIL: "noreply@ogresearch.com"
@@ -58,6 +59,9 @@ jobs:
       TOOLSET_REPO: "toolset"
       DATA_WAREHOUSE_CLIENT_REPO: "data-warehouse-client"
       IRIS_TOOLBOX_REPO: "iris-toolbox"
+
+    secrets:
+      token: ${{ secrets.token_with_all_access }}
 
     steps:
 
@@ -68,7 +72,7 @@ jobs:
           ref: ${{ inputs.model_repo_ref }}
           fetch-depth: 1
           path: ./${{ inputs.model_repo }}
-          token: ${{ secrets.token_with_all_access }}
+          token: ${{ secrets.token }}
 
       - name: Get SHA of model repo
         id: model_repo
@@ -79,7 +83,6 @@ jobs:
           cd $GITHUB_WORKSPACE
 
 
-
       - name: Clone model infra repo
         uses: actions/checkout@v3
         with:
@@ -87,7 +90,7 @@ jobs:
           ref: ${{ inputs.model_infra_repo_ref }}
           fetch-depth: 1
           path: ./model-infra
-          token: ${{ secrets.token_with_all_access }}
+          token: ${{ secrets.token }}
 
       - name: Get SHA of model infra repo
         id: model_infra_repo
@@ -98,7 +101,6 @@ jobs:
           cd $GITHUB_WORKSPACE
 
 
-
       - name: Clone toolset repo
         uses: actions/checkout@v3
         with:
@@ -106,7 +108,7 @@ jobs:
           ref: ${{ inputs.toolset_repo_ref }}
           fetch-depth: 1
           path: ./toolset
-          token: ${{ secrets.token_with_all_access }}
+          token: ${{ secrets.token }}
 
       - name: Get SHA of toolset repo
         id: toolset_repo
@@ -125,7 +127,7 @@ jobs:
           ref: ${{ inputs.data_warehouse_client_repo_ref }}
           fetch-depth: 1
           path: ./data-warehouse-client
-          token: ${{ secrets.token_with_all_access }}
+          token: ${{ secrets.token }}
 
       - name: Get SHA of data warehouse client repo
         id: data_warehouse_client_repo
@@ -144,7 +146,7 @@ jobs:
           ref: ${{ inputs.iris_repo_ref }}
           fetch-depth: 1
           path: ./${{ env.IRIS_TOOLBOX_REPO }}
-          token: ${{ secrets.token_with_all_access }}
+          token: ${{ secrets.token }}
 
       - name: Get SHA of Iris toolbox repo
         id: iris_repo
@@ -161,7 +163,7 @@ jobs:
         with:
           fetch-depth: 1
           path: "./workflow-forecast"
-          token: ${{ secrets.token_with_all_access }}
+          token: ${{ secrets.token }}
 
       - name: Create timestamp and branch name
         id: stamp
@@ -221,7 +223,7 @@ jobs:
           map[data_warehouse_client_repo_SHA]=${{ steps.data_warehouse_client_repo.outputs.SHA }}
           map[iris_toolbox_repo]=${{ env.IRIS_TOOLBOX_REPO }}
           map[iris_toolbox_repo_SHA]=${{ steps.iris_repo.outputs.SHA }}
-
+          #
           echo '{' > ./artifact/config.json
           for n in ${!map[@]}; do
             printf '    "%s": "%s",\n' $n ${map[$n]} >> ./artifact/config.json

@@ -90,7 +90,6 @@ if __name__ == "__main__":
     data_warehouse_client_repo = git.Repo.clone_from(f"git@github.com:OGR-EIU/{_DATA_WAREHOUSE_CLIENT_REPO}.git", f"{_DATA_WAREHOUSE_CLIENT_REPO}", filter="tree:0", no_checkout=True, )
     data_warehouse_client_repo.git.checkout(f"{_DATA_WAREHOUSE_CLIENT_REPO_SHA}")
 
-    from IPython import embed; embed()
     logging.info("Requesting forecast input data")
     with open(os.path.join(_MODEL_REPO, "requests", "input-data-request.json"), "rt") as f:
         request = json.load(f)
