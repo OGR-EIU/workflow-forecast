@@ -190,17 +190,6 @@ object ForecastInitializer : BuildType({
             workingDir = "report"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.report%"; exit ${'$'}?"""
         }
-        python {
-            name = "Report step: Send email"
-            enabled = false
-            pythonVersion = customPython {
-                executable = "/usr/bin/python3.11"
-            }
-            command = file {
-                filename = "toolset/send_mail.py"
-                scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment './report/results/report-forecast.bundle.html'"
-            }
-        }
     }
 
     requirements {
