@@ -117,14 +117,6 @@ object ForecastInitializer : BuildType({
                 if [ ${'$'}model_us != "HEAD" ]; then git checkout ${'$'}model_us; fi
             """.trimIndent()
         }
-        python {
-            name = "Forecast step: Load settings"
-            workingDir = "settings/forecast"
-            command = file {
-                filename = "create_input.py"
-                scriptArguments = """--config-path %workflow.forecast.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.adhoc.snapshot-time%"}'"""
-            }
-        }
     }
 
     requirements {
