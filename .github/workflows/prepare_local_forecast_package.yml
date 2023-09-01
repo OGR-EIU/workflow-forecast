@@ -8,42 +8,42 @@ on:
         inputs:
             model_repo:
                 description: "Country model repo"
-        required: true
-        type: choice
-        options:
-            - "Model-EA"
-            - "Model-US"
-            - "Model-CZ"
-    model_repo_ref:
-        description: "Country model version"
-        required: false
-        type: string
-        default: ""
-    input_data_snapshot_time:
-        description: "Input data snapshot time"
-        required: false
-        type: string
-        default: ""
-    model_infra_repo_ref:
-        description: "Model infrastructure version"
-        required: false
-        type: string
-        default: ""
-    toolset_repo_ref:
-        description: "Toolset version"
-        required: false
-        type: string
-        default: ""
-    data_warehouse_client_repo_ref:
-        description: "Data warehouse client version"
-        required: false
-        type: string
-        default: ""
-    iris_repo_ref:
-        description: "Iris toolbox version"
-        required: false
-        type: string
-        default: ""
+                required: true
+                type: choice
+                options:
+                    - "Model-EA"
+                    - "Model-US"
+                    - "Model-CZ"
+            model_repo_ref:
+                description: "Country model version"
+                required: false
+                type: string
+                default: ""
+            input_data_snapshot_time:
+                description: "Input data snapshot time"
+                required: false
+                type: string
+                default: ""
+            model_infra_repo_ref:
+                description: "Model infrastructure version"
+                required: false
+                type: string
+                default: ""
+            toolset_repo_ref:
+                description: "Toolset version"
+                required: false
+                type: string
+                default: ""
+            data_warehouse_client_repo_ref:
+                description: "Data warehouse client version"
+                required: false
+                type: string
+                default: ""
+            iris_repo_ref:
+                description: "Iris toolbox version"
+                required: false
+                type: string
+                default: ""
 
 jobs:
 
