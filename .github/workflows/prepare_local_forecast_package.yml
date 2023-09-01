@@ -201,7 +201,7 @@ jobs:
           #
           cd $GITHUB_WORKSPACE
 
-      - name: Prepare artifact for local env
+      - name: Prepare artifact for local environment
         run: |
           cd $GITHUB_WORKSPACE
           #
@@ -226,10 +226,15 @@ jobs:
             printf '    "%s": "%s",\n' $n ${map[$n]} >> ./artifact/config.json
           done
           printf '    "dependencies": [\n' >> ./artifact/config.json
+          cat ./artifact/config.json
           for d in \
             ${{ inputs.model_repo }} \
             ${{ env.MODEL_INFRA_REPO }} \
             ; do
+              echo ****************************
+              echo $d
+              echo ****************************
+
               cd $GITHUB_WORKSPACE/$d
               url=$(git remote get-url origin)
               ref=$(git rev-parse HEAD --short)
