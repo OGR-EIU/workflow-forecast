@@ -186,9 +186,9 @@ jobs:
                       cd $GITHUB_WORKSPACE
                       printf '        "%s": {"url": "%s", "commit": "%s"},\n' $d $url $commit >> $CONFIG_FILE
                   done
-                  printf '        {}\n' $d $url $commit >> $CONFIG_FILE
+                  printf '        "end": null\n' $d $url $commit >> $CONFIG_FILE
                   printf '    ],\n' >> $CONFIG_FILE
-                  printf '    {}\n' $d $url $commit >> $CONFIG_FILE
+                  printf '    "end": null\n' $d $url $commit >> $CONFIG_FILE
                   echo '}' >> $CONFIG_FILE
                   #
                   cd $GITHUB_WORKSPACE
