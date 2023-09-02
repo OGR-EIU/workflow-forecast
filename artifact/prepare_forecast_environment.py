@@ -34,7 +34,7 @@ def _copy_matlab_environment_files() -> None:
     logging.info("Copying Matlab environment files")
     for file_name in _MATLAB_ENVIRONMENT_FILES:
         src = os.path.join(_WORKFLOW_FORECAST_DIR, "environment", file_name, )
-        dst = os.path.join(_THIS_DIR, file, )
+        dst = os.path.join(_THIS_DIR, file_name, )
         shutil.copyfile(src, dst, )
 
 
