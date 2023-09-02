@@ -47,7 +47,7 @@ on:
 
 jobs:
 
-    prepare_local_forecast_package:
+    prepare_local_environment_artifact:
 
         runs-on: ubuntu-latest
 

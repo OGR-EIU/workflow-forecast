@@ -8,9 +8,19 @@ import requests
 import sys
 
 
-DATA_WAREHOUSE_URL = "https://eiu-dev.ogresearch.com/api"
-USERNAME = "test-user"
-PASSWORD = "t3stT#st"
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+_MODEL_DIR = os.path.join(_THIS_DIR, "model", )
+_WORKFLOW_FORECAST_DIR = os.path.join(_THIS_DIR, "workflow-forecast", )
+
+_MATLAB_ENVIRONMENT_FILES = [
+    "startup.m",
+    "run_forecast.m",
+    "apply_new_judgment.m",
+]
+
+_DATA_WAREHOUSE_URL = "https://eiu-dev.ogresearch.com/api"
+_USERNAME = "test-user"
+_PASSWORD = "t3stT#st"
 
 
 def _install_dependency(folder:str, dep: dict, ) -> None:
@@ -18,6 +28,14 @@ def _install_dependency(folder:str, dep: dict, ) -> None:
     shutil.rmtree(folder, ignore_errors=True, )
     workflow_forecast_repo = git.Repo.clone_from(dep["url"], folder, filter="tree:0", no_checkout=True, )
     workflow_forecast_repo.git.checkout(dep["commit"])
+
+
+def _copy_matlab_environment_files() -> None:
+    logging.info("Copying Matlab environment files")
+    for file_name in _MATLAB_ENVIRONMENT_FILES:
+        src = os.path.join(_WORKFLOW_FORECAST_DIR, "environment", file_name, )
+        dst = os.path.join(_THIS_DIR, file, )
+        shutil.copyfile(src, dst, )
 
 
 def _request_data(request, base_url, username, password, timestamp, ) -> None:
@@ -58,8 +76,7 @@ def _postprocess_response(response, response_path, ) -> None:
 
 if __name__ == "__main__":
 
-    this_dir = os.path.dirname(os.path.abspath(__file__))
-    config_path = os.path.join(this_dir, "config.json")
+    config_path = os.path.join(_THIS_DIR, "config.json")
     logging.basicConfig(level=logging.INFO, )
 
     with open(config_path, "r") as f:
@@ -69,14 +86,15 @@ if __name__ == "__main__":
         if folder and dep:
             _install_dependency(folder, dep, )
 
-    request_path = os.path.join(this_dir, "model", "requests", "input-data-request.json", )
+    request_path = os.path.join(_MODEL_DIR, "requests", "input-data-request.json", )
     with open(request_path, "r") as f:
         request = json.load(f)
 
+    _copy_matlab_environment_files()
+
     timestamp = config["timestamp"]
+    response = _request_data(request, _DATA_WAREHOUSE_URL, _USERNAME, _PASSWORD, timestamp, )
 
-    response = _request_data(request, DATA_WAREHOUSE_URL, USERNAME, PASSWORD, timestamp, )
-
-    response_path = os.path.join(this_dir, "input-data.json", )
+    response_path = os.path.join(_THIS_DIR, "input-data.json", )
     _postprocess_response(response, response_path, )
 
