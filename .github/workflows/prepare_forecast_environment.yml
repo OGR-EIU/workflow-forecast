@@ -1,4 +1,4 @@
-name: Prepare local forecast package
+name: Prepare forecast environment
 
 permissions:
     actions: write
@@ -55,7 +55,7 @@ jobs:
             CI_AUTHOR: "Production workflow"
             CI_EMAIL: "noreply@ogresearch.com"
             WORKFLOW_FORECAST_REPO: "workflow-forecast"
-            MODEL_REPO: ${{ inputs.model_repo }}
+            MODEL_REPO: "model"
             MODEL_INFRA_REPO: "model-infra"
             TOOLSET_REPO: "toolset"
             DATA_WAREHOUSE_CLIENT_REPO: "data-warehouse-client"
@@ -69,7 +69,7 @@ jobs:
                   repository: OGR-EIU/${{ inputs.model_repo }}
                   ref: ${{ inputs.model_repo_ref }}
                   fetch-depth: 1
-                  path: ./${{ inputs.model_repo }}
+                  path: ./${{ env.MODEL_REPO }}
                   token: ${{ secrets.token_with_all_access }}
 
 
@@ -172,8 +172,6 @@ jobs:
                   printf '    "timestamp": "%s",\n' ${{ steps.stamp.outputs.timestamp }} >> $CONFIG_FILE
                   printf '    "dependencies": [\n' >> $CONFIG_FILE
                   cat ./artifact/config.json
-                  echo ${{ inputs.model_repo }}
-                  echo ${{ env.MODEL_INFRA_REPO }}
                   for d in \
                       ${{ env.WORKFLOW_FORECAST_REPO }} \
                       ${{ env.MODEL_REPO }} \
@@ -186,7 +184,7 @@ jobs:
                       url=$(git remote get-url origin)
                       commit=$(git rev-parse --short HEAD)
                       cd $GITHUB_WORKSPACE
-                      printf '        {"dir": "%s", "url": "%s", "commit": "%s"},\n' $d $url $commit >> $CONFIG_FILE
+                      printf '        "%s": {"url": "%s", "commit": "%s"},\n' $d $url $commit >> $CONFIG_FILE
                   done
                   printf '        {}\n' $d $url $commit >> $CONFIG_FILE
                   printf '    ],\n' >> $CONFIG_FILE
@@ -205,9 +203,7 @@ jobs:
 
             - name: Print out config.json
               run: |
-                  echo ****************************************************************
                   cat ./artifact/config.json
-                  echo ****************************************************************
 
 
             - name: Create and commit the ANALYST forecast branch
