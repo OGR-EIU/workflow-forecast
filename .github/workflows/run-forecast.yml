@@ -24,7 +24,7 @@ jobs:
             - name: Install Python dependencies
               run: | 
                 cd $GITHUB_WORKSPACE
-                pip install -r requirements.txt
+                pip install -r ./workflow-forecast/requirements.txt
 
             - name: Prepare environment
               run: |
