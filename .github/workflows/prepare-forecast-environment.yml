@@ -158,7 +158,7 @@ jobs:
               run: |
                   cd $GITHUB_WORKSPACE
                   #
-                  CONFIG_FILE=./artifact/config.json
+                  CONFIG_FILE=${{ env.WORKFLOW_FORECAST_REPO }}/artifact/config.json
                   echo '{' > $CONFIG_FILE
                   printf '    "forecast-branch-name": "%s",\n' ${{ steps.stamp.outputs.forecast_branch_name }} >> $CONFIG_FILE
                   printf '    "timestamp": "%s",\n' ${{ steps.stamp.outputs.timestamp }} >> $CONFIG_FILE
