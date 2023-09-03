@@ -16,5 +16,5 @@ jobs:
 
             - name: Download artifact
               uses: actions/download-artifact@v3
-                  with:
-                      name: art
+              with:
+                name: art
