@@ -142,7 +142,8 @@ jobs:
               run: |
                   cd $GITHUB_WORKSPACE
                   #
-                  CONFIG_PATH=${{ env.WORKFLOW_FORECAST_REPO }}/artifact/config.json
+                  REL_CONFIG_PATH=artifact/config.json
+                  CONFIG_PATH=${{ env.WORKFLOW_FORECAST_REPO }}/$REL_CONFIG_PATH
                   echo '{' > $CONFIG_PATH
                   printf '    "forecast-branch-name": "%s",\n' ${{ steps.stamp.outputs.forecast_branch_name }} >> $CONFIG_PATH
                   printf '    "timestamp": "%s",\n' ${{ steps.stamp.outputs.timestamp }} >> $CONFIG_PATH
@@ -177,7 +178,7 @@ jobs:
                   printf '    },\n' >> $CONFIG_PATH
                   printf '    "end": null\n' >> $CONFIG_PATH
                   echo '}' >> $CONFIG_PATH
-                  echo "CONFIG_PATH=$CONFIG_PATH" >> $GITHUB_OUTPUT
+                  echo "REL_CONFIG_PATH=$REL_CONFIG_PATH" >> $GITHUB_OUTPUT
                   #
                   cd $GITHUB_WORKSPACE
 
@@ -192,14 +193,14 @@ jobs:
             - name: Create main forecast branch on workflow-forecast repo and get its SHA
               id: workflow_forecast_repo
               run: |
-                  cd $GITHUB_WORKSPACE/workflow-forecast
+                  cd $GITHUB_WORKSPACE/${{ env.WORKFLOW_FORECAST_REPO }}
                   forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
                   #
                   git config user.name "${{ env.CI_AUTHOR }}"
                   git config user.email "${{ env.CI_EMAIL }}"
                   #
                   git switch -c "$forecast_branch_name"
-                  git add ${{ steps.create-config.outputs.CONFIG_PATH }}
+                  git add ${{ steps.create-config.outputs.REL_CONFIG_PATH }}
                   git commit -m "Created config.json"
                   git push origin "$forecast_branch_name"
                   SHA="$(git rev-parse --short HEAD)"
@@ -210,7 +211,7 @@ jobs:
 
             - name: Create and commit the ANALYST forecast branch
               run: |
-                  cd $GITHUB_WORKSPACE/workflow-forecast
+                  cd $GITHUB_WORKSPACE/${{ env.WORKFLOW_FORECAST_REPO }}
                   #
                   forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
                   git switch -c "$forecast_branch_name-ANALYST"
