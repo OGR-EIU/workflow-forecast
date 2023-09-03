@@ -21,10 +21,6 @@ apply_new_judgment_func = @apply_new_judgment;
     apply_new_judgment_func ...
 );
 
-report_db = databank.merge("horzcat", reference_db, final_db);
-figure();
-plot(report_db.roc_rgdp);
-
 data_column = 1;
 output_response = modeler.prepare_country_output_data( ...
     final_db, ...
