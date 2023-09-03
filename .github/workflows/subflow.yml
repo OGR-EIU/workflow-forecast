@@ -9,11 +9,11 @@ jobs:
         steps:
 
             - name: Create file
-            - run: |
+              run: |
                 echo "123" > file123.txt
                 
             - name: Upload artifact
-            - uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v3
               with:
                   name: art
                   path: file123.txt
