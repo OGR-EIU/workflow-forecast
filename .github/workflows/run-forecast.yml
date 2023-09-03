@@ -21,11 +21,10 @@ jobs:
               with:
                 python-version: "3.11"
 
-            - name: Copy artifact files and prepare environment
+            - name: Prepare environment
               run: |
                 cd $GITHUB_WORKSPACE
                 cp ./workflow-forecast/artifact/*.* .
                 python prepare_forecast_environment.py --local=no
-                ls
                 cd $GITHUB_WORKSPACE
 
