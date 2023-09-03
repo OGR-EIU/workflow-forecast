@@ -35,7 +35,9 @@ jobs:
                 git branch
                 echo ===========================================
                 cd $GITHUB_WORKSPACE
-                cp ./workflow-forecast/artifact/*.* .
+                cp ./workflow-forecast/artifact/*.* ./
+                pwd
+                ls
                 python prepare_forecast_environment.py --local=no
                 echo ===========================================
                 ls
