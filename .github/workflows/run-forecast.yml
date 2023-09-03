@@ -25,7 +25,7 @@ jobs:
               run: |
                 cd $GITHUB_WORKSPACE
                 echo ===========================================
-                cd $GITHUB_WORKSPACE/workspace-forecast
+                cd $GITHUB_WORKSPACE/workflow-forecast
                 git status
                 git branch
                 echo ===========================================
@@ -35,7 +35,7 @@ jobs:
                 echo ===========================================
                 ls
                 echo ===========================================
-                cd $GITHUB_WORKSPACE/workspace-forecast
+                cd $GITHUB_WORKSPACE/workflow-forecast
                 git status
                 git branch
                 cd $GITHUB_WORKSPACE
