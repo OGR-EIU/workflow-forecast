@@ -18,12 +18,13 @@ jobs:
               uses: actions/download-artifact@v3
               with:
                 name: art
+                path: subf
 
             - name: Add to file
               run: |
                 ls
                 echo 456 > file456.txt
-                cat file123.txt file456.txt > file.txt
+                cat subf/file123.txt file456.txt > file.txt
 
             - name: Upload artifact
               uses: actions/upload-artifact@v3
