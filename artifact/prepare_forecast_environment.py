@@ -1,16 +1,17 @@
 
-import git
 import json
 import os
 import shutil
 import logging
 import requests
 import sys
+import subprocess
 
 
-_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__), )
 _MODEL_DIR = os.path.join(_THIS_DIR, "model", )
 _WORKFLOW_FORECAST_DIR = os.path.join(_THIS_DIR, "workflow-forecast", )
+_ENVIRONMENT_DIR = os.path.join(_WORKFLOW_FORECAST_DIR, "environment", )
 
 _MATLAB_ENVIRONMENT_FILES = [
     "startup.m",
@@ -24,16 +25,23 @@ _PASSWORD = "t3stT#st"
 
 
 def _install_dependency(folder:str, dep: dict, ) -> None:
-    logging.info("Cloning " + folder)
+    logging.info("Cloning " + folder, )
     shutil.rmtree(folder, ignore_errors=True, )
-    workflow_forecast_repo = git.Repo.clone_from(dep["url"], folder, filter="tree:0", no_checkout=True, )
-    workflow_forecast_repo.git.checkout(dep["commit"])
+    command = ["git", "clone", ]
+    if dep["branch"]:
+        command += ["--branch", dep["branch"], "--depth", "1", ]
+    else:
+        command += ["--no-checkout", "--filter", "tree:0", ]
+    command += [dep["url"], folder, ]
+    subprocess.run(command)
+    if dep["commitish"]:
+        subprocess.run(["git", "checkout", dep["commitish"], ], cwd=folder, )
 
 
 def _copy_matlab_environment_files() -> None:
     logging.info("Copying Matlab environment files")
     for file_name in _MATLAB_ENVIRONMENT_FILES:
-        src = os.path.join(_WORKFLOW_FORECAST_DIR, "environment", file_name, )
+        src = os.path.join(_ENVIRONMENT_DIR, file_name, )
         dst = os.path.join(_THIS_DIR, file_name, )
         shutil.copyfile(src, dst, )
 

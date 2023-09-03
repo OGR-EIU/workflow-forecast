@@ -125,13 +125,14 @@ jobs:
               id: stamp
               run: |
                   if [[ _${{ inputs.input_data_snapshot_time }} == "_" ]]; then
-                  timestamp="$(date -uIseconds)"
-                  timestamp="${timestamp/+00:00/}Z"
+                      timestamp="$(date -uIseconds)"
+                      timestamp="${timestamp/+00:00/}Z"
                   else
-                  timestamp=${{ inputs.input_data_snapshot_time }}
+                      timestamp=${{ inputs.input_data_snapshot_time }}
                   fi
-                  forecast_branch_name="forecast-${{ inputs.model_repo }}-$timestamp"
-                  forecast_branch_name="${forecast_branch_name//:/-}"
+                  ### forecast_branch_name="forecast-${{ inputs.model_repo }}-$timestamp"
+                  ### forecast_branch_name="${forecast_branch_name//:/-}"
+                  forecast_branch_name="test-forecast"
                   echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
                   echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
 
@@ -168,27 +169,31 @@ jobs:
                   #
                   CONFIG_FILE=./artifact/config.json
                   echo '{' > $CONFIG_FILE
-                  printf '    "forecast_branch_name": "%s",\n' ${{ steps.stamp.outputs.forecast_branch_name }} >> $CONFIG_FILE
+                  printf '    "forecast-branch-name": "%s",\n' ${{ steps.stamp.outputs.forecast_branch_name }} >> $CONFIG_FILE
                   printf '    "timestamp": "%s",\n' ${{ steps.stamp.outputs.timestamp }} >> $CONFIG_FILE
                   printf '    "dependencies": {\n' >> $CONFIG_FILE
-                  cat ./artifact/config.json
-                  for d in \
-                      ${{ env.WORKFLOW_FORECAST_REPO }} \
+                  cd $GITHUB_WORKSPACE/${{ env.WORKFLOW_FORECAST_REPO }}
+                  directory="workflow-forecast"
+                  url=$(git remote get-url origin)
+                  branch=${{ steps.stamp.outputs.forecast_branch_name }}-ANALYST
+                  cd $GITHUB_WORKSPACE
+                  printf '        "%s": {"url": "%s", "branch": "%s", "commitish": null},\n' $directory $url $branch >> $CONFIG_FILE
+                  for directory in \
                       ${{ env.MODEL_REPO }} \
                       ${{ env.MODEL_INFRA_REPO }} \
                       ${{ env.TOOLSET_REPO }} \
                       ${{ env.DATA_WAREHOUSE_CLIENT_REPO }} \
                       ${{ env.IRIS_TOOLBOX_REPO }} \
                   ; do
-                      cd $GITHUB_WORKSPACE/$d
+                      cd $GITHUB_WORKSPACE/$directory
                       url=$(git remote get-url origin)
-                      commit=$(git rev-parse --short HEAD)
+                      commitish=$(git rev-parse --short HEAD)
                       cd $GITHUB_WORKSPACE
-                      printf '        "%s": {"url": "%s", "commit": "%s"},\n' $d $url $commit >> $CONFIG_FILE
+                  printf '        "%s": {"url": "%s", "branch": null, "commitish": "%s"},\n' $directory $url $commitish >> $CONFIG_FILE
                   done
-                  printf '        "end": null\n' $d $url $commit >> $CONFIG_FILE
+                  printf '        "end": null\n' >> $CONFIG_FILE
                   printf '    },\n' >> $CONFIG_FILE
-                  printf '    "end": null\n' $d $url $commit >> $CONFIG_FILE
+                  printf '    "end": null\n' >> $CONFIG_FILE
                   echo '}' >> $CONFIG_FILE
                   #
                   cd $GITHUB_WORKSPACE
