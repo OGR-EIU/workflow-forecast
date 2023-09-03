@@ -2,6 +2,7 @@ name: Run forecast
 
 on:
     workflow_call:
+    workflow_dispatch:
 
 jobs:
     run-forecast:
@@ -9,14 +10,22 @@ jobs:
 
         steps:
 
-            - name: Clone workflow repo
+            - name: Clone workflow-forecast repo
               uses: actions/checkout@v3
               with:
-                  fetch-depth: 1
-                  path: "./workflow-forecast"
+                fetch-depth: 1
+                path: "./workflow-forecast"
 
-            - name: Prepare environment
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: "3.11"
+
+            - name: Copy artifact files and prepare environment
               run: |
-                  echo ${{ github.ref }}
-                  ls
+                cd $GITHUB_WORKSPACE
+                cp ./workflow-forecast/artifact/*.* .
+                python prepare_forecast_environment.py --local=no
+                ls
+                cd $GITHUB_WORKSPACE
 

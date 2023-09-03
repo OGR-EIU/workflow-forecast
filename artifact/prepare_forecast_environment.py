@@ -6,6 +6,7 @@ import logging
 import requests
 import sys
 import subprocess
+import argparse
 
 
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__), )
@@ -85,11 +86,18 @@ def _postprocess_response(response, response_path, ) -> None:
 
 if __name__ == "__main__":
 
+    p = argparse.ArgumentParser()
+    p.add_argument("--local", type=str, choices=["yes", "no"], default="yes", )
+    args = p.parse_args()
+
     config_path = os.path.join(_THIS_DIR, "config.json")
     logging.basicConfig(level=logging.INFO, )
 
     with open(config_path, "r") as f:
         config = json.load(f)
+
+    if args.local == "yes":
+        config["dependencies"] |= config["local-dependencies"]
 
     for folder, dep in config["dependencies"].items():
         if folder and dep:
