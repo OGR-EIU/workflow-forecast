@@ -12,7 +12,7 @@ import argparse
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__), )
 _MODEL_DIR = os.path.join(_THIS_DIR, "model", )
 _WORKFLOW_FORECAST_DIR = os.path.join(_THIS_DIR, "workflow-forecast", )
-_ENVIRONMENT_DIR = os.path.join(_WORKFLOW_FORECAST_DIR, "environment", )
+_ANALYST_DIR = os.path.join(_WORKFLOW_FORECAST_DIR, "analyst", )
 
 _ANALYST_FILES = [
     "startup.m",
@@ -40,10 +40,10 @@ def _install_dependency(folder:str, dep: dict, ) -> None:
         subprocess.run(["git", "checkout", dep["commitish"], ], cwd=folder, )
 
 
-def _copy_matlab_environment_files() -> None:
-    logging.info("Copying Matlab environment files")
+def _copy_analyst_files() -> None:
+    logging.info("Copying analyst files")
     for file_name in _ANALYST_FILES:
-        src = os.path.join(_ENVIRONMENT_DIR, file_name, )
+        src = os.path.join(_ANALYST_DIR, file_name, )
         dst = os.path.join(_THIS_DIR, file_name, )
         shutil.copyfile(src, dst, )
 
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     with open(request_path, "r") as f:
         request = json.load(f)
 
-    _copy_matlab_environment_files()
+    _copy_analyst_files()
 
     timestamp = config["timestamp"]
     response = _request_data(request, _DATA_WAREHOUSE_URL, _USERNAME, _PASSWORD, timestamp, )
