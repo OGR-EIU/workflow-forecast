@@ -1,0 +1,22 @@
+name: Run forecast
+
+on:
+    workflow_call:
+
+jobs:
+    run-forecast:
+        runs-on: ubuntu-latest
+
+        steps:
+
+            - name: Clone workflow repo
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 1
+                  path: "./workflow-forecast"
+
+            - name: Prepare environment
+              run: |
+                  echo ${{ github.ref }}
+                  ls
+

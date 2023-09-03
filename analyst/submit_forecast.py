@@ -8,7 +8,7 @@ _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 _WORKFLOW_FORECAST_DIR = os.path.join(_THIS_DIR, "workflow-forecast", )
 _ENVIRONMENT_DIR = os.path.join(_WORKFLOW_FORECAST_DIR, "environment", )
 
-_MATLAB_ENVIRONMENT_FILES = [
+_ANALYST_FILES = [
     "apply_new_judgment.m",
 ]
 
@@ -29,7 +29,7 @@ subprocess.run(["git", "pull", ], cwd=_WORKFLOW_FORECAST_DIR, )
 #
 # Copy ./file.m to workflow-forecast/environment/file.m
 #
-for file_name in _MATLAB_ENVIRONMENT_FILES:
+for file_name in _ANALYST_FILES:
     srd = os.path.join(_THIS_DIR, file_name, )
     dst = os.path.join(_ENVIRONMENT_DIR, file_name, )
     shutil.copyfile(src, dst, )
@@ -37,5 +37,4 @@ for file_name in _MATLAB_ENVIRONMENT_FILES:
 
 subprocess.run(["git", "commit", "-m", "Submitting forecast", ], cwd=_WORKFLOW_FORECAST_DIR, )
 subprocess.run(["git", "push", "origin", branch_to_push, ], cwd=_WORKFLOW_FORECAST_DIR, )
-
 

@@ -13,10 +13,11 @@ _MODEL_DIR = os.path.join(_THIS_DIR, "model", )
 _WORKFLOW_FORECAST_DIR = os.path.join(_THIS_DIR, "workflow-forecast", )
 _ENVIRONMENT_DIR = os.path.join(_WORKFLOW_FORECAST_DIR, "environment", )
 
-_MATLAB_ENVIRONMENT_FILES = [
+_ANALYST_FILES = [
     "startup.m",
     "run_forecast.m",
     "apply_new_judgment.m",
+    "submit_forecast.py",
 ]
 
 _DATA_WAREHOUSE_URL = "https://eiu-dev.ogresearch.com/api"
@@ -40,7 +41,7 @@ def _install_dependency(folder:str, dep: dict, ) -> None:
 
 def _copy_matlab_environment_files() -> None:
     logging.info("Copying Matlab environment files")
-    for file_name in _MATLAB_ENVIRONMENT_FILES:
+    for file_name in _ANALYST_FILES:
         src = os.path.join(_ENVIRONMENT_DIR, file_name, )
         dst = os.path.join(_THIS_DIR, file_name, )
         shutil.copyfile(src, dst, )

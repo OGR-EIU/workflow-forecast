@@ -1,0 +1,10 @@
+name: Post submission tasks
+
+on:
+    workflow_dispatch:
+
+jobs:
+    rerun-analyst-forecast:
+        uses: ./.github/workflows/run-forecast.yml
+
+

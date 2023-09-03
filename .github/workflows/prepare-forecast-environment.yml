@@ -47,7 +47,7 @@ on:
 
 jobs:
 
-    prepare_local_environment_artifact:
+    prepare_artifact:
 
         runs-on: ubuntu-latest
 
@@ -154,15 +154,6 @@ jobs:
                   cd $GITHUB_WORKSPACE
 
 
-            - name: Prepare artifact
-              run: |
-                  cd $GITHUB_WORKSPACE
-                  #
-                  cp -r ./workflow-forecast/artifact ./
-                  #
-                  cd $GITHUB_WORKSPACE
-
-
             - name: Prepare config for local dependencies
               run: |
                   cd $GITHUB_WORKSPACE
@@ -203,12 +194,7 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                   name: ${{ steps.stamp.outputs.forecast_branch_name }}
-                  path: ./artifact
-
-
-            - name: Print out config.json
-              run: |
-                  cat ./artifact/config.json
+                  path: ${{ env.WORKFLOW_FORECAST_REPO }}/artifact
 
 
             - name: Create and commit the ANALYST forecast branch
