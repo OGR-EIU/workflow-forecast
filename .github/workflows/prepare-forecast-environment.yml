@@ -137,45 +137,29 @@ jobs:
                   echo "forecast_branch_name=$forecast_branch_name" >> $GITHUB_OUTPUT
 
 
-            - name: Create main forecast branch on workflow-forecast repo and get its SHA
-              id: workflow_forecast_repo
-              run: |
-                  cd $GITHUB_WORKSPACE/workflow-forecast
-                  forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
-                  #
-                  git config user.name "${{ env.CI_AUTHOR }}"
-                  git config user.email "${{ env.CI_EMAIL }}"
-                  #
-                  git switch -c "$forecast_branch_name"
-                  git push origin "$forecast_branch_name"
-                  SHA="$(git rev-parse --short HEAD)"
-                  echo "SHA=$SHA" >> $GITHUB_OUTPUT
-                  #
-                  cd $GITHUB_WORKSPACE
-
-
-            - name: Prepare config for local dependencies
+            - name: Create config
+              id: create-config
               run: |
                   cd $GITHUB_WORKSPACE
                   #
-                  CONFIG_FILE=${{ env.WORKFLOW_FORECAST_REPO }}/artifact/config.json
-                  echo '{' > $CONFIG_FILE
-                  printf '    "forecast-branch-name": "%s",\n' ${{ steps.stamp.outputs.forecast_branch_name }} >> $CONFIG_FILE
-                  printf '    "timestamp": "%s",\n' ${{ steps.stamp.outputs.timestamp }} >> $CONFIG_FILE
+                  CONFIG_PATH=${{ env.WORKFLOW_FORECAST_REPO }}/artifact/config.json
+                  echo '{' > $CONFIG_PATH
+                  printf '    "forecast-branch-name": "%s",\n' ${{ steps.stamp.outputs.forecast_branch_name }} >> $CONFIG_PATH
+                  printf '    "timestamp": "%s",\n' ${{ steps.stamp.outputs.timestamp }} >> $CONFIG_PATH
                   #
                   # Local dependencies (only installed if local=True)
-                  printf '    "local-dependencies": {\n' >> $CONFIG_FILE
+                  printf '    "local-dependencies": {\n' >> $CONFIG_PATH
                   cd $GITHUB_WORKSPACE/${{ env.WORKFLOW_FORECAST_REPO }}
                   directory="workflow-forecast"
                   url=$(git remote get-url origin)
                   branch=${{ steps.stamp.outputs.forecast_branch_name }}-ANALYST
                   cd $GITHUB_WORKSPACE
-                  printf '        "%s": {"url": "%s", "branch": "%s", "commitish": null},\n' $directory $url $branch >> $CONFIG_FILE
-                  printf '        "end": null\n' >> $CONFIG_FILE
-                  printf '    },\n' >> $CONFIG_FILE
+                  printf '        "%s": {"url": "%s", "branch": "%s", "commitish": null},\n' $directory $url $branch >> $CONFIG_PATH
+                  printf '        "end": null\n' >> $CONFIG_PATH
+                  printf '    },\n' >> $CONFIG_PATH
                   #
                   # General dependencies
-                  printf '    "dependencies": {\n' >> $CONFIG_FILE
+                  printf '    "dependencies": {\n' >> $CONFIG_PATH
                   for directory in \
                       ${{ env.MODEL_REPO }} \
                       ${{ env.MODEL_INFRA_REPO }} \
@@ -187,12 +171,13 @@ jobs:
                       url=$(git remote get-url origin)
                       commitish=$(git rev-parse --short HEAD)
                       cd $GITHUB_WORKSPACE
-                      printf '        "%s": {"url": "%s", "branch": null, "commitish": "%s"},\n' $directory $url $commitish >> $CONFIG_FILE
+                      printf '        "%s": {"url": "%s", "branch": null, "commitish": "%s"},\n' $directory $url $commitish >> $CONFIG_PATH
                   done
-                  printf '        "end": null\n' >> $CONFIG_FILE
-                  printf '    },\n' >> $CONFIG_FILE
-                  printf '    "end": null\n' >> $CONFIG_FILE
-                  echo '}' >> $CONFIG_FILE
+                  printf '        "end": null\n' >> $CONFIG_PATH
+                  printf '    },\n' >> $CONFIG_PATH
+                  printf '    "end": null\n' >> $CONFIG_PATH
+                  echo '}' >> $CONFIG_PATH
+                  echo "CONFIG_PATH=$CONFIG_PATH" >> $GITHUB_OUTPUT
                   #
                   cd $GITHUB_WORKSPACE
 
@@ -202,6 +187,25 @@ jobs:
               with:
                   name: ${{ steps.stamp.outputs.forecast_branch_name }}
                   path: ${{ env.WORKFLOW_FORECAST_REPO }}/artifact
+
+
+            - name: Create main forecast branch on workflow-forecast repo and get its SHA
+              id: workflow_forecast_repo
+              run: |
+                  cd $GITHUB_WORKSPACE/workflow-forecast
+                  forecast_branch_name=${{ steps.stamp.outputs.forecast_branch_name }}
+                  #
+                  git config user.name "${{ env.CI_AUTHOR }}"
+                  git config user.email "${{ env.CI_EMAIL }}"
+                  #
+                  git switch -c "$forecast_branch_name"
+                  git add ${{ steps.create-config.outputs.CONFIG_PATH }}
+                  git commit -m "Created config.json"
+                  git push origin "$forecast_branch_name"
+                  SHA="$(git rev-parse --short HEAD)"
+                  echo "SHA=$SHA" >> $GITHUB_OUTPUT
+                  #
+                  cd $GITHUB_WORKSPACE
 
 
             - name: Create and commit the ANALYST forecast branch

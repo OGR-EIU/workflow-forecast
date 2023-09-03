@@ -10,6 +10,12 @@ jobs:
 
         steps:
 
+            - name: Test 1
+              run: |
+                  pwd
+                  ls
+                  echo $GITHUB_WORKSPACE
+
             - name: Clone workflow-forecast repo
               uses: actions/checkout@v3
               with:
