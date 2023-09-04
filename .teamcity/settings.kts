@@ -442,7 +442,7 @@ object ForecastMerger : BuildType({
             }
         }
         script {
-            name = "Create a merge request"
+            name = "Create merge request"
             workingDir = "workflow-forecast"
             scriptContent = """
                 #!/bin/bash
