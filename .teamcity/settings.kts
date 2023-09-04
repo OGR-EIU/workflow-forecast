@@ -455,7 +455,7 @@ object ForecastMerger : BuildType({
                 --title "Merging ${'$'}input_branch_name" \
                 --body "Merging ${'$'}input_branch_name to ${'$'}output_branch_name" \
                 --base ${'$'}output_branch_name \
-                --head ${'$'}input_branch_name/${'$'}(git rev-parse --short HEAD) \
+                --head ${'$'}input_branch_name/${'$'}(git rev-parse --abbrev-ref HEAD) \
                 --assignee nul0m \
                 --assignee jaromir-benes
             """.trimIndent()
