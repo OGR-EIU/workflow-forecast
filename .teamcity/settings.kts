@@ -288,21 +288,6 @@ object ForecastInitializer : BuildType({
             """.trimIndent()
         }
         script {
-            name = "Create main forecast branch on workflow-forecast repo and get its SHA"
-            scriptContent = """
-                #!/bin/bash
-                
-                cd workflow-forecast
-                forecast_branch_name=%workflow.output.forecast-branch-name%
-                git config user.name %env.CI_AUTHOR%
-                git config user.email %env.CI_EMAIL%
-                git switch -c "${'$'}forecast_branch_name"
-                git push origin "${'$'}forecast_branch_name"
-                sha="${'$'}(git rev-parse --short HEAD)"
-                echo "##teamcity[setParameter name='workflow.output.sha' value='${'$'}sha']"
-            """.trimIndent()
-        }
-        script {
             name = "Prepare config file"
             scriptContent = """
                 #!/bin/bash
@@ -355,6 +340,21 @@ object ForecastInitializer : BuildType({
                 echo ****************************************************************
                 cat ./artifact/config.json
                 echo ****************************************************************
+            """.trimIndent()
+        }
+        script {
+            name = "Create main forecast branch on workflow-forecast repo and get its SHA"
+            scriptContent = """
+                #!/bin/bash
+                
+                cd workflow-forecast
+                forecast_branch_name=%workflow.output.forecast-branch-name%
+                git config user.name %env.CI_AUTHOR%
+                git config user.email %env.CI_EMAIL%
+                git switch -c "${'$'}forecast_branch_name"
+                git push origin "${'$'}forecast_branch_name"
+                sha="${'$'}(git rev-parse --short HEAD)"
+                echo "##teamcity[setParameter name='workflow.output.sha' value='${'$'}sha']"
             """.trimIndent()
         }
         script {
