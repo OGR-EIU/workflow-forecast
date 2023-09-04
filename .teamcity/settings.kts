@@ -99,6 +99,8 @@ object ForecastChecker : BuildType({
                         subprocess.run(f$TQ echo "##teamcity[setParameter \
                                        name='workflow.dependencies.model.commit' \
                                        value='{value['commitish']}']" ${TQ}, shell=True)
+                      if key == "end":
+                        continue
                       else:
                         subprocess.run(f$TQ echo "##teamcity[setParameter \
                                        name='workflow.dependencies.{key}.commit' \
