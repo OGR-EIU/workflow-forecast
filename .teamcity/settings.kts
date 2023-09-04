@@ -146,7 +146,7 @@ object ForecastChecker : BuildType({
             workingDir = "workflow-forecast/forecast"
             command = file {
                 filename = "create_input.py"
-                scriptArguments = """--config-path ../model-%workflow.config.country%/requests/%workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
+                scriptArguments = """--config-path ../model-%workflow.config.country%/requests/input-data-request.json --output-file adjusted-input-data-request.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
             }
         }
         python {
