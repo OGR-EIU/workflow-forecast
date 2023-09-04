@@ -520,7 +520,6 @@ object ForecastRunner : BuildType({
         }
         script {
             name = "Forecast step: Run forecast"
-            workingDir = "workflow-forecast/forecast"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
         }
         python {
