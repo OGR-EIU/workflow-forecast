@@ -32,7 +32,7 @@ dates.end_simulation = dates.this_quarter + 5*4;
 dates.start_hist = qq(2000,1);
 
 input_db = modeler.prepare_input_data(model, input_db, dates);
-dates = modeler.define_forecast_dates(model, input_db);
+dates = modeler.define_forecast_dates(dates, model, input_db);
 
 setappdata(0, "env_paths", env_paths);
 setappdata(0, "input_db", input_db);
