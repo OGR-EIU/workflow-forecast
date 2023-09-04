@@ -174,7 +174,7 @@ object ForecastChecker : BuildType({
 
     triggers {
         vcs {
-            branchFilter = "+:forecast-*"
+            branchFilter = "+:forecast-*-ANALYST"
         }
     }
 
