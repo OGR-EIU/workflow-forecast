@@ -1,6 +1,4 @@
 import jetbrains.buildServer.configs.kotlin.*
-import jetbrains.buildServer.configs.kotlin.buildFeatures.PullRequests
-import jetbrains.buildServer.configs.kotlin.buildFeatures.pullRequests
 import jetbrains.buildServer.configs.kotlin.buildFeatures.sshAgent
 import jetbrains.buildServer.configs.kotlin.buildSteps.python
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
@@ -401,20 +399,6 @@ object ForecastMerger : BuildType({
             perCheckinTriggering = true
             groupCheckinsByCommitter = true
             enableQueueOptimization = false
-        }
-    }
-
-    features {
-        pullRequests {
-            vcsRootExtId = "ExampleWorkflows_WorkflowForecastPr"
-            provider = github {
-                authType = token {
-                    token = "credentialsJSON:07638a0d-7d3d-4341-b007-b65fb387e662"
-                }
-                filterSourceBranch = "+:refs/heads/forecast-*-ANALYST"
-                filterTargetBranch = "+:refs/heads/forecast-*"
-                filterAuthorRole = PullRequests.GitHubRoleFilter.MEMBER
-            }
         }
     }
 })
