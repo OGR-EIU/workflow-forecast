@@ -70,6 +70,7 @@ object ForecastChecker : BuildType({
         root(AbsoluteId("ExampleWorkflows_ModelEa"), "+:. => model-ea")
         root(AbsoluteId("ExampleWorkflows_ModelUs"), "+:. => model-us")
         root(AbsoluteId("ExampleWorkflows_WorkflowForecastPr"), "+:. => workflow-forecast")
+        root(DslContext.settingsRoot)
     }
 
     steps {
