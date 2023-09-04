@@ -406,6 +406,7 @@ object ForecastMerger : BuildType({
 
     params {
         text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("env.GH_TOKEN", "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", display = ParameterDisplay.HIDDEN, allowEmpty = true)
     }
 
     vcs {
