@@ -391,6 +391,10 @@ object ForecastInitializer : BuildType({
 
 object ForecastMerger : BuildType({
     name = "Forecast merger"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
 })
 
 object ForecastRunner : BuildType({
