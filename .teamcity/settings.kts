@@ -333,16 +333,6 @@ object ForecastInitializer : BuildType({
             """.trimIndent()
         }
         script {
-            name = "Print config file"
-            scriptContent = """
-                #!/bin/bash
-                
-                echo ****************************************************************
-                cat ./artifact/config.json
-                echo ****************************************************************
-            """.trimIndent()
-        }
-        script {
             name = "Create main forecast branch on workflow-forecast repo and get its SHA"
             scriptContent = """
                 #!/bin/bash
