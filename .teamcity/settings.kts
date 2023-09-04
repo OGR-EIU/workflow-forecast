@@ -422,25 +422,6 @@ object ForecastMerger : BuildType({
                 scriptArguments = "--props-path %system.teamcity.configuration.properties.file% --params-path build-params.json"
             }
         }
-        python {
-            name = "Extract config file"
-            workingDir = "workflow-forecast/artifact"
-            command = script {
-                content = """
-                    import subprocess
-                    import json
-                    
-                    # load config file
-                    with open("config.json") as f:
-                      configs = json.load(f)
-                    
-                    # get branch name
-                    subprocess.run(f$TQ echo "##teamcity[setParameter \
-                                   name='workflow.config.timestamp' \
-                                   value='{configs['forecast_branch_name']}']" ${TQ}, shell=True)
-                """.trimIndent()
-            }
-        }
         script {
             name = "Create merge request"
             workingDir = "workflow-forecast"
