@@ -69,7 +69,7 @@ object ForecastChecker : BuildType({
         root(AbsoluteId("ExampleWorkflows_ModelCz"), "+:. => model-cz")
         root(AbsoluteId("ExampleWorkflows_ModelEa"), "+:. => model-ea")
         root(AbsoluteId("ExampleWorkflows_ModelUs"), "+:. => model-us")
-        root(RelativeId("WorkflowForecastPr"), "+:. => workflow-forecast")
+        root(AbsoluteId("ExampleWorkflows_WorkflowForecastPr"), "+:. => workflow-forecast")
     }
 
     steps {
@@ -179,7 +179,7 @@ object ForecastChecker : BuildType({
 
     triggers {
         vcs {
-            triggerRules = "+:root=ExampleWorkflows_ModelForecasts_WorkflowForecastPr:**"
+            triggerRules = "+:root=ExampleWorkflows_WorkflowForecastPr:**"
 
             branchFilter = "+:forecast-*-ANALYST"
             perCheckinTriggering = true
@@ -395,7 +395,7 @@ object ForecastMerger : BuildType({
     name = "Forecast merger"
 
     vcs {
-        root(RelativeId("WorkflowForecastPr"))
+        root(AbsoluteId("ExampleWorkflows_WorkflowForecastPr"))
     }
 
     triggers {
@@ -409,7 +409,7 @@ object ForecastMerger : BuildType({
 
     features {
         pullRequests {
-            vcsRootExtId = "ExampleWorkflows_ModelForecasts_WorkflowForecastPr"
+            vcsRootExtId = "ExampleWorkflows_WorkflowForecastPr"
             provider = github {
                 authType = token {
                     token = "credentialsJSON:07638a0d-7d3d-4341-b007-b65fb387e662"
