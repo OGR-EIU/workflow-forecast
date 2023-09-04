@@ -443,16 +443,6 @@ object ForecastMerger : BuildType({
             """.trimIndent()
         }
         python {
-            name = "Send email"
-            pythonVersion = customPython {
-                executable = "/usr/bin/python3.11"
-            }
-            command = file {
-                filename = "toolset/send_mail.py"
-                scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment 'report-forecast.bundle.html'"
-            }
-        }
-        python {
             name = "Fetch artifacts from dependent builds"
             command = script {
                 content = """
@@ -481,6 +471,16 @@ object ForecastMerger : BuildType({
                     with open('nondaily_run_result.json', 'w') as f:
                       json.dump(output, f, indent=2)
                 """.trimIndent()
+            }
+        }
+        python {
+            name = "Send email"
+            pythonVersion = customPython {
+                executable = "/usr/bin/python3.11"
+            }
+            command = file {
+                filename = "toolset/send_mail.py"
+                scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment 'report-forecast.bundle.html'"
             }
         }
     }
