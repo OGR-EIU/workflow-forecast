@@ -400,6 +400,13 @@ object ForecastMerger : BuildType({
 
     steps {
         python {
+            name = "Save build parameters"
+            command = file {
+                filename = "toolset/extract_build_params.py"
+                scriptArguments = "--props-path %system.teamcity.configuration.properties.file% --params-path build-params.json"
+            }
+        }
+        python {
             name = "Extract config file"
             workingDir = "workflow-forecast/artifact"
             command = script {
@@ -433,13 +440,6 @@ object ForecastMerger : BuildType({
                 --assignee nul0m \
                 --assignee jaromir-benes
             """.trimIndent()
-        }
-        python {
-            name = "Save build parameters"
-            command = file {
-                filename = "toolset/extract_build_params.py"
-                scriptArguments = "--props-path %system.teamcity.configuration.properties.file% --params-path build-params.json"
-            }
         }
     }
 
