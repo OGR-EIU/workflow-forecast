@@ -515,7 +515,7 @@ object ForecastRunner : BuildType({
             }
             command = file {
                 filename = "retrieve_data.py"
-                scriptArguments = "--settings ../workflow-forecast/forecast/adjusted-input-cfg.json --save-to request-output.json --username %api.username% --password %api.password%"
+                scriptArguments = "--json-request ../workflow-forecast/forecast/adjusted-input-data-request.json --save-to ../input-data.json --username %api.username% --password %api.password%"
             }
         }
         script {
