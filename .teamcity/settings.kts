@@ -452,6 +452,16 @@ object ForecastMerger : BuildType({
                 scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment './report-forecast/results/report-forecast.bundle.html'"
             }
         }
+        python {
+            name = "Report step: Send email (1)"
+            pythonVersion = customPython {
+                executable = "/usr/bin/python3.11"
+            }
+            command = file {
+                filename = "toolset/send_mail.py"
+                scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment 'report-forecast.bundle.html'"
+            }
+        }
     }
 
     triggers {
