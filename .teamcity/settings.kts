@@ -463,7 +463,7 @@ object ForecastRunner : BuildType({
     """.trimIndent()
 
     params {
-        text("email.subject", "EIU PoC Forecast Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
+        text("email.subject", "Final EIU PoC Forecast Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
         text("workflow.config.country", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         param("matlab.code.forecast", "copyfile('./workflow-forecast/artifact/config.json', pwd); copyfile('./workflow-forecast/analyst', pwd); startup; run_forecast;")
         text("workflow.dependencies.model.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
