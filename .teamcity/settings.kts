@@ -403,7 +403,7 @@ object ForecastMerger : BuildType({
 
     triggers {
         vcs {
-            branchFilter = "+:forecast-*"
+            branchFilter = "+:forecast-*-ANALYST"
             perCheckinTriggering = true
             groupCheckinsByCommitter = true
             enableQueueOptimization = false
