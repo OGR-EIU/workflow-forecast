@@ -93,21 +93,21 @@ object ForecastChecker : BuildType({
                       # get coutry code
                       if key != "model-infra" and "model" in key:
                         country = key.split("-")[1]
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.config.country\' \
-                                       value=\'{country}\']\"")
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.dependencies.model.commit\' \
-                                       value=\'{value['commitish']}\']\"")
+                        subprocess.run(f"echo '##teamcity[setParameter \
+                                       name='workflow.config.country' \
+                                       value='{country}']'")
+                        subprocess.run(f"echo '##teamcity[setParameter \
+                                       name='workflow.dependencies.model.commit' \
+                                       value='{value['commitish']}']'")
                       else:
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.dependencies.{key}.commit\' \
-                                       value=\'{value['commitish']}\']\"")
+                        subprocess.run(f"echo '##teamcity[setParameter \
+                                       name='workflow.dependencies.{key}.commit' \
+                                       value='{value['commitish']}']'")
                     
                     # get timestamp
-                    subprocess.run(f"echo \"##teamcity[setParameter \
-                                   name=\'workflow.config.timestamp\' \
-                                   value=\'{configs['timestamp']}\']\"")
+                    subprocess.run(f"echo '##teamcity[setParameter \
+                                   name='workflow.config.timestamp' \
+                                   value='{configs['timestamp']}']'")
                 """.trimIndent()
             }
         }
