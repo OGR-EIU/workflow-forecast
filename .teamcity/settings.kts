@@ -93,13 +93,21 @@ object ForecastChecker : BuildType({
                       # get coutry code
                       if key != "model-infra" and "model" in key:
                         country = key.split("-")[1]
-                        subprocess.run(f$TQ echo "##teamcity[setParameter name='workflow.config.country' value='{country}']" ${TQ})
-                        subprocess.run(f$TQ echo "##teamcity[setParameter name='workflow.dependencies.model.commit' value='{value['commitish']}']" ${TQ})
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.config.country' \
+                                       value='{country}']" ${TQ}, shell=True)
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.dependencies.model.commit' \
+                                       value='{value['commitish']}']" ${TQ}, shell=True)
                       else:
-                        subprocess.run(f$TQ echo "##teamcity[setParameter name='workflow.dependencies.{key}.commit' value='{value['commitish']}']" ${TQ})
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.dependencies.{key}.commit' \
+                                        value='{value['commitish']}']" ${TQ}, shell=True)
                     
                     # get timestamp
-                    subprocess.run(f$TQ echo "##teamcity[setParameter name='workflow.config.timestamp' value='{configs['timestamp']}']" ${TQ})
+                    subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                   name='workflow.config.timestamp' \
+                                   value='{configs['timestamp']}']" ${TQ}, shell=True)
                 """.trimIndent()
             }
         }
