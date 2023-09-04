@@ -417,12 +417,6 @@ object ForecastMerger : BuildType({
     }
 
     triggers {
-        vcs {
-            branchFilter = "+:refs/heads/forecast-*-ANALYST"
-            perCheckinTriggering = true
-            groupCheckinsByCommitter = true
-            enableQueueOptimization = false
-        }
         finishBuildTrigger {
             buildType = "${ForecastChecker.id}"
             successfulOnly = true
