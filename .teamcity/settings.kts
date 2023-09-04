@@ -89,20 +89,20 @@ object ForecastChecker : BuildType({
                       configs = json.load(f)
                     
                     # get dependencies
-                    for dep in configs["dependencies"]:
+                    for key, value in configs["dependencies"]:
                       # get coutry code
-                      if dep["dir"] != "model-infra" and "model" in dep["dir"]:
-                        country = dep["dir"].split("-")[1]
+                      if key != "model-infra" and "model" in key:
+                        country = key.split("-")[1]
                         subprocess.run(f"echo \"##teamcity[setParameter \
                                        name=\'workflow.config.country\' \
                                        value=\'{country}\']\"")
                         subprocess.run(f"echo \"##teamcity[setParameter \
                                        name=\'workflow.dependencies.model.commit\' \
-                                       value=\'{dep['commitish']}\']\"")
+                                       value=\'{value['commitish']}\']\"")
                       else:
                         subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.dependencies.{dep['dir']}.commit\' \
-                                       value=\'{dep['commitish']}\']\"")
+                                       name=\'workflow.dependencies.{value['dir']}.commit\' \
+                                       value=\'{value['commitish']}\']\"")
                     
                     # get timestamp
                     subprocess.run(f"echo \"##teamcity[setParameter \
