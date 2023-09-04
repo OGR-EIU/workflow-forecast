@@ -452,6 +452,37 @@ object ForecastMerger : BuildType({
                 scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment 'report-forecast.bundle.html'"
             }
         }
+        python {
+            name = "Fetch artifacts from dependent builds"
+            command = script {
+                content = """
+                    import json
+                    import requests
+                    
+                    user_id = "%system.teamcity.auth.userId%"
+                    password = "%system.teamcity.auth.password%"
+                    
+                    urls = [
+                      f"https://tc-eiu.ogresearch.com/repository/download/ExampleWorkflows_DataPumps_NondailyPumps_NondailyCnbWorkflow/{%dep.ExampleWorkflows_DataPumps_NondailyPumps_NondailyCnbWorkflow.teamcity.build.id%}:id/submit-output.json",
+                      f"https://tc-eiu.ogresearch.com/repository/download/ExampleWorkflows_DataPumps_NondailyPumps_NondailyEcbWorkflow/{%dep.ExampleWorkflows_DataPumps_NondailyPumps_NondailyEcbWorkflow.teamcity.build.id%}:id/submit-output.json",
+                      f"https://tc-eiu.ogresearch.com/repository/download/ExampleWorkflows_DataPumps_NondailyPumps_NondailyFredWorkflow/{%dep.ExampleWorkflows_DataPumps_NondailyPumps_NondailyFredWorkflow.teamcity.build.id%}:id/submit-output.json",
+                    ]
+                    
+                    output = []
+                    
+                    for url in urls:
+                      try:
+                        response = requests.get(url, auth=(user_id, password))
+                        output += json.loads(response.text)
+                      except:
+                        print(f'no artifact for {url}')
+                      
+                    
+                    with open('nondaily_run_result.json', 'w') as f:
+                      json.dump(output, f, indent=2)
+                """.trimIndent()
+            }
+        }
     }
 
     triggers {
