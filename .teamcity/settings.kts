@@ -447,7 +447,7 @@ object ForecastMerger : BuildType({
             scriptContent = """
                 #!/bin/bash
                 
-                input_branch_name=%workflow.output.forecast-branch-name%
+                input_branch_name=${'$'}(git rev-parse --abbrev-ref HEAD)
                 output_branch_name=${'$'}(echo ${'$'}forecast_branch_name | sed 's/-ANALYST//g')
                 
                 gh auth login --with-token <<< %gh.token%
@@ -455,7 +455,7 @@ object ForecastMerger : BuildType({
                 --title "Merging ${'$'}input_branch_name" \
                 --body "Merging ${'$'}input_branch_name to ${'$'}output_branch_name" \
                 --base ${'$'}output_branch_name \
-                --head ${'$'}input_branch_name/${'$'}(git rev-parse --abbrev-ref HEAD) \
+                --head ${'$'}input_branch_name \
                 --assignee nul0m \
                 --assignee jaromir-benes
             """.trimIndent()
