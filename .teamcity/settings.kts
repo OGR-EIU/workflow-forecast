@@ -46,8 +46,8 @@ object ForecastChecker : BuildType({
 
     params {
         text("workflow.config.country", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        param("matlab.code.report", "runner('../output-data.json', 'model', true);")
         param("matlab.code.forecast", "copyfile('./workflow-forecast/artifact/config.json', pwd); copyfile('./workflow-forecast/analyst', pwd); startup; run_forecast;")
+        param("matlab.code.report", "runner('../output-data.json', 'model', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.iris-toolbox.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
@@ -434,7 +434,7 @@ object ForecastRunner : BuildType({
         }
         python {
             name = "Extract config file"
-            workingDir = "workflow-forecast/analyst"
+            workingDir = "workflow-forecast/artifact"
             command = script {
                 content = """
                     import subprocess
@@ -445,25 +445,27 @@ object ForecastRunner : BuildType({
                       configs = json.load(f)
                     
                     # get dependencies
-                    for dep in configs["dependencies"]:
+                    for key, value in configs["dependencies"].items():
                       # get coutry code
-                      if dep["dir"] != "model-infra" and "model" in dep["dir"]:
-                        country = dep["dir"].split("-")[1]
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.config.country\' \
-                                       value=\'{country}\']\"")
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.dependencies.model.commit\' \
-                                       value=\'{dep['commit']}\']\"")
+                      if key != "model-infra" and "model" in key:
+                        country = key.split("-")[1]
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.config.country' \
+                                       value='{country}']" ${TQ}, shell=True)
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.dependencies.model.commit' \
+                                       value='{value['commitish']}']" ${TQ}, shell=True)
+                      if key == "end":
+                        continue
                       else:
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.dependencies.{dep['dir']}.commit\' \
-                                       value=\'{dep['commit']}\']\"")
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.dependencies.{key}.commit' \
+                                        value='{value['commitish']}']" ${TQ}, shell=True)
                     
                     # get timestamp
-                    subprocess.run(f"echo \"##teamcity[setParameter \
-                                   name=\'workflow.config.timestamp\' \
-                                   value=\'{configs['timestamp']}\']\"")
+                    subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                   name='workflow.config.timestamp' \
+                                   value='{configs['timestamp']}']" ${TQ}, shell=True)
                 """.trimIndent()
             }
         }
