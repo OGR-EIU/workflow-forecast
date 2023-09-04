@@ -443,7 +443,7 @@ object ForecastMerger : BuildType({
             """.trimIndent()
         }
         python {
-            name = "Report step: Send email"
+            name = "Send email"
             pythonVersion = customPython {
                 executable = "/usr/bin/python3.11"
             }
