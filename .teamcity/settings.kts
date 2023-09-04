@@ -78,7 +78,7 @@ object ForecastChecker : BuildType({
         }
         python {
             name = "Extract config file"
-            workingDir = "workflow-forecast/analyst"
+            workingDir = "workflow-forecast/artifact"
             command = script {
                 content = """
                     import subprocess
