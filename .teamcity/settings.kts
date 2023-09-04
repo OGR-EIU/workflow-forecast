@@ -427,7 +427,7 @@ object ForecastMerger : BuildType({
                 #!/bin/bash
                 
                 input_branch_name=${'$'}(git rev-parse --abbrev-ref HEAD)
-                output_branch_name=${'$'}(echo ${'$'}forecast_branch_name | sed 's/-ANALYST//g')
+                output_branch_name=${'$'}(echo ${'$'}input_branch_name | sed 's/-ANALYST//g')
                 
                 gh auth login --with-token <<< %gh.token%
                 gh pr create \
