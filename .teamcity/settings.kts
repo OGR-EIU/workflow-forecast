@@ -400,6 +400,8 @@ object ForecastMerger : BuildType({
 
     triggers {
         vcs {
+            triggerRules = "+:root=ExampleWorkflows_WorkflowForecastPr:**"
+
             branchFilter = "+:forecast-*-ANALYST"
             perCheckinTriggering = true
             groupCheckinsByCommitter = true
