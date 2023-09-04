@@ -47,7 +47,7 @@ object ForecastChecker : BuildType({
     params {
         text("workflow.config.country", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         param("matlab.code.report", "runner('../workflow-forecast/forecast/output.json', 'model', true);")
-        param("matlab.code.forecast", "run(./workflow-forecast/analyst/startup); run(./workflow-forecast/analyst/run_forecast);")
+        param("matlab.code.forecast", "run(workflow-forecast/analyst/startup); run(workflow-forecast/analyst/run_forecast);")
         text("workflow.dependencies.data-warehouse-client.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.iris-toolbox.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
