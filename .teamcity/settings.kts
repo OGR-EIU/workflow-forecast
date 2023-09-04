@@ -305,7 +305,7 @@ object ForecastInitializer : BuildType({
                 directory="workflow-forecast"
                 url=${'$'}(git remote get-url origin)
                 branch=%workflow.output.forecast-branch-name%-ANALYST
-                cd ${'$'}GITHUB_WORKSPACE
+                cd ${'$'}PWD
                 printf '        "%s": {"url": "%s", "branch": "%s", "commitish": null},\n' ${'$'}directory ${'$'}url ${'$'}branch >> ${'$'}CONFIG_PATH
                 printf '        "end": null\n' >> ${'$'}CONFIG_PATH
                 printf '    },\n' >> ${'$'}CONFIG_PATH
@@ -322,7 +322,7 @@ object ForecastInitializer : BuildType({
                     cd ${'$'}PWD/${'$'}directory
                     url=${'$'}(git remote get-url origin)
                     commitish=${'$'}(git rev-parse --short HEAD)
-                    cd ${'$'}GITHUB_WORKSPACE
+                    cd ${'$'}PWD
                     printf '        "%s": {"url": "%s", "branch": null, "commitish": "%s"},\n' ${'$'}directory ${'$'}url ${'$'}commitish >> ${'$'}CONFIG_PATH
                 done
                 printf '        "end": null\n' >> ${'$'}CONFIG_PATH
