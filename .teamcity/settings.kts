@@ -434,6 +434,13 @@ object ForecastMerger : BuildType({
                 --assignee jaromir-benes
             """.trimIndent()
         }
+        python {
+            name = "Save build parameters"
+            command = file {
+                filename = "toolset/extract_build_params.py"
+                scriptArguments = "--props-path %system.teamcity.configuration.properties.file% --params-path build-params.json"
+            }
+        }
     }
 
     triggers {
