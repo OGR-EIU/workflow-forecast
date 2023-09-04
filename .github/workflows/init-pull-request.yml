@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - 'forecast-*-ANALYST'
+
 jobs:
     create_pull_request:
         permissions: write-all
@@ -34,3 +35,4 @@ jobs:
                   --head ${{ github.ref }} \
                   --assignee nul0m \
                   --assignee jaromir-benes
+

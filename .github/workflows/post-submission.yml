@@ -1,10 +1,22 @@
 name: Post submission tasks
 
+permissions:
+    actions: write
+    pull-requests: write
+
 on:
+    push:
+        branches:
+            - 'forecast-*-ANALYST'
+
     workflow_dispatch:
 
 jobs:
+
     rerun-analyst-forecast:
         uses: ./.github/workflows/run-forecast.yml
+
+    # create-pull-request:
+    #     uses: ./.github/workflows/init-pull-request.yml
 
 

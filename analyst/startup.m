@@ -20,7 +20,7 @@ env_paths.output_mapping_path = fullfile(env_paths.model_dir, "mappings", "outpu
 env_paths.input_data_path = fullfile(env_paths.this_dir, "input-data.json");
 env_paths.output_data_path = fullfile(env_paths.this_dir, "output-data.json");
 
-[model, params] = modeler.create_country_model(env_paths.model_dir);
+[model, params] = modeler.create_model(env_paths.model_dir);
 
 input_data_mapping = jsondecode(fileread(env_paths.input_mapping_path));
 input_data = jsondecode(fileread(env_paths.input_data_path));
