@@ -352,7 +352,7 @@ object ForecastInitializer : BuildType({
                 printf '    },\n' >> ${'$'}CONFIG_PATH
                 printf '    "end": null\n' >> ${'$'}CONFIG_PATH
                 echo '}' >> ${'$'}CONFIG_PATH
-                echo "##teamcity[setParameter name='rel.config.path' value='${'$'}REL_CONFIG_PATH']"
+                echo "##teamcity[setParameter name='workflow.output.rel-config-path' value='${'$'}REL_CONFIG_PATH']"
             """.trimIndent()
         }
         script {
