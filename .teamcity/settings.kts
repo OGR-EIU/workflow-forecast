@@ -179,7 +179,7 @@ object ForecastChecker : BuildType({
 
     triggers {
         vcs {
-            branchFilter = "+:forecast-*-ANALYST"
+            branchFilter = "+:refs/heads/forecast-*-ANALYST"
             perCheckinTriggering = true
             groupCheckinsByCommitter = true
             enableQueueOptimization = false
