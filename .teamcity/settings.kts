@@ -2,6 +2,7 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.sshAgent
 import jetbrains.buildServer.configs.kotlin.buildSteps.python
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
+import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -168,6 +169,12 @@ object ForecastChecker : BuildType({
             name = "Report step: Generate report"
             workingDir = "report-forecast"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.report%"; exit ${'$'}?"""
+        }
+    }
+
+    triggers {
+        vcs {
+            branchFilter = "+:forecast-*"
         }
     }
 
