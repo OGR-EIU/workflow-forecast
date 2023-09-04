@@ -341,11 +341,16 @@ object ForecastInitializer : BuildType({
             scriptContent = """
                 #!/bin/bash
                 
-                cd workflow-forecast
+                PWD=${'$'}(pwd)
+                cd ${'$'}PWD/%env.WORKFLOW_FORECAST_REPO%
                 forecast_branch_name=%workflow.output.forecast-branch-name%
+                #
                 git config user.name %env.CI_AUTHOR%
                 git config user.email %env.CI_EMAIL%
+                #
                 git switch -c "${'$'}forecast_branch_name"
+                git add %workflow.output.rel-config-path%
+                git commit -m "Created config.json"
                 git push origin "${'$'}forecast_branch_name"
                 sha="${'$'}(git rev-parse --short HEAD)"
                 echo "##teamcity[setParameter name='workflow.output.sha' value='${'$'}sha']"
