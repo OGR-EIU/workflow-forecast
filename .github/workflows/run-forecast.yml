@@ -35,18 +35,21 @@ jobs:
             - name: Prepare environment
               run: |
                 cd $GITHUB_WORKSPACE
-                echo ===========================================
-                cd $GITHUB_WORKSPACE/workflow-forecast
-                git status
-                git branch
-                echo ===========================================
-                cd $GITHUB_WORKSPACE
                 cp ./workflow-forecast/artifact/*.* ./
-                pwd
-                ls
                 python prepare_forecast_environment.py --local=no --pat=${{ secrets.token_with_all_access }}
-                echo ===========================================
                 ls
-                echo ===========================================
                 cd $GITHUB_WORKSPACE
+
+            - name: Set up Matlab
+              uses: matlab-actions/setup-matlab@v1
+
+            #- name: Run forecast
+            #  uses: matlab-actions/run-command@v1
+            #  with:
+            #      command: run_forecast
+
+            - name: Run forecast
+              run: |
+                matlab -nodesktop -nosplash -batch run_forecast
+                ls
 
