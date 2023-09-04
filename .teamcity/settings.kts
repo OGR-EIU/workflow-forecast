@@ -530,7 +530,7 @@ object ForecastRunner : BuildType({
             }
             command = file {
                 filename = "submit_data.py"
-                scriptArguments = "--json-request ../workflow-forecast/forecast/forecast-output.json --username %api.username% --password %api.password%"
+                scriptArguments = "--json-request ../output-data.json --username %api.username% --password %api.password%"
             }
         }
         python {
