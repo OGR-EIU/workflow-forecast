@@ -1,0 +1,17 @@
+{
+    "forecast_branch_name": "forecast-model-ea-2023-09-04T09-25-13Z",
+    "timestamp": "2023-09-04T09:25:13Z",
+    "local-dependencies": {
+        "workflow-forecast": {"url": "git@github.com:OGR-EIU/workflow-forecast.git", "branch": "forecast-model-ea-2023-09-04T09-25-13Z-ANALYST", "commitish": null},
+        "end": null
+    },
+    "dependencies": {
+        "model-ea": {"url": "https://github.com/OGR-EIU/model-ea", "branch": null, "commitish": "2dfb97b"},
+        "model-infra": {"url": "https://github.com/OGR-EIU/model-infra", "branch": null, "commitish": "9d15efe"},
+        "toolset": {"url": "https://github.com/OGR-EIU/toolset", "branch": null, "commitish": "a815638"},
+        "data-warehouse-client": {"url": "https://github.com/OGR-EIU/data-warehouse-client", "branch": null, "commitish": "6191c73"},
+        "iris-toolbox": {"url": "https://github.com/IRIS-Solutions-Team/IRIS-Toolbox", "branch": null, "commitish": "859845ca"},
+        "end": null
+    },
+    "end": null
+}
