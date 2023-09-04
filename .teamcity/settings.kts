@@ -438,7 +438,7 @@ object ForecastRunner : BuildType({
         text("workflow.dependencies.model.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.config.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("email.body", "Dear all, please find EIU PoC Forecast Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
-        param("matlab.code.report", "runner('../data-warehouse-client/post-output.json', 'model', true);")
+        param("matlab.code.report", "runner('../data-warehouse-client/post-output.json', '../workflow-forecast/report/%workflow.config.country%-input-mapping.json', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.iris-toolbox.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
