@@ -390,6 +390,10 @@ object ForecastInitializer : BuildType({
 object ForecastMerger : BuildType({
     name = "Forecast merger"
 
+    params {
+        text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+    }
+
     vcs {
         root(DslContext.settingsRoot, "+:. => workflow-forecast")
     }
