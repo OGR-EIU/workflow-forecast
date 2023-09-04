@@ -145,7 +145,7 @@ object ForecastChecker : BuildType({
             name = "Forecast step: Load settings"
             workingDir = "workflow-forecast/forecast"
             command = file {
-                filename = "model-us/requests/input-data-request.json"
+                filename = "create_input.py"
                 scriptArguments = """--config-path ../../model/requests/input-data-request.json --output-file adjusted-input-data-request.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
             }
         }
