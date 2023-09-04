@@ -44,12 +44,10 @@ jobs:
                 cp ./workflow-forecast/artifact/*.* ./
                 pwd
                 ls
-                python prepare_forecast_environment.py --local=no
+                # python prepare_forecast_environment.py --local=no
+                git clone https://github.com/OGR-EIU/model-ea model
                 echo ===========================================
                 ls
                 echo ===========================================
-                cd $GITHUB_WORKSPACE/workflow-forecast
-                git status
-                git branch
                 cd $GITHUB_WORKSPACE
 
