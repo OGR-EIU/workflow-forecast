@@ -68,7 +68,6 @@ object ForecastChecker : BuildType({
         root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolbox")
         root(AbsoluteId("ExampleWorkflows_Toolset"), "+:. => toolset")
         root(AbsoluteId("ExampleWorkflows_ModelInfra"), "+:. => model-infra")
-        root(DslContext.settingsRoot, "+:. => workflow-forecast")
         root(AbsoluteId("ExampleWorkflows_ReportForecast"), "+:. => report-forecast")
         root(AbsoluteId("ExampleWorkflows_ModelCz"), "+:. => model-cz")
         root(AbsoluteId("ExampleWorkflows_ModelEa"), "+:. => model-ea")
