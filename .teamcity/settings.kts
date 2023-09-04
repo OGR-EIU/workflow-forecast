@@ -638,6 +638,15 @@ object ForecastRunner : BuildType({
         }
     }
 
+    triggers {
+        vcs {
+            branchFilter = """
+                +:refs/heads/forecast-*
+                -:refs/heads/forecast-*-ANALYST
+            """.trimIndent()
+        }
+    }
+
     requirements {
         equals("system.agent.name", "Agent 2-1")
     }
