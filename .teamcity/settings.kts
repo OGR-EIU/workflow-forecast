@@ -30,6 +30,7 @@ version = "2023.05"
 
 project {
 
+    buildType(ForecastMerger)
     buildType(ForecastChecker)
     buildType(ForecastInitializer)
     buildType(ForecastRunner)
@@ -386,6 +387,10 @@ object ForecastInitializer : BuildType({
     requirements {
         equals("system.agent.name", "Agent 2-1")
     }
+})
+
+object ForecastMerger : BuildType({
+    name = "Forecast merger"
 })
 
 object ForecastRunner : BuildType({
