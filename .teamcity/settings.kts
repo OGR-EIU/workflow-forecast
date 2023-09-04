@@ -40,7 +40,7 @@ object ForecastChecker : BuildType({
 
     artifactRules = """
         build-params.json
-        workflow-forecast/forecast/forecast-output.json
+        output-output.json
         report-forecast/results/report-forecast.bundle.html
     """.trimIndent()
 
