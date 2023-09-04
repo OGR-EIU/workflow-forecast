@@ -21,12 +21,13 @@ _ANALYST_FILES = [
     "submit_forecast.py",
 ]
 
+_POC_ORG = "github.com/OGR-EIU"
 _DATA_WAREHOUSE_URL = "https://eiu-dev.ogresearch.com/api"
 _USERNAME = "test-user"
 _PASSWORD = "t3stT#st"
 
 
-def _install_dependency(folder:str, dep: dict, ) -> None:
+def _install_dependency(folder:str, dep: dict, token: str, ) -> None:
     logging.info("Cloning " + folder, )
     shutil.rmtree(folder, ignore_errors=True, )
     command = ["git", "clone", ]
@@ -34,10 +35,19 @@ def _install_dependency(folder:str, dep: dict, ) -> None:
         command += ["--branch", dep["branch"], "--depth", "1", ]
     else:
         command += ["--no-checkout", "--filter", "tree:0", ]
-    command += [dep["url"], folder, ]
+    url = _tokenize(dep["url"], ) if _is_tokenizable(dep["url"], ) else dep["url"]
+    command += [url, folder, ]
     subprocess.run(command)
     if dep["commitish"]:
         subprocess.run(["git", "checkout", dep["commitish"], ], cwd=folder, )
+
+
+def _is_tokenizable(url: str, ) -> bool:
+    return _POC_ORG in url
+
+
+def _tokenize(url: str, token: str, ) -> str:
+    return url.replace(_POC_ORG, token + "@" + _POC_ORG) if token else url
 
 
 def _copy_analyst_files() -> None:
@@ -88,6 +98,7 @@ if __name__ == "__main__":
 
     p = argparse.ArgumentParser()
     p.add_argument("--local", type=str, choices=["yes", "no"], default="yes", )
+    p.add_argument("--pat", type=str, default="", )
     args = p.parse_args()
 
     config_path = os.path.join(_THIS_DIR, "config.json")
@@ -101,7 +112,7 @@ if __name__ == "__main__":
 
     for folder, dep in config["dependencies"].items():
         if folder and dep:
-            _install_dependency(folder, dep, )
+            _install_dependency(folder, dep, args.pat, )
 
     request_path = os.path.join(_MODEL_DIR, "requests", "input-data-request.json", )
     with open(request_path, "r") as f:
