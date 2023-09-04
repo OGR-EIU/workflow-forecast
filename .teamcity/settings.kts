@@ -361,7 +361,7 @@ object ForecastInitializer : BuildType({
             scriptContent = """
                 #!/bin/bash
                 
-                cd workflow-forecast
+                cd %env.WORKFLOW_FORECAST_REPO%
                 forecast_branch_name=%workflow.output.forecast-branch-name%
                 git switch -c "${'$'}forecast_branch_name-ANALYST"
                 git push origin "${'$'}forecast_branch_name-ANALYST"
