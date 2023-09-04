@@ -298,7 +298,7 @@ object ForecastInitializer : BuildType({
             """.trimIndent()
         }
         script {
-            name = "Prepare config file"
+            name = "Prepare config.json"
             scriptContent = """
                 #!/bin/bash
                 
