@@ -393,6 +393,46 @@ object ForecastMerger : BuildType({
         root(DslContext.settingsRoot, "+:. => workflow-forecast")
     }
 
+    steps {
+        python {
+            name = "Extract config file"
+            workingDir = "workflow-forecast/artifact"
+            command = script {
+                content = """
+                    import subprocess
+                    import json
+                    
+                    # load config file
+                    with open("config.json") as f:
+                      configs = json.load(f)
+                    
+                    # get dependencies
+                    for key, value in configs["dependencies"].items():
+                      # get coutry code
+                      if key != "model-infra" and "model" in key:
+                        country = key.split("-")[1]
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.config.country' \
+                                       value='{country}']" ${TQ}, shell=True)
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.dependencies.model.commit' \
+                                       value='{value['commitish']}']" ${TQ}, shell=True)
+                      if key == "end":
+                        continue
+                      else:
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.dependencies.{key}.commit' \
+                                        value='{value['commitish']}']" ${TQ}, shell=True)
+                    
+                    # get timestamp
+                    subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                   name='workflow.config.timestamp' \
+                                   value='{configs['timestamp']}']" ${TQ}, shell=True)
+                """.trimIndent()
+            }
+        }
+    }
+
     triggers {
         vcs {
             branchFilter = "+:refs/heads/forecast-*-ANALYST"
