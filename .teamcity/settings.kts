@@ -303,14 +303,6 @@ object ForecastInitializer : BuildType({
             """.trimIndent()
         }
         script {
-            name = "Prepare artifact"
-            scriptContent = """
-                #!/bin/bash
-                
-                cp -r ./workflow-forecast/artifact ./
-            """.trimIndent()
-        }
-        script {
             name = "Prepare config file"
             scriptContent = """
                 #!/bin/bash
