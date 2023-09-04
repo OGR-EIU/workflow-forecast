@@ -405,8 +405,8 @@ object ForecastMerger : BuildType({
     name = "Forecast merger"
 
     params {
-        text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         password("env.GH_TOKEN", "credentialsJSON:1eb5ceaa-dfcb-4a70-ae18-89094a189970", label = "GitHub token", description = "GitHub token")
+        text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
     }
 
     vcs {
@@ -442,7 +442,8 @@ object ForecastMerger : BuildType({
             }
         }
         script {
-            name = "Make merge request"
+            name = "Create a merge request"
+            workingDir = "workflow-forecast"
             scriptContent = """
                 #!/bin/bash
                 
