@@ -157,7 +157,7 @@ object ForecastChecker : BuildType({
             }
             command = file {
                 filename = "retrieve_data.py"
-                scriptArguments = "--settings ../model-%workflow.config.country%/requests/adjusted-input-cfg.json --save-to request-output.json --username %api.username% --password %api.password%"
+                scriptArguments = "--json-request ../model-%workflow.config.country%/requests/adjusted-input-cfg.json --save-to request-output.json --username %api.username% --password %api.password%"
             }
         }
         script {
