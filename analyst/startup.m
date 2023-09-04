@@ -25,7 +25,7 @@ env_paths.output_data_path = fullfile(env_paths.this_dir, "output-data.json");
 input_data_mapping = jsondecode(fileread(env_paths.input_mapping_path));
 input_data = jsondecode(fileread(env_paths.input_data_path));
 input_db = protocol_conversion.databank_from_response(input_data, input_data_mapping);
-input_db = modeler.prepare_country_input_data(input_db, params);
+input_db = modeler.prepare_input_data(model, input_db, dates);
 
 dates = modeler.define_forecast_dates(model, input_db);
 

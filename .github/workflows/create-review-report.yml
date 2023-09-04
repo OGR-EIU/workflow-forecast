@@ -1,0 +1,49 @@
+name: Run forecast
+
+on:
+    workflow_call:
+    workflow_dispatch:
+
+jobs:
+    run-forecast:
+        runs-on: ubuntu-latest
+
+        steps:
+
+            - name: Clone workflow-forecast repo
+              uses: actions/checkout@v3
+              with:
+                fetch-depth: 1
+                path: "./workflow-forecast"
+
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: "3.11"
+
+            - name: Install Python dependencies
+              run: | 
+                cd $GITHUB_WORKSPACE
+                pip install -r ./workflow-forecast/requirements.txt
+
+            - name: Prepare environment
+              run: |
+                cd $GITHUB_WORKSPACE
+                cp ./workflow-forecast/artifact/*.* ./
+                python prepare_forecast_environment.py --local=no --pat=${{ secrets.token_with_all_access }}
+                ls
+                cd $GITHUB_WORKSPACE
+
+            - name: Set up Matlab
+              uses: matlab-actions/setup-matlab@v1
+
+            #- name: Run forecast
+            #  uses: matlab-actions/run-command@v1
+            #  with:
+            #      command: run_forecast
+
+            - name: Run forecast
+              run: |
+                matlab -nodesktop -nosplash -batch run_forecast
+                ls
+
