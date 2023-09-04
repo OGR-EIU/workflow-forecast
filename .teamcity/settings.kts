@@ -395,6 +395,15 @@ object ForecastMerger : BuildType({
     vcs {
         root(DslContext.settingsRoot)
     }
+
+    triggers {
+        vcs {
+            branchFilter = "+:forecast-*"
+            perCheckinTriggering = true
+            groupCheckinsByCommitter = true
+            enableQueueOptimization = false
+        }
+    }
 })
 
 object ForecastRunner : BuildType({
