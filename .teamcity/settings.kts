@@ -182,7 +182,7 @@ object ForecastChecker : BuildType({
 
     triggers {
         vcs {
-            triggerRules = "+:root=${DslContext.settingsRoot.id}:**"
+            triggerRules = "+:root=${WorkflowForecastPr.id}:**"
 
             branchFilter = "+:forecast-*-ANALYST"
             perCheckinTriggering = true
