@@ -1,4 +1,6 @@
 import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.buildFeatures.PullRequests
+import jetbrains.buildServer.configs.kotlin.buildFeatures.pullRequests
 import jetbrains.buildServer.configs.kotlin.buildFeatures.sshAgent
 import jetbrains.buildServer.configs.kotlin.buildSteps.python
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
@@ -30,6 +32,7 @@ version = "2023.05"
 
 project {
 
+    buildType(ForecastMerger)
     buildType(ForecastChecker)
     buildType(ForecastInitializer)
     buildType(ForecastRunner)
@@ -40,14 +43,15 @@ object ForecastChecker : BuildType({
 
     artifactRules = """
         build-params.json
-        workflow-forecast/forecast/forecast-output.json
+        input-data.json
+        output-data.json
         report-forecast/results/report-forecast.bundle.html
     """.trimIndent()
 
     params {
         text("workflow.config.country", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        param("matlab.code.forecast", "runner('../../model-%workflow.config.country%', '../../data-warehouse-client/request-output.json', '../../toolset/tunes.csv', 'forecast-output.json', true);")
-        param("matlab.code.report", "runner('../workflow-forecast/forecast/output.json', 'model-%workflow.config.country%', true);")
+        param("matlab.code.forecast", "copyfile('./workflow-forecast/artifact/config.json', pwd); copyfile('./workflow-forecast/analyst', pwd); startup; run_forecast;")
+        param("matlab.code.report", "runner('../output-data.json', 'model', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.iris-toolbox.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
@@ -58,7 +62,7 @@ object ForecastChecker : BuildType({
 
     vcs {
         root(AbsoluteId("ExampleWorkflows_ApiClient"), "+:. => data-warehouse-client")
-        root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolset")
+        root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolbox")
         root(AbsoluteId("ExampleWorkflows_Toolset"), "+:. => toolset")
         root(AbsoluteId("ExampleWorkflows_ModelInfra"), "+:. => model-infra")
         root(DslContext.settingsRoot, "+:. => workflow-forecast")
@@ -78,7 +82,7 @@ object ForecastChecker : BuildType({
         }
         python {
             name = "Extract config file"
-            workingDir = "workflow-forecast/analyst"
+            workingDir = "workflow-forecast/artifact"
             command = script {
                 content = """
                     import subprocess
@@ -89,25 +93,27 @@ object ForecastChecker : BuildType({
                       configs = json.load(f)
                     
                     # get dependencies
-                    for dep in configs["dependencies"]:
+                    for key, value in configs["dependencies"].items():
                       # get coutry code
-                      if dep["dir"] != "model-infra" and "model" in dep["dir"]:
-                        country = dep["dir"].split("-")[1]
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.config.country\' \
-                                       value=\'{country}\']\"")
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.dependencies.model.commit\' \
-                                       value=\'{dep['commit']}\']\"")
+                      if key != "model-infra" and "model" in key:
+                        country = key.split("-")[1]
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.config.country' \
+                                       value='{country}']" ${TQ}, shell=True)
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.dependencies.model.commit' \
+                                       value='{value['commitish']}']" ${TQ}, shell=True)
+                      if key == "end":
+                        continue
                       else:
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.dependencies.{dep['dir']}.commit\' \
-                                       value=\'{dep['commit']}\']\"")
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.dependencies.{key}.commit' \
+                                        value='{value['commitish']}']" ${TQ}, shell=True)
                     
                     # get timestamp
-                    subprocess.run(f"echo \"##teamcity[setParameter \
-                                   name=\'workflow.config.timestamp\' \
-                                   value=\'{configs['timestamp']}\']\"")
+                    subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                   name='workflow.config.timestamp' \
+                                   value='{configs['timestamp']}']" ${TQ}, shell=True)
                 """.trimIndent()
             }
         }
@@ -141,10 +147,10 @@ object ForecastChecker : BuildType({
         }
         python {
             name = "Forecast step: Load settings"
-            workingDir = "model-%workflow.config.country%/requests"
+            workingDir = "workflow-forecast/forecast"
             command = file {
                 filename = "create_input.py"
-                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
+                scriptArguments = """--config-path ../../model/requests/input-data-request.json --output-file adjusted-input-data-request.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
             }
         }
         python {
@@ -157,12 +163,11 @@ object ForecastChecker : BuildType({
             }
             command = file {
                 filename = "retrieve_data.py"
-                scriptArguments = "--json-request ../model-%workflow.config.country%/requests/adjusted-input-cfg.json --save-to request-output.json --username %api.username% --password %api.password%"
+                scriptArguments = "--json-request ../workflow-forecast/forecast/adjusted-input-data-request.json --save-to ../input-data.json --username %api.username% --password %api.password%"
             }
         }
         script {
             name = "Forecast step: Run forecast"
-            workingDir = "workflow-forecast"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
         }
         script {
@@ -174,8 +179,12 @@ object ForecastChecker : BuildType({
 
     triggers {
         vcs {
-            enabled = false
-            branchFilter = "+:forecast-*"
+            triggerRules = "+:root=${DslContext.settingsRoot.id}:**"
+
+            branchFilter = "+:forecast-*-ANALYST"
+            perCheckinTriggering = true
+            groupCheckinsByCommitter = true
+            enableQueueOptimization = false
         }
     }
 
@@ -382,23 +391,54 @@ object ForecastInitializer : BuildType({
     }
 })
 
+object ForecastMerger : BuildType({
+    name = "Forecast merger"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    triggers {
+        vcs {
+            branchFilter = "+:forecast-*"
+            perCheckinTriggering = true
+            groupCheckinsByCommitter = true
+            enableQueueOptimization = false
+        }
+    }
+
+    features {
+        pullRequests {
+            vcsRootExtId = "${DslContext.settingsRoot.id}"
+            provider = github {
+                authType = token {
+                    token = "credentialsJSON:07638a0d-7d3d-4341-b007-b65fb387e662"
+                }
+                filterSourceBranch = "+:forecast-*-ANALYST"
+                filterTargetBranch = "+:forecast-*"
+                filterAuthorRole = PullRequests.GitHubRoleFilter.MEMBER
+            }
+        }
+    }
+})
+
 object ForecastRunner : BuildType({
     name = "Forecast runner"
 
     artifactRules = """
         build-params.json
-        workflow-forecast/forecast/forecast-output.json
+        output-data.json
         report-forecast/results/report-forecast.bundle.html
     """.trimIndent()
 
     params {
         text("email.subject", "EIU PoC Forecast Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
         text("workflow.config.country", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        param("matlab.code.forecast", "runner('../../model-%workflow.config.country%', '../../data-warehouse-client/request-output.json', '../../toolset/tunes.csv', 'forecast-output.json', true);")
+        param("matlab.code.forecast", "copyfile('./workflow-forecast/artifact/config.json', pwd); copyfile('./workflow-forecast/analyst', pwd); startup; run_forecast;")
         text("workflow.dependencies.model.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.config.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("email.body", "Dear all, please find EIU PoC Forecast Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
-        param("matlab.code.report", "runner('../workflow-forecast/forecast/output.json', 'model-%workflow.config.country%', true);")
+        param("matlab.code.report", "runner('../data-warehouse-client/post-output.json', 'model', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.iris-toolbox.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
@@ -429,7 +469,7 @@ object ForecastRunner : BuildType({
         }
         python {
             name = "Extract config file"
-            workingDir = "workflow-forecast/analyst"
+            workingDir = "workflow-forecast/artifact"
             command = script {
                 content = """
                     import subprocess
@@ -440,25 +480,27 @@ object ForecastRunner : BuildType({
                       configs = json.load(f)
                     
                     # get dependencies
-                    for dep in configs["dependencies"]:
+                    for key, value in configs["dependencies"].items():
                       # get coutry code
-                      if dep["dir"] != "model-infra" and "model" in dep["dir"]:
-                        country = dep["dir"].split("-")[1]
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.config.country\' \
-                                       value=\'{country}\']\"")
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.dependencies.model.commit\' \
-                                       value=\'{dep['commit']}\']\"")
+                      if key != "model-infra" and "model" in key:
+                        country = key.split("-")[1]
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.config.country' \
+                                       value='{country}']" ${TQ}, shell=True)
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.dependencies.model.commit' \
+                                       value='{value['commitish']}']" ${TQ}, shell=True)
+                      if key == "end":
+                        continue
                       else:
-                        subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.dependencies.{dep['dir']}.commit\' \
-                                       value=\'{dep['commit']}\']\"")
+                        subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                       name='workflow.dependencies.{key}.commit' \
+                                        value='{value['commitish']}']" ${TQ}, shell=True)
                     
                     # get timestamp
-                    subprocess.run(f"echo \"##teamcity[setParameter \
-                                   name=\'workflow.config.timestamp\' \
-                                   value=\'{configs['timestamp']}\']\"")
+                    subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                   name='workflow.config.timestamp' \
+                                   value='{configs['timestamp']}']" ${TQ}, shell=True)
                 """.trimIndent()
             }
         }
@@ -486,6 +528,8 @@ object ForecastRunner : BuildType({
                 if [ ${'$'}model_infra != "HEAD" ]; then git checkout ${'$'}model_infra; fi
                 cd ../model-%workflow.config.country%
                 if [ ${'$'}model_%workflow.config.country% != "HEAD" ]; then git checkout ${'$'}model_%workflow.config.country%; fi
+                
+                cd .. && cp -r model-%workflow.config.country% model
             """.trimIndent()
         }
         python {
@@ -493,7 +537,7 @@ object ForecastRunner : BuildType({
             workingDir = "workflow-forecast/forecast"
             command = file {
                 filename = "create_input.py"
-                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
+                scriptArguments = """--config-path ../../model/requests/input-data-request.json --output-file adjusted-input-data-request.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
             }
         }
         python {
@@ -506,12 +550,11 @@ object ForecastRunner : BuildType({
             }
             command = file {
                 filename = "retrieve_data.py"
-                scriptArguments = "--settings ../workflow-forecast/forecast/adjusted-input-cfg.json --save-to request-output.json --username %api.username% --password %api.password%"
+                scriptArguments = "--json-request ../workflow-forecast/forecast/adjusted-input-data-request.json --save-to ../input-data.json --username %api.username% --password %api.password%"
             }
         }
         script {
             name = "Forecast step: Run forecast"
-            workingDir = "workflow-forecast/forecast"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
         }
         python {
@@ -522,7 +565,7 @@ object ForecastRunner : BuildType({
             }
             command = file {
                 filename = "submit_data.py"
-                scriptArguments = "--json-request ../workflow-forecast/forecast/forecast-output.json --username %api.username% --password %api.password%"
+                scriptArguments = "--json-request ../output-data.json --username %api.username% --password %api.password%"
             }
         }
         python {

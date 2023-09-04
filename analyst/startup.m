@@ -20,14 +20,19 @@ env_paths.output_mapping_path = fullfile(env_paths.model_dir, "mappings", "outpu
 env_paths.input_data_path = fullfile(env_paths.this_dir, "input-data.json");
 env_paths.output_data_path = fullfile(env_paths.this_dir, "output-data.json");
 
-[model, params] = modeler.create_country_model(env_paths.model_dir);
+[model, params] = modeler.create_model(env_paths.model_dir);
 
 input_data_mapping = jsondecode(fileread(env_paths.input_mapping_path));
 input_data = jsondecode(fileread(env_paths.input_data_path));
 input_db = protocol_conversion.databank_from_response(input_data, input_data_mapping);
-input_db = modeler.prepare_country_input_data(input_db, params);
 
-dates = modeler.define_forecast_dates(model, input_db);
+dates = struct();
+dates.this_quarter = Dater.today(Frequency.QUARTERLY);
+dates.end_simulation = dates.this_quarter + 5*4;
+dates.start_hist = qq(2000,1);
+
+input_db = modeler.prepare_input_data(model, input_db, dates);
+dates = modeler.define_forecast_dates(dates, model, input_db);
 
 setappdata(0, "env_paths", env_paths);
 setappdata(0, "input_db", input_db);

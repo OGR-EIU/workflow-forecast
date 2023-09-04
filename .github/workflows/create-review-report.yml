@@ -37,18 +37,13 @@ jobs:
             - name: Set up Matlab
               uses: matlab-actions/setup-matlab@v1
 
+            #- name: Run forecast
+            #  uses: matlab-actions/run-command@v1
+            #  with:
+            #      command: run_forecast
+
             - name: Run forecast
               run: |
                 matlab -nodesktop -nosplash -batch run_forecast
                 ls
-                mkdir ./artifact
-                echo "" > review-report.html
-                cp ./output-data.json ./artifact
-                cp ./review-report.html ./artifact
-
-            - name: Upload artifact
-              uses: actions/upload-artifact@v3
-                with:
-                    name: ${{ github.ref }}-FOR-REVIEW
-                    path: ./artifact
 

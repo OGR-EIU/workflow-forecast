@@ -99,6 +99,7 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--local", type=str, choices=["yes", "no"], default="yes", )
     p.add_argument("--pat", type=str, default="", )
+    p.add_argument("--clone", type=str, choices=["yes", "no"], default="yes", )
     args = p.parse_args()
 
     config_path = os.path.join(_THIS_DIR, "config.json")
