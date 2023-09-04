@@ -406,7 +406,7 @@ object ForecastMerger : BuildType({
 
     features {
         pullRequests {
-            vcsRootExtId = "${DslContext.settingsRoot.id}"
+            vcsRootExtId = "ExampleWorkflows_WorkflowForecastPr"
             provider = github {
                 authType = token {
                     token = "credentialsJSON:07638a0d-7d3d-4341-b007-b65fb387e662"
