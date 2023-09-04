@@ -406,13 +406,13 @@ object ForecastMerger : BuildType({
 
     features {
         pullRequests {
-            vcsRootExtId = "ExampleWorkflows_WorkflowForecastPr"
+            vcsRootExtId = "${DslContext.settingsRoot.id}"
             provider = github {
                 authType = token {
                     token = "credentialsJSON:07638a0d-7d3d-4341-b007-b65fb387e662"
                 }
-                filterSourceBranch = "+:forecast-*-ANALYST"
-                filterTargetBranch = "+:forecast-*"
+                filterSourceBranch = "+:refs/heads/forecast-*-ANALYST"
+                filterTargetBranch = "+:refs/heads/forecast-*"
                 filterAuthorRole = PullRequests.GitHubRoleFilter.MEMBER
             }
         }
