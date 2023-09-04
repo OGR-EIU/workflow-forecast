@@ -183,7 +183,7 @@ object ForecastChecker : BuildType({
             }
             command = file {
                 filename = "toolset/send_mail.py"
-                scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment 'report-forecast/results/report-forecast.bundle.html'"
+                scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment './report-forecast/results/report-forecast.bundle.html'"
             }
         }
     }
