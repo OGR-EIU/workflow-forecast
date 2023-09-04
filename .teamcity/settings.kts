@@ -85,7 +85,7 @@ object ForecastChecker : BuildType({
                     import json
                     
                     # load config file
-                    with open("artifact/config.json") as f:
+                    with open("config.json") as f:
                       configs = json.load(f)
                     
                     # get dependencies
