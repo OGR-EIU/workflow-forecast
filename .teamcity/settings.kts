@@ -642,6 +642,8 @@ object ForecastRunner : BuildType({
 
     triggers {
         vcs {
+            triggerRules = "+:root=${DslContext.settingsRoot.id}:analyst/**"
+
             branchFilter = """
                 +:refs/heads/forecast-*
                 -:refs/heads/forecast-*-ANALYST
