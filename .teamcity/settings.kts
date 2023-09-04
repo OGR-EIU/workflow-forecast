@@ -449,6 +449,7 @@ object ForecastMerger : BuildType({
                 
                 input_branch_name=%workflow.output.forecast-branch-name%
                 output_branch_name=${'$'}(echo ${'$'}forecast_branch_name | sed 's/-ANALYST//g')
+                gh auth login
                 gh pr create \
                 --title "Merging ${'$'}input_branch_name" \
                 --body "Merging ${'$'}input_branch_name to ${'$'}output_branch_name" \
