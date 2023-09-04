@@ -293,20 +293,20 @@ object ForecastInitializer : BuildType({
             scriptContent = """
                 #!/bin/bash
                 
-                PWD=${'$'}(pwd)
+                DIR_PATH=${'$'}(pwd)
                 REL_CONFIG_PATH=artifact/config.json
-                CONFIG_PATH=${'$'}PWD/%env.WORKFLOW_FORECAST_REPO%/${'$'}REL_CONFIG_PATH
+                CONFIG_PATH=${'$'}DIR_PATH/%env.WORKFLOW_FORECAST_REPO%/${'$'}REL_CONFIG_PATH
                 echo '{' > ${'$'}CONFIG_PATH
                 printf '    "forecast_branch_name": "%s",\n' %workflow.output.forecast-branch-name% >> ${'$'}CONFIG_FILE
                 printf '    "timestamp": "%s",\n' %workflow.output.timestamp% >> ${'$'}CONFIG_FILE
                 #
                 # Local dependencies (only installed if local=True)
                 printf '    "local-dependencies": {\n' >> ${'$'}CONFIG_PATH
-                cd ${'$'}PWD/%env.WORKFLOW_FORECAST_REPO%
+                cd ${'$'}DIR_PATH/%env.WORKFLOW_FORECAST_REPO%
                 directory="workflow-forecast"
                 url=${'$'}(git remote get-url origin)
                 branch=%workflow.output.forecast-branch-name%-ANALYST
-                cd ${'$'}PWD
+                cd ${'$'}DIR_PATH
                 printf '        "%s": {"url": "%s", "branch": "%s", "commitish": null},\n' ${'$'}directory ${'$'}url ${'$'}branch >> ${'$'}CONFIG_PATH
                 printf '        "end": null\n' >> ${'$'}CONFIG_PATH
                 printf '    },\n' >> ${'$'}CONFIG_PATH
@@ -320,10 +320,10 @@ object ForecastInitializer : BuildType({
                     %env.DATA_WAREHOUSE_CLIENT_REPO% \
                     %env.IRIS_TOOLBOX_REPO% \
                 ; do
-                    cd ${'$'}PWD/${'$'}directory
+                    cd ${'$'}DIR_PATH/${'$'}directory
                     url=${'$'}(git remote get-url origin)
                     commitish=${'$'}(git rev-parse --short HEAD)
-                    cd ${'$'}PWD
+                    cd ${'$'}DIR_PATH
                     printf '        "%s": {"url": "%s", "branch": null, "commitish": "%s"},\n' ${'$'}directory ${'$'}url ${'$'}commitish >> ${'$'}CONFIG_PATH
                 done
                 printf '        "end": null\n' >> ${'$'}CONFIG_PATH
