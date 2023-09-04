@@ -390,7 +390,7 @@ object ForecastMerger : BuildType({
     name = "Forecast merger"
 
     vcs {
-        root(DslContext.settingsRoot)
+        root(DslContext.settingsRoot, "+:. => workflow-forecast")
     }
 
     triggers {
