@@ -493,6 +493,8 @@ object ForecastRunner : BuildType({
                 if [ ${'$'}model_infra != "HEAD" ]; then git checkout ${'$'}model_infra; fi
                 cd ../model-%workflow.config.country%
                 if [ ${'$'}model_%workflow.config.country% != "HEAD" ]; then git checkout ${'$'}model_%workflow.config.country%; fi
+                
+                cd .. && cp -r model-%workflow.config.country% model
             """.trimIndent()
         }
         python {
