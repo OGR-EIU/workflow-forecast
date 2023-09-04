@@ -299,8 +299,8 @@ object ForecastInitializer : BuildType({
                 echo '{' > ${'$'}CONFIG_PATH
                 forecast_branch_name=%workflow.output.forecast-branch-name%
                 timestamp=%workflow.output.timestamp%
-                printf '    "forecast_branch_name": "%s",\n' ${'$'}forecast_branch_name >> ${'$'}CONFIG_FILE
-                printf '    "timestamp": "%s",\n' ${'$'}timestamp >> ${'$'}CONFIG_FILE
+                printf '    "forecast_branch_name": "%s",\n' ${'$'}forecast_branch_name >> ${'$'}CONFIG_PATH
+                printf '    "timestamp": "%s",\n' ${'$'}timestamp >> ${'$'}CONFIG_PATH
                 #
                 # Local dependencies (only installed if local=True)
                 printf '    "local-dependencies": {\n' >> ${'$'}CONFIG_PATH
