@@ -405,8 +405,8 @@ object ForecastMerger : BuildType({
     name = "Forecast merger"
 
     params {
-        text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         password("gh.token", "credentialsJSON:85b007fe-292c-4963-80ac-a225e833a9e7", label = "GitHub token", description = "GitHub token required to run GitHub CLI")
+        text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
     }
 
     vcs {
@@ -455,7 +455,7 @@ object ForecastMerger : BuildType({
                 --title "Merging ${'$'}input_branch_name" \
                 --body "Merging ${'$'}input_branch_name to ${'$'}output_branch_name" \
                 --base ${'$'}output_branch_name \
-                --head ${'$'}input_branch_name \
+                --head ${'$'}input_branch_name/${'$'}(git rev-parse --short HEAD) \
                 --assignee nul0m \
                 --assignee jaromir-benes
             """.trimIndent()
