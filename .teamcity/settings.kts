@@ -73,6 +73,7 @@ object ForecastChecker : BuildType({
         root(AbsoluteId("ExampleWorkflows_ModelCz"), "+:. => model-cz")
         root(AbsoluteId("ExampleWorkflows_ModelEa"), "+:. => model-ea")
         root(AbsoluteId("ExampleWorkflows_ModelUs"), "+:. => model-us")
+        root(WorkflowForecastPr)
     }
 
     steps {
