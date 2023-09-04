@@ -46,12 +46,12 @@ object ForecastChecker : BuildType({
     params {
         text("workflow.config.country", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         param("matlab.code.forecast", "runner('../../model-%workflow.config.country%', '../../data-warehouse-client/request-output.json', '../../toolset/tunes.csv', 'forecast-output.json', true);")
-        text("workflow.dependencies.model.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        text("workflow.config.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         param("matlab.code.report", "runner('../workflow-forecast/forecast/output.json', 'model-%workflow.config.country%', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.iris-toolbox.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("workflow.dependencies.model.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("workflow.config.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.toolset.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
     }
 
@@ -134,6 +134,8 @@ object ForecastChecker : BuildType({
                 if [ ${'$'}model_infra != "HEAD" ]; then git checkout ${'$'}model_infra; fi
                 cd ../model-%workflow.config.country%
                 if [ ${'$'}model_%workflow.config.country% != "HEAD" ]; then git checkout ${'$'}model_%workflow.config.country%; fi
+                
+                cd .. && cp -r model-%workflow.config.country% model
             """.trimIndent()
         }
         python {
