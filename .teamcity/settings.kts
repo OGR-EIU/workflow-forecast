@@ -315,29 +315,44 @@ object ForecastInitializer : BuildType({
             scriptContent = """
                 #!/bin/bash
                 
-                CONFIG_FILE=./artifact/config.json
-                echo '{' > ${'$'}CONFIG_FILE
+                PWD=${'$'}(pwd)
+                REL_CONFIG_PATH=artifact/config.json
+                CONFIG_PATH=${'$'}PWD/%env.WORKFLOW_FORECAST_REPO%/${'$'}REL_CONFIG_PATH
+                echo '{' > ${'$'}CONFIG_PATH
                 printf '    "forecast_branch_name": "%s",\n' %workflow.output.forecast-branch-name% >> ${'$'}CONFIG_FILE
                 printf '    "timestamp": "%s",\n' %workflow.output.timestamp% >> ${'$'}CONFIG_FILE
-                printf '    "dependencies": [\n' >> ${'$'}CONFIG_FILE
-                cat ${'$'}CONFIG_FILE
-                for d in \
-                  %env.WORKFLOW_FORECAST_REPO% \
-                  %env.MODEL_REPO% \
-                  %env.MODEL_INFRA_REPO% \
-                  %env.TOOLSET_REPO% \
-                  %env.DATA_WAREHOUSE_CLIENT_REPO% \
-                  %env.IRIS_TOOLBOX_REPO% \
+                #
+                # Local dependencies (only installed if local=True)
+                printf '    "local-dependencies": {\n' >> ${'$'}CONFIG_PATH
+                cd ${'$'}PWD/%env.WORKFLOW_FORECAST_REPO%
+                directory="workflow-forecast"
+                url=${'$'}(git remote get-url origin)
+                branch=%workflow.output.forecast-branch-name%-ANALYST
+                cd ${'$'}GITHUB_WORKSPACE
+                printf '        "%s": {"url": "%s", "branch": "%s", "commitish": null},\n' ${'$'}directory ${'$'}url ${'$'}branch >> ${'$'}CONFIG_PATH
+                printf '        "end": null\n' >> ${'$'}CONFIG_PATH
+                printf '    },\n' >> ${'$'}CONFIG_PATH
+                #
+                # General dependencies
+                printf '    "dependencies": {\n' >> ${'$'}CONFIG_PATH
+                for directory in \
+                    %env.MODEL_REPO% \
+                    %env.MODEL_INFRA_REPO% \
+                    %env.TOOLSET_REPO% \
+                    %env.DATA_WAREHOUSE_CLIENT_REPO% \
+                    %env.IRIS_TOOLBOX_REPO% \
                 ; do
-                  cd ${'$'}d
-                  url=${'$'}(git remote get-url origin)
-                  commit=${'$'}(git rev-parse --short HEAD)
-                  cd ..
-                  printf '        {"dir": "%s", "url": "%s", "commit": "%s"},\n' ${'$'}d ${'$'}url ${'$'}commit >> ${'$'}CONFIG_FILE
+                    cd ${'$'}PWD/${'$'}directory
+                    url=${'$'}(git remote get-url origin)
+                    commitish=${'$'}(git rev-parse --short HEAD)
+                    cd ${'$'}GITHUB_WORKSPACE
+                    printf '        "%s": {"url": "%s", "branch": null, "commitish": "%s"},\n' ${'$'}directory ${'$'}url ${'$'}commitish >> ${'$'}CONFIG_PATH
                 done
-                printf '    ],\n' >> ${'$'}CONFIG_FILE
-                echo '    "end": ""' >> ${'$'}CONFIG_FILE
-                echo '}' >> ${'$'}CONFIG_FILE
+                printf '        "end": null\n' >> ${'$'}CONFIG_PATH
+                printf '    },\n' >> ${'$'}CONFIG_PATH
+                printf '    "end": null\n' >> ${'$'}CONFIG_PATH
+                echo '}' >> ${'$'}CONFIG_PATH
+                echo "##teamcity[setParameter name='rel.config.path' value='${'$'}REL_CONFIG_PATH']"
             """.trimIndent()
         }
         script {
