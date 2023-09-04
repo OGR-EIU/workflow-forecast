@@ -98,11 +98,11 @@ object ForecastChecker : BuildType({
                                        value=\'{country}\']\"")
                         subprocess.run(f"echo \"##teamcity[setParameter \
                                        name=\'workflow.dependencies.model.commit\' \
-                                       value=\'{dep['commit']}\']\"")
+                                       value=\'{dep['commitish']}\']\"")
                       else:
                         subprocess.run(f"echo \"##teamcity[setParameter \
                                        name=\'workflow.dependencies.{dep['dir']}.commit\' \
-                                       value=\'{dep['commit']}\']\"")
+                                       value=\'{dep['commitish']}\']\"")
                     
                     # get timestamp
                     subprocess.run(f"echo \"##teamcity[setParameter \
