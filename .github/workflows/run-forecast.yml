@@ -45,7 +45,7 @@ jobs:
                 pwd
                 ls
                 # python prepare_forecast_environment.py --local=no
-                git clone https://${{ secrets.token_with_all_access}@github.com/OGR-EIU/model-ea model
+                git clone https://${{ secrets.token_with_all_access}}@github.com/OGR-EIU/model-ea model
                 echo ===========================================
                 ls
                 echo ===========================================
