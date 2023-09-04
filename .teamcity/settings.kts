@@ -198,7 +198,7 @@ object ForecastInitializer : BuildType({
 
     artifactRules = """
         build-params.json
-        artifact => artifact.zip
+        workflow-forecast/artifact => artifact.zip
     """.trimIndent()
 
     params {
