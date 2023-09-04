@@ -178,6 +178,7 @@ object ForecastChecker : BuildType({
         }
         python {
             name = "Send email"
+            enabled = false
             pythonVersion = customPython {
                 executable = "/usr/bin/python3.11"
             }
