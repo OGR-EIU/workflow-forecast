@@ -191,6 +191,8 @@ object ForecastChecker : BuildType({
 
     triggers {
         vcs {
+            triggerRules = "+:root=${DslContext.settingsRoot.id}:analyst/**"
+
             branchFilter = "+:refs/heads/forecast-*-ANALYST"
             perCheckinTriggering = true
             groupCheckinsByCommitter = true
