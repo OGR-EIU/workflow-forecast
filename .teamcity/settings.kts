@@ -395,7 +395,7 @@ object ForecastMerger : BuildType({
 
     steps {
         python {
-            name = "Extract config file (1)"
+            name = "Extract config file"
             workingDir = "workflow-forecast/artifact"
             command = script {
                 content = """
