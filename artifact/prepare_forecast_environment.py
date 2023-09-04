@@ -35,15 +35,15 @@ def _install_dependency(folder:str, dep: dict, token: str, ) -> None:
         command += ["--branch", dep["branch"], "--depth", "1", ]
     else:
         command += ["--no-checkout", "--filter", "tree:0", ]
-    url = _tokenize(dep["url"], ) if _is_tokenizable(dep["url"], ) else dep["url"]
+    url = _tokenize(dep["url"], dep["token"], ) if _is_tokenizable(dep["url"], dep["token"], ) else dep["url"]
     command += [url, folder, ]
     subprocess.run(command)
     if dep["commitish"]:
         subprocess.run(["git", "checkout", dep["commitish"], ], cwd=folder, )
 
 
-def _is_tokenizable(url: str, ) -> bool:
-    return _POC_ORG in url
+def _is_tokenizable(url: str, token: str, ) -> bool:
+    return _POC_ORG in url and token
 
 
 def _tokenize(url: str, token: str, ) -> str:
