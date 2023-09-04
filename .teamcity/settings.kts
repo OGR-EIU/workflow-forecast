@@ -55,6 +55,7 @@ object ForecastChecker : BuildType({
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.config.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        param("email.body", "Dear all, please find intermediate EIU PoC Forecast Report attached. Best regards, Ngoc Nam Nguyen")
         text("workflow.dependencies.toolset.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
     }
 
