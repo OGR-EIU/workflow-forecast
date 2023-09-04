@@ -85,11 +85,11 @@ object ForecastChecker : BuildType({
                     import json
                     
                     # load config file
-                    with open("config.json") as f:
+                    with open("artifact/config.json") as f:
                       configs = json.load(f)
                     
                     # get dependencies
-                    for key, value in configs["dependencies"]:
+                    for key, value in configs["dependencies"].items():
                       # get coutry code
                       if key != "model-infra" and "model" in key:
                         country = key.split("-")[1]
@@ -101,7 +101,7 @@ object ForecastChecker : BuildType({
                                        value=\'{value['commitish']}\']\"")
                       else:
                         subprocess.run(f"echo \"##teamcity[setParameter \
-                                       name=\'workflow.dependencies.{value['dir']}.commit\' \
+                                       name=\'workflow.dependencies.{key}.commit\' \
                                        value=\'{value['commitish']}\']\"")
                     
                     # get timestamp
