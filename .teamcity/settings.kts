@@ -392,7 +392,6 @@ object ForecastMerger : BuildType({
     name = "Forecast merger"
 
     vcs {
-        root(DslContext.settingsRoot)
         root(AbsoluteId("ExampleWorkflows_WorkflowForecastPr"))
     }
 
