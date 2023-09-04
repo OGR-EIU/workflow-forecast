@@ -341,8 +341,7 @@ object ForecastInitializer : BuildType({
             scriptContent = """
                 #!/bin/bash
                 
-                PWD=${'$'}(pwd)
-                cd ${'$'}PWD/%env.WORKFLOW_FORECAST_REPO%
+                cd %env.WORKFLOW_FORECAST_REPO%
                 forecast_branch_name=%workflow.output.forecast-branch-name%
                 #
                 git config user.name %env.CI_AUTHOR%
