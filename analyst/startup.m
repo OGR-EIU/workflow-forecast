@@ -5,22 +5,18 @@ disp("Setting up forecast environment...");
 
 echo startup on
 
-addpath(fullfile("..", "iris-toolbox"), "-end");
-addpath(fullfile("..", "toolset"), "-end");
-addpath(fullfile("..", "model-infra"), "-end");
+addpath(fullfile("iris-toolbox"), "-end");
+addpath(fullfile("toolset"), "-end");
+addpath(fullfile("model-infra"), "-end");
 iris.startup("silent", true);
 
 config = jsondecode(fileread("config.json"));
 
 env_paths = struct();
-
 env_paths.this_dir = fileparts(mfilename("fullpath"));
-
 env_paths.model_dir = fullfile(env_paths.this_dir, "model");
-
 env_paths.input_mapping_path = fullfile(env_paths.model_dir, "mappings", "input-data-mapping.json");
 env_paths.output_mapping_path = fullfile(env_paths.model_dir, "mappings", "output-data-mapping.json");
-
 env_paths.input_data_path = fullfile(env_paths.this_dir, "input-data.json");
 env_paths.output_data_path = fullfile(env_paths.this_dir, "output-data.json");
 
