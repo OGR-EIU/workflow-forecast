@@ -405,8 +405,8 @@ object ForecastMerger : BuildType({
     name = "Forecast merger"
 
     params {
-        text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.GH_TOKEN", "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", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
     }
 
     vcs {
@@ -448,6 +448,7 @@ object ForecastMerger : BuildType({
                 
                 input_branch_name=%workflow.output.forecast-branch-name%
                 output_branch_name=${'$'}(echo ${'$'}forecast_branch_name | sed 's/-ANALYST//g')
+                gh auth login --with-token %env.GH_TOKEN%
                 gh pr create \
                 --title "Merging ${'$'}input_branch_name" \
                 --body "Merging ${'$'}input_branch_name to ${'$'}output_branch_name" \
