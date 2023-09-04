@@ -33,8 +33,6 @@ project {
     buildType(ForecastChecker)
     buildType(ForecastInitializer)
     buildType(ForecastRunner)
-
-    subProject(ForecastMerger)
 }
 
 object ForecastChecker : BuildType({
@@ -578,9 +576,4 @@ object ForecastRunner : BuildType({
     requirements {
         equals("system.agent.name", "Agent 2-1")
     }
-})
-
-
-object ForecastMerger : Project({
-    name = "Forecast merger"
 })
