@@ -46,8 +46,8 @@ object ForecastChecker : BuildType({
 
     params {
         text("workflow.config.country", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        param("matlab.code.report", "runner('../workflow-forecast/forecast/output.json', 'model', true);")
         param("matlab.code.forecast", "addpath('./workflow-forecast/analyst'); startup; run_forecast;")
+        param("matlab.code.report", "runner('../workflow-forecast/forecast/output.json', 'model', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.iris-toolbox.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
@@ -58,7 +58,7 @@ object ForecastChecker : BuildType({
 
     vcs {
         root(AbsoluteId("ExampleWorkflows_ApiClient"), "+:. => data-warehouse-client")
-        root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolset")
+        root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolbox")
         root(AbsoluteId("ExampleWorkflows_Toolset"), "+:. => toolset")
         root(AbsoluteId("ExampleWorkflows_ModelInfra"), "+:. => model-infra")
         root(DslContext.settingsRoot, "+:. => workflow-forecast")
