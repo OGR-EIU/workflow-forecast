@@ -431,6 +431,25 @@ object ForecastMerger : BuildType({
                 """.trimIndent()
             }
         }
+        python {
+            name = "Extract config file (1)"
+            workingDir = "workflow-forecast/artifact"
+            command = script {
+                content = """
+                    import subprocess
+                    import json
+                    
+                    # load config file
+                    with open("config.json") as f:
+                      configs = json.load(f)
+                    
+                    # get branch name
+                    subprocess.run(f$TQ echo "##teamcity[setParameter \
+                                   name='workflow.config.timestamp' \
+                                   value='{configs['forecast_branch_name']}']" ${TQ}, shell=True)
+                """.trimIndent()
+            }
+        }
     }
 
     triggers {
