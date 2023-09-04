@@ -30,11 +30,10 @@ version = "2023.05"
 
 project {
 
+    buildType(ForecastMerger)
     buildType(ForecastChecker)
     buildType(ForecastInitializer)
     buildType(ForecastRunner)
-
-    subProject(ForecastMerger)
 }
 
 object ForecastChecker : BuildType({
@@ -390,6 +389,23 @@ object ForecastInitializer : BuildType({
     }
 })
 
+object ForecastMerger : BuildType({
+    name = "Forecast merger"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    triggers {
+        vcs {
+            branchFilter = "+:forecast-*"
+            perCheckinTriggering = true
+            groupCheckinsByCommitter = true
+            enableQueueOptimization = false
+        }
+    }
+})
+
 object ForecastRunner : BuildType({
     name = "Forecast runner"
 
@@ -578,9 +594,4 @@ object ForecastRunner : BuildType({
     requirements {
         equals("system.agent.name", "Agent 2-1")
     }
-})
-
-
-object ForecastMerger : Project({
-    name = "Forecast merger"
 })
