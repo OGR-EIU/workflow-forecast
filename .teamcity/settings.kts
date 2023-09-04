@@ -2,6 +2,7 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.sshAgent
 import jetbrains.buildServer.configs.kotlin.buildSteps.python
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
+import jetbrains.buildServer.configs.kotlin.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
 /*
@@ -421,6 +422,11 @@ object ForecastMerger : BuildType({
             perCheckinTriggering = true
             groupCheckinsByCommitter = true
             enableQueueOptimization = false
+        }
+        finishBuildTrigger {
+            buildType = "${ForecastChecker.id}"
+            successfulOnly = true
+            branchFilter = "+:refs/heads/forecast-*-ANALYST"
         }
     }
 })
