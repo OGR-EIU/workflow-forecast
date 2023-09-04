@@ -200,7 +200,7 @@ object ForecastInitializer : BuildType({
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ssZ")
         text("env.CI_EMAIL", "noreply@ogresearch.com", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         select("workflow.forecast.model", "", label = "Model", description = "Model to be forecasted", display = ParameterDisplay.PROMPT,
-                options = listOf("CZ" to "model-cz", "EA" to "model-ea", "US" to "model-us"))
+                options = listOf("CZ" to "Model-CZ", "EA" to "Model-EA", "US" to "Model-US"))
         text("workflow.output.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.IRIS_TOOLBOX_REPO", "iris-toolbox", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.rel-config-path", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
