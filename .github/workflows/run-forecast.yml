@@ -44,8 +44,7 @@ jobs:
                 cp ./workflow-forecast/artifact/*.* ./
                 pwd
                 ls
-                # python prepare_forecast_environment.py --local=no
-                git clone https://${{ secrets.token_with_all_access}}@github.com/OGR-EIU/model-ea model
+                python prepare_forecast_environment.py --local=no --pat=${{ secrets.token_with_all_access }}
                 echo ===========================================
                 ls
                 echo ===========================================
