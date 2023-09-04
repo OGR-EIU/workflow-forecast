@@ -47,6 +47,7 @@ object ForecastChecker : BuildType({
     """.trimIndent()
 
     params {
+        text("email.subject", "Intermediate EIU PoC Forecast Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
         text("workflow.config.country", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         param("matlab.code.forecast", "copyfile('./workflow-forecast/artifact/config.json', pwd); copyfile('./workflow-forecast/analyst', pwd); startup; run_forecast;")
         param("matlab.code.report", "runner('../output-data.json', '../workflow-forecast/report/%workflow.config.country%-input-mapping.json', true);")
