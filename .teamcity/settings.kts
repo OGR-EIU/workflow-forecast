@@ -456,16 +456,6 @@ object ForecastMerger : BuildType({
                 --assignee jaromir-benes
             """.trimIndent()
         }
-        python {
-            name = "Send email"
-            pythonVersion = customPython {
-                executable = "/usr/bin/python3.11"
-            }
-            command = file {
-                filename = "toolset/send_mail.py"
-                scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment 'report-forecast.bundle.html'"
-            }
-        }
     }
 
     triggers {
