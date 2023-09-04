@@ -405,8 +405,8 @@ object ForecastMerger : BuildType({
     name = "Forecast merger"
 
     params {
-        text("env.GH_TOKEN", "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", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        password("env.GH_TOKEN", "credentialsJSON:1eb5ceaa-dfcb-4a70-ae18-89094a189970", label = "GitHub token", description = "GitHub token")
     }
 
     vcs {
