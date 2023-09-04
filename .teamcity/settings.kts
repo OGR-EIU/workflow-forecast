@@ -5,7 +5,6 @@ import jetbrains.buildServer.configs.kotlin.buildFeatures.sshAgent
 import jetbrains.buildServer.configs.kotlin.buildSteps.python
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
-import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -32,8 +31,6 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2023.05"
 
 project {
-
-    vcsRoot(WorkflowForecastPr)
 
     buildType(ForecastMerger)
     buildType(ForecastChecker)
@@ -72,7 +69,7 @@ object ForecastChecker : BuildType({
         root(AbsoluteId("ExampleWorkflows_ModelCz"), "+:. => model-cz")
         root(AbsoluteId("ExampleWorkflows_ModelEa"), "+:. => model-ea")
         root(AbsoluteId("ExampleWorkflows_ModelUs"), "+:. => model-us")
-        root(WorkflowForecastPr, "+:. => workflow-forecast")
+        root(RelativeId("WorkflowForecastPr"), "+:. => workflow-forecast")
     }
 
     steps {
@@ -182,7 +179,7 @@ object ForecastChecker : BuildType({
 
     triggers {
         vcs {
-            triggerRules = "+:root=${WorkflowForecastPr.id}:**"
+            triggerRules = "+:root=ExampleWorkflows_ModelForecasts_WorkflowForecastPr:**"
 
             branchFilter = "+:forecast-*-ANALYST"
             perCheckinTriggering = true
@@ -398,7 +395,7 @@ object ForecastMerger : BuildType({
     name = "Forecast merger"
 
     vcs {
-        root(WorkflowForecastPr)
+        root(RelativeId("WorkflowForecastPr"))
     }
 
     triggers {
@@ -412,7 +409,7 @@ object ForecastMerger : BuildType({
 
     features {
         pullRequests {
-            vcsRootExtId = "${WorkflowForecastPr.id}"
+            vcsRootExtId = "ExampleWorkflows_ModelForecasts_WorkflowForecastPr"
             provider = github {
                 authType = token {
                     token = "credentialsJSON:07638a0d-7d3d-4341-b007-b65fb387e662"
@@ -612,16 +609,5 @@ object ForecastRunner : BuildType({
 
     requirements {
         equals("system.agent.name", "Agent 2-1")
-    }
-})
-
-object WorkflowForecastPr : GitVcsRoot({
-    name = "workflow-forecast-pr"
-    url = "https://github.com/OGR-EIU/workflow-forecast"
-    branch = "main"
-    branchSpec = "+:report-*-ANALYST"
-    authMethod = password {
-        userName = "Nordanis"
-        password = "credentialsJSON:790b3d76-1c94-4b4e-b48b-54636d45fda0"
     }
 })
