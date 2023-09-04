@@ -40,14 +40,14 @@ object ForecastChecker : BuildType({
 
     artifactRules = """
         build-params.json
-        workflow-forecast/forecast/forecast-output.json
+        output-data.json
         report-forecast/results/report-forecast.bundle.html
     """.trimIndent()
 
     params {
         text("workflow.config.country", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        param("matlab.code.forecast", "runner('../../model', '../../data-warehouse-client/request-output.json', '../../toolset/tunes.csv', 'forecast-output.json', true);")
-        param("matlab.code.report", "runner('../workflow-forecast/forecast/output.json', 'model', true);")
+        param("matlab.code.report", "runner('../output-data.json', 'model', true);")
+        param("matlab.code.forecast", "copyfile('./workflow-forecast/artifact/config.json', './workflow-forecast/analyst'); addpath('./workflow-forecast/analyst'); startup; run_forecast;")
         text("workflow.dependencies.data-warehouse-client.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.iris-toolbox.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
@@ -58,7 +58,7 @@ object ForecastChecker : BuildType({
 
     vcs {
         root(AbsoluteId("ExampleWorkflows_ApiClient"), "+:. => data-warehouse-client")
-        root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolset")
+        root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolbox")
         root(AbsoluteId("ExampleWorkflows_Toolset"), "+:. => toolset")
         root(AbsoluteId("ExampleWorkflows_ModelInfra"), "+:. => model-infra")
         root(DslContext.settingsRoot, "+:. => workflow-forecast")
@@ -146,7 +146,7 @@ object ForecastChecker : BuildType({
             workingDir = "workflow-forecast/forecast"
             command = file {
                 filename = "create_input.py"
-                scriptArguments = """--config-path ../model/requests/input-data-request.json --output-file adjusted-input-data-request.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
+                scriptArguments = """--config-path ../../model/requests/input-data-request.json --output-file adjusted-input-data-request.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
             }
         }
         python {
@@ -159,12 +159,11 @@ object ForecastChecker : BuildType({
             }
             command = file {
                 filename = "retrieve_data.py"
-                scriptArguments = "--json-request ../workflow-forecast/forecast/adjusted-input-data-request.json --save-to request-output.json --username %api.username% --password %api.password%"
+                scriptArguments = "--json-request ../workflow-forecast/forecast/adjusted-input-data-request.json --save-to ../input-data.json --username %api.username% --password %api.password%"
             }
         }
         script {
             name = "Forecast step: Run forecast"
-            workingDir = "workflow-forecast"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
         }
         script {
