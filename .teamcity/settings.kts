@@ -391,6 +391,9 @@ object ForecastInitializer : BuildType({
         sshAgent {
             teamcitySshKey = "TC-SSH"
         }
+        swabra {
+            forceCleanCheckout = true
+        }
     }
 
     requirements {
