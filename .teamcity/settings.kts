@@ -311,7 +311,7 @@ object ForecastComparer : BuildType({
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.report%"; exit ${'$'}?"""
         }
         python {
-            name = "Report step: Send email"
+            name = "Send email"
             enabled = false
             pythonVersion = customPython {
                 executable = "/usr/bin/python3.11"
