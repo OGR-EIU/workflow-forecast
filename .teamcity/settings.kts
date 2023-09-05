@@ -428,25 +428,6 @@ object ForecastMerger : BuildType({
             }
         }
         script {
-            name = "Create merge request"
-            workingDir = "workflow-forecast"
-            scriptContent = """
-                #!/bin/bash
-                
-                input_branch_name=${'$'}(git rev-parse --abbrev-ref HEAD)
-                output_branch_name=${'$'}(echo ${'$'}input_branch_name | sed 's/-ANALYST//g')
-                
-                gh auth login --with-token <<< %gh.token%
-                gh pr create \
-                --title "Merging ${'$'}input_branch_name" \
-                --body "Merging ${'$'}input_branch_name to ${'$'}output_branch_name" \
-                --base ${'$'}output_branch_name \
-                --head ${'$'}input_branch_name \
-                --assignee nul0m \
-                --assignee jaromir-benes
-            """.trimIndent()
-        }
-        script {
             name = "Ensure repo revisions"
             scriptContent = """
                 #!/bin/bash
@@ -472,6 +453,25 @@ object ForecastMerger : BuildType({
                 if [ ${'$'}model_%workflow.config.country% != "HEAD" ]; then git checkout ${'$'}model_%workflow.config.country%; fi
                 
                 cd .. && cp -r model-%workflow.config.country% model
+            """.trimIndent()
+        }
+        script {
+            name = "Create merge request"
+            workingDir = "workflow-forecast"
+            scriptContent = """
+                #!/bin/bash
+                
+                input_branch_name=${'$'}(git rev-parse --abbrev-ref HEAD)
+                output_branch_name=${'$'}(echo ${'$'}input_branch_name | sed 's/-ANALYST//g')
+                
+                gh auth login --with-token <<< %gh.token%
+                gh pr create \
+                --title "Merging ${'$'}input_branch_name" \
+                --body "Merging ${'$'}input_branch_name to ${'$'}output_branch_name" \
+                --base ${'$'}output_branch_name \
+                --head ${'$'}input_branch_name \
+                --assignee nul0m \
+                --assignee jaromir-benes
             """.trimIndent()
         }
     }
