@@ -4,6 +4,7 @@ import jetbrains.buildServer.configs.kotlin.buildFeatures.swabra
 import jetbrains.buildServer.configs.kotlin.buildSteps.python
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
+import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -30,6 +31,8 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2023.05"
 
 project {
+
+    vcsRoot(ReportCompare)
 
     buildType(ForecastMerger)
     buildType(ForecastChecker)
@@ -227,6 +230,7 @@ object ForecastComparer : BuildType({
         root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolbox")
         root(AbsoluteId("ExampleWorkflows_Toolset"), "+:. => toolset")
         root(DslContext.settingsRoot, "+:. => workflow-forecast")
+        root(ReportCompare)
     }
 
     steps {
@@ -785,5 +789,15 @@ object ForecastRunner : BuildType({
 
     requirements {
         equals("system.agent.name", "Agent 2-1")
+    }
+})
+
+object ReportCompare : GitVcsRoot({
+    name = "report-compare"
+    url = "https://github.com/OGR-EIU/report-compare"
+    branch = "main"
+    authMethod = password {
+        userName = "Nordanis"
+        password = "credentialsJSON:790b3d76-1c94-4b4e-b48b-54636d45fda0"
     }
 })
