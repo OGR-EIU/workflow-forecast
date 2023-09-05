@@ -230,7 +230,7 @@ object ForecastComparer : BuildType({
         root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolbox")
         root(AbsoluteId("ExampleWorkflows_Toolset"), "+:. => toolset")
         root(DslContext.settingsRoot, "+:. => workflow-forecast")
-        root(ReportCompare)
+        root(ReportCompare, "+:. => report-compare")
     }
 
     steps {
