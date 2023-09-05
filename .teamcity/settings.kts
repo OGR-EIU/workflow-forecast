@@ -287,10 +287,6 @@ object ForecastComparer : BuildType({
                 scriptArguments = "--json-request ../workflow-forecast/forecast/adjusted-input-data-request.json --save-to ../input-data.json --username %api.username% --password %api.password%"
             }
         }
-        script {
-            name = "Forecast step: Run forecast"
-            scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
-        }
         python {
             name = "Report step: Load settings"
             workingDir = "workflow-forecast/report"
