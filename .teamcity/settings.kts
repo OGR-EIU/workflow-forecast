@@ -449,6 +449,12 @@ object ForecastMerger : BuildType({
         }
     }
 
+    features {
+        swabra {
+            forceCleanCheckout = true
+        }
+    }
+
     dependencies {
         snapshot(ForecastChecker) {
             reuseBuilds = ReuseBuilds.NO
