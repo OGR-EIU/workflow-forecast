@@ -285,7 +285,7 @@ object ForecastComparer : BuildType({
             }
         }
         python {
-            name = "Report step: Load settings (1)"
+            name = "Load settings for the 2nd database"
             workingDir = "workflow-forecast/report"
             command = file {
                 filename = "create_input.py"
