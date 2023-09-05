@@ -311,7 +311,7 @@ object ForecastComparer : BuildType({
         }
         script {
             name = "Generate report"
-            workingDir = "report-forecast"
+            workingDir = "report-compare"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.report%"; exit ${'$'}?"""
         }
         python {
