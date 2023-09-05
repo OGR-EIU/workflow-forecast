@@ -799,7 +799,7 @@ object ForecastRunner : BuildType({
 
     triggers {
         vcs {
-            triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
+            triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/apply_new_judgment.m"
 
             branchFilter = """
                 +:refs/heads/forecast-*
