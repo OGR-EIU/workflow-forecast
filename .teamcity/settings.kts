@@ -268,7 +268,7 @@ object ForecastComparer : BuildType({
             workingDir = "workflow-forecast/report"
             command = file {
                 filename = "create_input.py"
-                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
+                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp-1%"}'"""
             }
         }
         python {
