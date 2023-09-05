@@ -455,6 +455,12 @@ object ForecastMerger : BuildType({
             branchFilter = "+:refs/heads/forecast-*-ANALYST"
         }
     }
+
+    dependencies {
+        snapshot(ForecastChecker) {
+            onDependencyFailure = FailureAction.FAIL_TO_START
+        }
+    }
 })
 
 object ForecastRunner : BuildType({
