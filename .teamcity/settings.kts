@@ -206,8 +206,7 @@ object ForecastComparer : BuildType({
 
     artifactRules = """
         build-params.json
-        output-data.json
-        report-forecast/results/report-forecast.bundle.html
+        report-compare/results/report-compare.bundle.html
     """.trimIndent()
 
     params {
