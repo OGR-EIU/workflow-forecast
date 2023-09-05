@@ -300,6 +300,14 @@ object ForecastComparer : BuildType({
                 scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
             }
         }
+        python {
+            name = "Report step: Load settings (1)"
+            workingDir = "workflow-forecast/report"
+            command = file {
+                filename = "create_input.py"
+                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
+            }
+        }
     }
 
     features {
