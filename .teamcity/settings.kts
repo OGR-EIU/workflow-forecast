@@ -220,7 +220,6 @@ object ForecastComparer : BuildType({
         text("workflow.dependencies.iris-toolbox.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("email.recipients", "ngocnam.nguyen@ogresearch.com, jaromir.benes@ogresearch.com, sergey.plotnikov@ogresearch.com", label = "Email recipients", description = "List of notification email recipients", allowEmpty = false)
-        text("workflow.forecast.country", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.toolset.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
     }
 
