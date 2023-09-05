@@ -292,6 +292,14 @@ object ForecastComparer : BuildType({
                 scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment './report-forecast/results/report-forecast.bundle.html'"
             }
         }
+        python {
+            name = "Report step: Load settings"
+            workingDir = "workflow-forecast/report"
+            command = file {
+                filename = "create_input.py"
+                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
+            }
+        }
     }
 
     features {
