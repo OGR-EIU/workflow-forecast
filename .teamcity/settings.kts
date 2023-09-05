@@ -415,7 +415,6 @@ object ForecastMerger : BuildType({
     vcs {
         root(DslContext.settingsRoot, "+:. => workflow-forecast")
         root(AbsoluteId("ExampleWorkflows_Toolset"), "+:. => toolset")
-        root(WorkflowForecastPr)
     }
 
     steps {
