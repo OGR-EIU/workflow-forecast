@@ -194,9 +194,6 @@ object ForecastChecker : BuildType({
             triggerRules = "+:root=${DslContext.settingsRoot.id}:analyst/**"
 
             branchFilter = "+:refs/heads/forecast-*-ANALYST"
-            perCheckinTriggering = true
-            groupCheckinsByCommitter = true
-            enableQueueOptimization = false
         }
     }
 
