@@ -221,6 +221,7 @@ object ForecastComparer : BuildType({
         text("email.body", "Dear all, please find EIU PoC Compare Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
         text("workflow.dependencies.report-compare.commit", "HEAD", label = "Report compare commit", description = "Commit id of the report compare repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.toolset.commit", "HEAD", label = "Toolset commit", description = "Commit id of the Toolset repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text("workflow.dependencies.workflow-forecast.commit", "HEAD", label = "Workflow forecast commit", description = "Commit id of the Workflow forecast repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
     }
 
     vcs {
