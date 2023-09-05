@@ -421,13 +421,13 @@ object ForecastInitializer : BuildType({
                 cd ../model-infra
                 if [ ${'$'}model_infra != "HEAD" ]; then git checkout ${'$'}model_infra; fi
                 cd ../model-cz
-                if [ -z "${'$'}tag_model_cz" ]; then git checkout tags/${'$'}tag_model_cz;
+                if [ -z "${'$'}tag_model_cz" ]; then git fetch; git checkout tags/${'$'}tag_model_cz;
                 elif [ ${'$'}model_cz != "HEAD" ]; then git checkout ${'$'}model_cz; fi
                 cd ../model-ea
-                if [ -z "${'$'}tag_model_ea" ]; then git checkout tags/${'$'}tag_model_ea;
+                if [ -z "${'$'}tag_model_ea" ]; then git fetch; git checkout tags/${'$'}tag_model_ea;
                 elif [ ${'$'}model_ea != "HEAD" ]; then git checkout ${'$'}model_ea; fi
                 cd ../model-us
-                if [ -z "${'$'}tag_model_us" ]; then git checkout tags/${'$'}tag_model_us;
+                if [ -z "${'$'}tag_model_us" ]; then git fetch; git checkout tags/${'$'}tag_model_us;
                 elif [ ${'$'}model_us != "HEAD" ]; then git checkout ${'$'}model_us; fi
             """.trimIndent()
         }
