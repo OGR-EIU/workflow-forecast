@@ -213,7 +213,7 @@ object ForecastComparer : BuildType({
         text("email.subject", "EIU PoC Compare Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
         select("workflow.config.country", "", label = "Country", description = "Country to report",
                 options = listOf("CZ" to "cz", "EA" to "ea", "US" to "us"))
-        param("matlab.code.report", "runner('../data-warehouse-client/post-output.json', '../workflow-forecast/report/%workflow.config.country%-input-mapping.json', true);")
+        param("matlab.code.report", "runner('../data-warehouse-client/input-data-1.json', '../data-warehouse-client/input-data-2.json', '../workflow-forecast/report/%workflow.config.country%-input-mapping.json', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "HEAD", label = "Data Warehouse Client commit", description = "Commit id of the Data Warehouse Client repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.config.timestamp-1", "", label = "Snapshot time", description = "Timestamp of the 1st database requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ssZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ssZ")
