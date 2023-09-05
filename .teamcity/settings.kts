@@ -607,7 +607,7 @@ object ForecastMerger : BuildType({
     dependencies {
         snapshot(ForecastChecker) {
             reuseBuilds = ReuseBuilds.NO
-            onDependencyFailure = FailureAction.FAIL_TO_START
+            onDependencyCancel = FailureAction.ADD_PROBLEM
         }
     }
 })
