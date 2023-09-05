@@ -357,7 +357,7 @@ object ForecastInitializer : BuildType({
         text("workflow.output.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.IRIS_TOOLBOX_REPO", "iris-toolbox", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.rel-config-path", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        param("workflow.dependencies.model-cz.tag", "")
+        text("workflow.dependencies.model-cz.tag", "", label = "Model CZ tag", description = "Tag id of the Model CZ repo, if assigned, commit id will be ignored", display = ParameterDisplay.PROMPT, allowEmpty = true)
         text("env.CI_AUTHOR", "Production workflow", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.TOOLSET_REPO", "toolset", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-ea.commit", "HEAD", label = "Model EA commit", description = "Commit id of the Model EA repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
