@@ -1,5 +1,6 @@
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.sshAgent
+import jetbrains.buildServer.configs.kotlin.buildFeatures.swabra
 import jetbrains.buildServer.configs.kotlin.buildSteps.python
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
@@ -197,6 +198,12 @@ object ForecastChecker : BuildType({
             triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
 
             branchFilter = "+:refs/heads/forecast-*-ANALYST"
+        }
+    }
+
+    features {
+        swabra {
+            forceCleanCheckout = true
         }
     }
 
