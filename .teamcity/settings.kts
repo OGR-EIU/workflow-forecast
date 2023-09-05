@@ -386,17 +386,6 @@ object ForecastComparer : BuildType({
         }
     }
 
-    triggers {
-        vcs {
-            triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
-
-            branchFilter = """
-                +:refs/heads/forecast-*
-                -:refs/heads/forecast-*-ANALYST
-            """.trimIndent()
-        }
-    }
-
     features {
         swabra {
             forceCleanCheckout = true
