@@ -211,7 +211,7 @@ object ForecastComparer : BuildType({
 
     params {
         text("email.subject", "EIU PoC Compare Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
-        select("workflow.config.country", "", label = "Country", description = "Country to report",
+        select("workflow.config.country", "", label = "Country", description = "Country to report", display = ParameterDisplay.PROMPT,
                 options = listOf("CZ" to "cz", "EA" to "ea", "US" to "us"))
         param("matlab.code.report", "runner('../data-warehouse-client/input-data-1.json', '../data-warehouse-client/input-data-2.json', '../workflow-forecast/report/%workflow.config.country%-input-mapping.json', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "HEAD", label = "Data Warehouse Client commit", description = "Commit id of the Data Warehouse Client repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
