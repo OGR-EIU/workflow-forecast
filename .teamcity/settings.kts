@@ -272,7 +272,7 @@ object ForecastComparer : BuildType({
             }
         }
         python {
-            name = "Report step: Request data from data warehouse"
+            name = "Request 1st database from data warehouse"
             workingDir = "data-warehouse-client"
             pythonVersion = customPython {
                 executable = "/usr/bin/python3.11"
