@@ -653,6 +653,12 @@ object ForecastRunner : BuildType({
         }
     }
 
+    features {
+        swabra {
+            forceCleanCheckout = true
+        }
+    }
+
     requirements {
         equals("system.agent.name", "Agent 2-1")
     }
