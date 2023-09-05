@@ -275,19 +275,6 @@ object ForecastComparer : BuildType({
             """.trimIndent()
         }
         python {
-            name = "Forecast step: Request data from data warehouse"
-            workingDir = "data-warehouse-client"
-            pythonVersion = customPython {
-                executable = "/usr/bin/python3.11"
-            }
-            environment = venv {
-            }
-            command = file {
-                filename = "retrieve_data.py"
-                scriptArguments = "--json-request ../workflow-forecast/forecast/adjusted-input-data-request.json --save-to ../input-data.json --username %api.username% --password %api.password%"
-            }
-        }
-        python {
             name = "Report step: Load settings"
             workingDir = "workflow-forecast/report"
             command = file {
