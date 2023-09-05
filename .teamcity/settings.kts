@@ -191,7 +191,7 @@ object ForecastChecker : BuildType({
 
     triggers {
         vcs {
-            triggerRules = "+:root=${DslContext.settingsRoot.id}:apply_new_judgment.m"
+            triggerRules = "+:root=${DslContext.settingsRoot.id}:analyst/**"
 
             branchFilter = "+:refs/heads/forecast-*-ANALYST"
         }
