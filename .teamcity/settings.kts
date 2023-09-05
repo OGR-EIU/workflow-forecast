@@ -216,7 +216,6 @@ object ForecastComparer : BuildType({
                 options = listOf("CZ" to "cz", "EA" to "ea", "US" to "us"))
         param("matlab.code.report", "runner('../data-warehouse-client/post-output.json', '../workflow-forecast/report/%workflow.config.country%-input-mapping.json', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "HEAD", label = "Data Warehouse Client commit", description = "Commit id of the Data Warehouse Client repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
-        text("workflow.dependencies.model.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("email.recipients", "ngocnam.nguyen@ogresearch.com, jaromir.benes@ogresearch.com, sergey.plotnikov@ogresearch.com", label = "Email recipients", description = "List of notification email recipients", allowEmpty = false)
         text("email.body", "Dear all, please find EIU PoC Compare Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
         text("workflow.dependencies.toolset.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
