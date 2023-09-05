@@ -264,6 +264,14 @@ object ForecastComparer : BuildType({
             """.trimIndent()
         }
         python {
+            name = "Report step: Load settings"
+            workingDir = "workflow-forecast/report"
+            command = file {
+                filename = "create_input.py"
+                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
+            }
+        }
+        python {
             name = "Report step: Request data from data warehouse"
             workingDir = "data-warehouse-client"
             pythonVersion = customPython {
@@ -274,6 +282,14 @@ object ForecastComparer : BuildType({
             command = file {
                 filename = "retrieve_data.py"
                 scriptArguments = "--settings ../workflow-forecast/report/adjusted-input-cfg.json --save-to post-output.json --username %api.username% --password %api.password%"
+            }
+        }
+        python {
+            name = "Report step: Load settings (1)"
+            workingDir = "workflow-forecast/report"
+            command = file {
+                filename = "create_input.py"
+                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
             }
         }
         python {
@@ -303,22 +319,6 @@ object ForecastComparer : BuildType({
             command = file {
                 filename = "toolset/send_mail.py"
                 scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment './report-forecast/results/report-forecast.bundle.html'"
-            }
-        }
-        python {
-            name = "Report step: Load settings"
-            workingDir = "workflow-forecast/report"
-            command = file {
-                filename = "create_input.py"
-                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
-            }
-        }
-        python {
-            name = "Report step: Load settings (1)"
-            workingDir = "workflow-forecast/report"
-            command = file {
-                filename = "create_input.py"
-                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
             }
         }
     }
