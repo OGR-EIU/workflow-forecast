@@ -292,17 +292,6 @@ object ForecastComparer : BuildType({
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
         }
         python {
-            name = "Forecast step: Submit daily data to data warehouse"
-            workingDir = "data-warehouse-client"
-            environment = venv {
-                requirementsFile = ""
-            }
-            command = file {
-                filename = "submit_data.py"
-                scriptArguments = "--json-request ../output-data.json --username %api.username% --password %api.password%"
-            }
-        }
-        python {
             name = "Report step: Load settings"
             workingDir = "workflow-forecast/report"
             command = file {
