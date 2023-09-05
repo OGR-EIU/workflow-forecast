@@ -264,7 +264,7 @@ object ForecastComparer : BuildType({
             """.trimIndent()
         }
         python {
-            name = "Report step: Load settings"
+            name = "Load settings for the 1st database"
             workingDir = "workflow-forecast/report"
             command = file {
                 filename = "create_input.py"
