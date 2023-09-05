@@ -226,7 +226,6 @@ object ForecastComparer : BuildType({
         root(AbsoluteId("ExampleWorkflows_ApiClient"), "+:. => data-warehouse-client")
         root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolbox")
         root(AbsoluteId("ExampleWorkflows_Toolset"), "+:. => toolset")
-        root(AbsoluteId("ExampleWorkflows_ModelInfra"), "+:. => model-infra")
         root(DslContext.settingsRoot, "+:. => workflow-forecast")
         root(AbsoluteId("ExampleWorkflows_ReportForecast"), "+:. => report-forecast")
         root(AbsoluteId("ExampleWorkflows_ModelCz"), "+:. => model-cz")
