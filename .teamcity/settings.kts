@@ -446,6 +446,34 @@ object ForecastMerger : BuildType({
                 --assignee jaromir-benes
             """.trimIndent()
         }
+        script {
+            name = "Ensure repo revisions"
+            scriptContent = """
+                #!/bin/bash
+                
+                data_warehouse_client=%workflow.dependencies.data-warehouse-client.commit%
+                iris_toolbox=%workflow.dependencies.iris-toolbox.commit%
+                workflow_forecast="HEAD"
+                toolset=%workflow.dependencies.toolset.commit%
+                model_infra=%workflow.dependencies.model-infra.commit%
+                model_%workflow.config.country%=%workflow.dependencies.model.commit%
+                
+                cd data-warehouse-client
+                if [ ${'$'}data_warehouse_client != "HEAD" ]; then git checkout ${'$'}data_warehouse_client; fi
+                cd ../iris-toolbox
+                if [ ${'$'}iris_toolbox != "HEAD" ]; then git checkout ${'$'}iris_toolbox; fi
+                cd ../workflow-forecast
+                if [ ${'$'}workflow_forecast != "HEAD" ]; then git checkout ${'$'}workflow_forecast; fi
+                cd ../toolset
+                if [ ${'$'}toolset != "HEAD" ]; then git checkout ${'$'}toolset; fi
+                cd ../model-infra
+                if [ ${'$'}model_infra != "HEAD" ]; then git checkout ${'$'}model_infra; fi
+                cd ../model-%workflow.config.country%
+                if [ ${'$'}model_%workflow.config.country% != "HEAD" ]; then git checkout ${'$'}model_%workflow.config.country%; fi
+                
+                cd .. && cp -r model-%workflow.config.country% model
+            """.trimIndent()
+        }
     }
 
     triggers {
