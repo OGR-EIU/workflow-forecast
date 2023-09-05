@@ -192,15 +192,6 @@ object ForecastChecker : BuildType({
         }
     }
 
-    triggers {
-        vcs {
-            enabled = false
-            triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
-
-            branchFilter = "+:refs/heads/forecast-*-ANALYST"
-        }
-    }
-
     features {
         swabra {
             forceCleanCheckout = true
