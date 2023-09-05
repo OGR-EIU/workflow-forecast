@@ -305,7 +305,7 @@ object ForecastComparer : BuildType({
             }
             command = file {
                 filename = "retrieve_data.py"
-                scriptArguments = "--settings ../workflow-forecast/report/adjusted-input-cfg.json --save-to post-output.json --username %api.username% --password %api.password%"
+                scriptArguments = "--settings ../workflow-forecast/report/adjusted-input-cfg.json --save-to input-data-2.json --username %api.username% --password %api.password%"
             }
         }
         script {
