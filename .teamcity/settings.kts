@@ -214,7 +214,6 @@ object ForecastComparer : BuildType({
         text("email.subject", "Final EIU PoC Forecast Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
         param("matlab.code.forecast", "copyfile('./workflow-forecast/artifact/config.json', pwd); copyfile('./workflow-forecast/analyst', pwd); startup; run_forecast;")
         text("workflow.dependencies.model.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        text("workflow.config.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("email.body", "Dear all, please find final EIU PoC Forecast Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
         param("matlab.code.report", "runner('../data-warehouse-client/post-output.json', '../workflow-forecast/report/%workflow.config.country%-input-mapping.json', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
