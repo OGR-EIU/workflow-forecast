@@ -406,6 +406,9 @@ object ForecastInitializer : BuildType({
                 model_cz=%workflow.dependencies.model-cz.commit%
                 model_ea=%workflow.dependencies.model-ea.commit%
                 model_us=%workflow.dependencies.model-us.commit%
+                tag_model_cz=%workflow.dependencies.model-cz.tag%
+                tag_model_ea=%workflow.dependencies.model-ea.tag%
+                tag_model_us=%workflow.dependencies.model-us.tag%
                 
                 cd data-warehouse-client
                 if [ ${'$'}data_warehouse_client != "HEAD" ]; then git checkout ${'$'}data_warehouse_client; fi
@@ -418,11 +421,14 @@ object ForecastInitializer : BuildType({
                 cd ../model-infra
                 if [ ${'$'}model_infra != "HEAD" ]; then git checkout ${'$'}model_infra; fi
                 cd ../model-cz
-                if [ ${'$'}model_cz != "HEAD" ]; then git checkout ${'$'}model_cz; fi
+                if [ -z "${'$'}{tag_model_cz}" ]; then git checkout tags/${'$'}tag_model_cz;
+                elif [ ${'$'}model_cz != "HEAD" ]; then git checkout ${'$'}model_cz; fi
                 cd ../model-ea
-                if [ ${'$'}model_ea != "HEAD" ]; then git checkout ${'$'}model_ea; fi
+                if [ -z "${'$'}{tag_model_ea}" ]; then git checkout tags/${'$'}tag_model_ea;
+                elif [ ${'$'}model_ea != "HEAD" ]; then git checkout ${'$'}model_ea; fi
                 cd ../model-us
-                if [ ${'$'}model_us != "HEAD" ]; then git checkout ${'$'}model_us; fi
+                if [ -z "${'$'}{tag_model_us}" ]; then git checkout tags/${'$'}tag_model_us;
+                elif [ ${'$'}model_us != "HEAD" ]; then git checkout ${'$'}model_us; fi
             """.trimIndent()
         }
         script {
