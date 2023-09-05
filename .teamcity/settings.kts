@@ -239,7 +239,7 @@ object ForecastComparer : BuildType({
             }
         }
         script {
-            name = "Ensure repo revisions (1)"
+            name = "Ensure repo revisions"
             scriptContent = """
                 #!/bin/bash
                 
