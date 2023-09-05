@@ -801,7 +801,7 @@ object ForecastRunner : BuildType({
         vcs {
             triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
 
-            branchFilter = "+:refs/heads/forecast-*-Z"
+            branchFilter = "+:refs/heads/forecast-*Z"
         }
     }
 
