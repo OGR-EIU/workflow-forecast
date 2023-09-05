@@ -2,7 +2,6 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.sshAgent
 import jetbrains.buildServer.configs.kotlin.buildSteps.python
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
-import jetbrains.buildServer.configs.kotlin.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 
@@ -449,11 +448,6 @@ object ForecastMerger : BuildType({
     }
 
     triggers {
-        finishBuildTrigger {
-            buildType = "${ForecastChecker.id}"
-            successfulOnly = true
-            branchFilter = "+:refs/heads/forecast-*-ANALYST"
-        }
         vcs {
             triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
 
