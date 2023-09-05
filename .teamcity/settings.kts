@@ -594,7 +594,7 @@ object ForecastMerger : BuildType({
         vcs {
             triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
 
-            branchFilter = "+:refs/heads/forecast-*-ANALYST"
+            branchFilter = "+:refs/heads/forecast-*Z-ANALYST"
         }
     }
 
