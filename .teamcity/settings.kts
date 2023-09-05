@@ -276,6 +276,19 @@ object ForecastComparer : BuildType({
                 scriptArguments = "--settings ../workflow-forecast/report/adjusted-input-cfg.json --save-to post-output.json --username %api.username% --password %api.password%"
             }
         }
+        python {
+            name = "Report step: Request data from data warehouse (1)"
+            workingDir = "data-warehouse-client"
+            pythonVersion = customPython {
+                executable = "/usr/bin/python3.11"
+            }
+            environment = venv {
+            }
+            command = file {
+                filename = "retrieve_data.py"
+                scriptArguments = "--settings ../workflow-forecast/report/adjusted-input-cfg.json --save-to post-output.json --username %api.username% --password %api.password%"
+            }
+        }
         script {
             name = "Report step: Generate report"
             workingDir = "report-forecast"
