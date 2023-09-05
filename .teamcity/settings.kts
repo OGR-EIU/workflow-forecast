@@ -661,7 +661,7 @@ object ForecastRunner : BuildType({
 object WorkflowForecastPr : GitVcsRoot({
     name = "workflow-forecast-pr"
     url = "https://github.com/OGR-EIU/workflow-forecast"
-    branch = "main"
+    branch = "%workflow.build-branch%"
     authMethod = password {
         userName = "Nordanis"
         password = "credentialsJSON:790b3d76-1c94-4b4e-b48b-54636d45fda0"
