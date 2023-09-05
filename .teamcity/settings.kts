@@ -212,13 +212,13 @@ object ForecastComparer : BuildType({
 
     params {
         text("email.subject", "EIU PoC Compare Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
-        text("workflow.dependencies.model.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        text("email.body", "Dear all, please find EIU PoC Compare Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
         param("matlab.code.report", "runner('../data-warehouse-client/post-output.json', '../workflow-forecast/report/%workflow.config.country%-input-mapping.json', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.iris-toolbox.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("workflow.dependencies.model.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("email.recipients", "ngocnam.nguyen@ogresearch.com, jaromir.benes@ogresearch.com, sergey.plotnikov@ogresearch.com", label = "Email recipients", description = "List of notification email recipients", allowEmpty = false)
+        text("email.body", "Dear all, please find EIU PoC Compare Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
         text("workflow.dependencies.toolset.commit", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
     }
 
@@ -266,13 +266,28 @@ object ForecastComparer : BuildType({
                 cd .. && cp -r model-%workflow.config.country% model
             """.trimIndent()
         }
-        python {
-            name = "Report step: Load settings"
-            workingDir = "workflow-forecast/report"
-            command = file {
-                filename = "create_input.py"
-                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
-            }
+        script {
+            name = "Ensure repo revisions (1)"
+            scriptContent = """
+                #!/bin/bash
+                
+                data_warehouse_client=%workflow.dependencies.data-warehouse-client.commit%
+                iris_toolbox=%workflow.dependencies.iris-toolbox.commit%
+                workflow_forecast=%workflow.dependencies.workflow-forecast.commit%
+                toolset=%workflow.dependencies.toolset.commit%
+                report_compare=%workflow.dependencies.report-compare.commit%
+                
+                cd data-warehouse-client
+                if [ ${'$'}data_warehouse_client != "HEAD" ]; then git checkout ${'$'}data_warehouse_client; fi
+                cd ../iris-toolbox
+                if [ ${'$'}iris_toolbox != "HEAD" ]; then git checkout ${'$'}iris_toolbox; fi
+                cd ../workflow-forecast
+                if [ ${'$'}workflow_forecast != "HEAD" ]; then git checkout ${'$'}workflow_forecast; fi
+                cd ../toolset
+                if [ ${'$'}toolset != "HEAD" ]; then git checkout ${'$'}toolset; fi
+                cd ../report-compare
+                if [ ${'$'}report_compare != "HEAD" ]; then git checkout ${'$'}report_compare; fi
+            """.trimIndent()
         }
         python {
             name = "Report step: Request data from data warehouse"
