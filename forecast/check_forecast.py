@@ -7,8 +7,8 @@ import irispie as _ip
 
 import os as _os
 import sys as _sy
-this_dir = _os.path.dirname(__file__)
-dir_above = _os.path.join(this_dir, "..")
+cwd = _os.getcwd()
+dir_above = _os.path.join(cwd, "..")
 _sy.path.append(dir_above)
 import toolset.protocol_conversion as _tp
 
