@@ -183,7 +183,7 @@ object ForecastChecker : BuildType({
             }
         }
         script {
-            name = "Report step: Generate report"
+            name = "Generate report"
             workingDir = "report-forecast"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.report%"; exit ${'$'}?"""
         }
