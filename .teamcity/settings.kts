@@ -806,7 +806,7 @@ object ForecastRunner : BuildType({
             }
         }
         python {
-            name = "Check forecast"
+            name = "Forecast step: Check forecast"
             workingDir = "workflow-forecast"
             environment = venv {
             }
