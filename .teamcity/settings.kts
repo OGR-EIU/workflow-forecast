@@ -198,6 +198,16 @@ object ForecastChecker : BuildType({
                 scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment './report-forecast/results/report-forecast.bundle.html'"
             }
         }
+        python {
+            name = "Check forecast (1)"
+            workingDir = "workflow-forecast"
+            environment = venv {
+            }
+            command = file {
+                filename = "forecast/check_forecast.py"
+                scriptArguments = "--response-path ../output-data.json --mapping-path ../model/input-data-mapping.json"
+            }
+        }
     }
 
     features {
