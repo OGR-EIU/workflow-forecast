@@ -173,7 +173,7 @@ object ForecastChecker : BuildType({
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
         }
         python {
-            name = "Check forecast (1)"
+            name = "Check forecast"
             workingDir = "workflow-forecast"
             environment = venv {
             }
