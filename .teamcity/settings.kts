@@ -148,7 +148,7 @@ object ForecastChecker : BuildType({
             """.trimIndent()
         }
         python {
-            name = "Forecast step: Load settings"
+            name = "Load settings"
             workingDir = "workflow-forecast/forecast"
             command = file {
                 filename = "create_input.py"
