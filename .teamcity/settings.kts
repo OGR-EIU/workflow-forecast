@@ -156,7 +156,7 @@ object ForecastChecker : BuildType({
             }
         }
         python {
-            name = "Forecast step: Request data from data warehouse"
+            name = "Request data from data warehouse"
             workingDir = "data-warehouse-client"
             pythonVersion = customPython {
                 executable = "/usr/bin/python3.11"
