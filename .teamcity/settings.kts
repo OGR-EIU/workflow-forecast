@@ -33,6 +33,7 @@ project {
 
     buildType(ForecastMerger)
     buildType(ForecastChecker)
+    buildType(ForecastComparer)
     buildType(ForecastInitializer)
     buildType(ForecastRunner)
 }
@@ -200,6 +201,142 @@ object ForecastChecker : BuildType({
     }
 })
 
+object ForecastComparer : BuildType({
+    name = "Forecast comparer"
+
+    artifactRules = """
+        build-params.json
+        report-compare/results/report-compare.bundle.html
+    """.trimIndent()
+
+    params {
+        text("email.subject", "EIU PoC Compare Report", label = "Email subject", description = "Email notification subject", allowEmpty = false)
+        select("workflow.config.country", "", label = "Country", description = "Country to report", display = ParameterDisplay.PROMPT,
+                options = listOf("CZ" to "cz", "EA" to "ea", "US" to "us"))
+        param("matlab.code.report", "runner('../data-warehouse-client/input-data-1.json', '../data-warehouse-client/input-data-2.json', '../workflow-forecast/report/%workflow.config.country%-input-mapping.json', true);")
+        text("workflow.dependencies.data-warehouse-client.commit", "HEAD", label = "Data Warehouse Client commit", description = "Commit id of the Data Warehouse Client repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text("workflow.config.timestamp-1", "", label = "Snapshot time", description = "Timestamp of the 1st database requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ssZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
+              regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ssZ")
+        text("workflow.dependencies.iris-toolbox.commit", "HEAD", label = "IRIS toolbox commit", description = "Commit id of the IRIS toolbox repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text("email.recipients", "ngocnam.nguyen@ogresearch.com, jaromir.benes@ogresearch.com, sergey.plotnikov@ogresearch.com", label = "Email recipients", description = "List of notification email recipients", allowEmpty = false)
+        text("workflow.config.timestamp-2", "", label = "Snapshot time", description = "Timestamp of the 2nd database requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ssZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
+              regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ssZ")
+        text("email.body", "Dear all, please find EIU PoC Compare Report attached. Best regards, Ngoc Nam Nguyen", label = "Email message", description = "Text of the notification email", allowEmpty = false)
+        text("workflow.dependencies.report-compare.commit", "HEAD", label = "Report compare commit", description = "Commit id of the report compare repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text("workflow.dependencies.toolset.commit", "HEAD", label = "Toolset commit", description = "Commit id of the Toolset repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text("workflow.dependencies.workflow-forecast.commit", "HEAD", label = "Workflow forecast commit", description = "Commit id of the Workflow forecast repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
+    }
+
+    vcs {
+        root(AbsoluteId("ExampleWorkflows_ApiClient"), "+:. => data-warehouse-client")
+        root(AbsoluteId("ExampleWorkflows_Iris"), "+:. => iris-toolbox")
+        root(AbsoluteId("ExampleWorkflows_Toolset"), "+:. => toolset")
+        root(DslContext.settingsRoot, "+:. => workflow-forecast")
+        root(RelativeId("ReportCompare"), "+:. => report-compare")
+    }
+
+    steps {
+        python {
+            name = "Save build parameters"
+            command = file {
+                filename = "toolset/extract_build_params.py"
+                scriptArguments = "--props-path %system.teamcity.configuration.properties.file% --params-path build-params.json"
+            }
+        }
+        script {
+            name = "Ensure repo revisions"
+            scriptContent = """
+                #!/bin/bash
+                
+                data_warehouse_client=%workflow.dependencies.data-warehouse-client.commit%
+                iris_toolbox=%workflow.dependencies.iris-toolbox.commit%
+                workflow_forecast=%workflow.dependencies.workflow-forecast.commit%
+                toolset=%workflow.dependencies.toolset.commit%
+                report_compare=%workflow.dependencies.report-compare.commit%
+                
+                cd data-warehouse-client
+                if [ ${'$'}data_warehouse_client != "HEAD" ]; then git checkout ${'$'}data_warehouse_client; fi
+                cd ../iris-toolbox
+                if [ ${'$'}iris_toolbox != "HEAD" ]; then git checkout ${'$'}iris_toolbox; fi
+                cd ../workflow-forecast
+                if [ ${'$'}workflow_forecast != "HEAD" ]; then git checkout ${'$'}workflow_forecast; fi
+                cd ../toolset
+                if [ ${'$'}toolset != "HEAD" ]; then git checkout ${'$'}toolset; fi
+                cd ../report-compare
+                if [ ${'$'}report_compare != "HEAD" ]; then git checkout ${'$'}report_compare; fi
+            """.trimIndent()
+        }
+        python {
+            name = "Load settings for the 1st database"
+            workingDir = "workflow-forecast/report"
+            command = file {
+                filename = "create_input.py"
+                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp-1%"}'"""
+            }
+        }
+        python {
+            name = "Request 1st database from data warehouse"
+            workingDir = "data-warehouse-client"
+            pythonVersion = customPython {
+                executable = "/usr/bin/python3.11"
+            }
+            environment = venv {
+            }
+            command = file {
+                filename = "retrieve_data.py"
+                scriptArguments = "--settings ../workflow-forecast/report/adjusted-input-cfg.json --save-to input-data-1.json --username %api.username% --password %api.password%"
+            }
+        }
+        python {
+            name = "Load settings for the 2nd database"
+            workingDir = "workflow-forecast/report"
+            command = file {
+                filename = "create_input.py"
+                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp-2%"}'"""
+            }
+        }
+        python {
+            name = "Request 2nd database from data warehouse"
+            workingDir = "data-warehouse-client"
+            pythonVersion = customPython {
+                executable = "/usr/bin/python3.11"
+            }
+            environment = venv {
+            }
+            command = file {
+                filename = "retrieve_data.py"
+                scriptArguments = "--settings ../workflow-forecast/report/adjusted-input-cfg.json --save-to input-data-2.json --username %api.username% --password %api.password%"
+            }
+        }
+        script {
+            name = "Generate report"
+            workingDir = "report-compare"
+            scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.report%"; exit ${'$'}?"""
+        }
+        python {
+            name = "Send email"
+            enabled = false
+            pythonVersion = customPython {
+                executable = "/usr/bin/python3.11"
+            }
+            command = file {
+                filename = "toolset/send_mail.py"
+                scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment './report-compare/results/report-compare.bundle.html'"
+            }
+        }
+    }
+
+    features {
+        swabra {
+            forceCleanCheckout = true
+        }
+    }
+
+    requirements {
+        equals("system.agent.name", "Agent 2-1")
+    }
+})
+
 object ForecastInitializer : BuildType({
     name = "Forecast initializer"
 
@@ -219,7 +356,9 @@ object ForecastInitializer : BuildType({
                 options = listOf("CZ" to "model-cz", "EA" to "model-ea", "US" to "model-us"))
         text("workflow.output.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.IRIS_TOOLBOX_REPO", "iris-toolbox", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("workflow.dependencies.model-us.tag", "", label = "Model US tag", description = "Tag id of the Model US repo, if assigned, commit id will be ignored", display = ParameterDisplay.PROMPT, allowEmpty = true)
         text("workflow.output.rel-config-path", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("workflow.dependencies.model-cz.tag", "", label = "Model CZ tag", description = "Tag id of the Model CZ repo, if assigned, commit id will be ignored", display = ParameterDisplay.PROMPT, allowEmpty = true)
         text("env.CI_AUTHOR", "Production workflow", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.TOOLSET_REPO", "toolset", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-ea.commit", "HEAD", label = "Model EA commit", description = "Commit id of the Model EA repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
@@ -232,6 +371,7 @@ object ForecastInitializer : BuildType({
         text("workflow.dependencies.toolset.commit", "HEAD", label = "Toolset commit", description = "Commit id of the Toolset repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.workflow-forecast.commit", "HEAD", label = "Workflow forecast commit", description = "Commit id of the Workflow forecast repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.MODEL_INFRA_REPO", "model-infra", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("workflow.dependencies.model-ea.tag", "", label = "Model EA tag", description = "Tag id of the Model EA repo, if assigned, commit id will be ignored", display = ParameterDisplay.PROMPT, allowEmpty = true)
     }
 
     vcs {
@@ -266,6 +406,9 @@ object ForecastInitializer : BuildType({
                 model_cz=%workflow.dependencies.model-cz.commit%
                 model_ea=%workflow.dependencies.model-ea.commit%
                 model_us=%workflow.dependencies.model-us.commit%
+                tag_model_cz="%workflow.dependencies.model-cz.tag%"
+                tag_model_ea="%workflow.dependencies.model-ea.tag%"
+                tag_model_us="%workflow.dependencies.model-us.tag%"
                 
                 cd data-warehouse-client
                 if [ ${'$'}data_warehouse_client != "HEAD" ]; then git checkout ${'$'}data_warehouse_client; fi
@@ -278,11 +421,14 @@ object ForecastInitializer : BuildType({
                 cd ../model-infra
                 if [ ${'$'}model_infra != "HEAD" ]; then git checkout ${'$'}model_infra; fi
                 cd ../model-cz
-                if [ ${'$'}model_cz != "HEAD" ]; then git checkout ${'$'}model_cz; fi
+                if [ ${'$'}tag_model_cz != "" ]; then git checkout tags/${'$'}tag_model_cz;
+                elif [ ${'$'}model_cz != "HEAD" ]; then git checkout ${'$'}model_cz; fi
                 cd ../model-ea
-                if [ ${'$'}model_ea != "HEAD" ]; then git checkout ${'$'}model_ea; fi
+                if [ ${'$'}tag_model_ea != "" ]; then git checkout tags/${'$'}tag_model_ea;
+                elif [ ${'$'}model_ea != "HEAD" ]; then git checkout ${'$'}model_ea; fi
                 cd ../model-us
-                if [ ${'$'}model_us != "HEAD" ]; then git checkout ${'$'}model_us; fi
+                if [ ${'$'}tag_model_us != "" ]; then git checkout tags/${'$'}tag_model_us;
+                elif [ ${'$'}model_us != "HEAD" ]; then git checkout ${'$'}model_us; fi
             """.trimIndent()
         }
         script {
@@ -448,7 +594,7 @@ object ForecastMerger : BuildType({
         vcs {
             triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
 
-            branchFilter = "+:refs/heads/forecast-*-ANALYST"
+            branchFilter = "+:refs/heads/forecast-*Z-ANALYST"
         }
     }
 
@@ -461,7 +607,7 @@ object ForecastMerger : BuildType({
     dependencies {
         snapshot(ForecastChecker) {
             reuseBuilds = ReuseBuilds.NO
-            onDependencyFailure = FailureAction.FAIL_TO_START
+            onDependencyCancel = FailureAction.ADD_PROBLEM
         }
     }
 })
@@ -655,10 +801,7 @@ object ForecastRunner : BuildType({
         vcs {
             triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
 
-            branchFilter = """
-                +:refs/heads/forecast-*
-                -:refs/heads/forecast-*-ANALYST
-            """.trimIndent()
+            branchFilter = "+:refs/heads/forecast-*Z"
         }
     }
 
