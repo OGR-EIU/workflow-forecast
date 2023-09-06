@@ -758,6 +758,16 @@ object ForecastRunner : BuildType({
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
         }
         python {
+            name = "Forecast step: Check forecast"
+            workingDir = "workflow-forecast"
+            environment = venv {
+            }
+            command = file {
+                filename = "forecast/check_forecast.py"
+                scriptArguments = "--response-path ../output-data.json --mapping-path ../model/input-data-mapping.json"
+            }
+        }
+        python {
             name = "Forecast step: Submit daily data to data warehouse"
             workingDir = "data-warehouse-client"
             environment = venv {
@@ -803,16 +813,6 @@ object ForecastRunner : BuildType({
             command = file {
                 filename = "toolset/send_mail.py"
                 scriptArguments = "--subject '%email.subject%' --recipients '%email.recipients%' --body '%email.body%' --attachment './report-forecast/results/report-forecast.bundle.html'"
-            }
-        }
-        python {
-            name = "Forecast step: Check forecast"
-            workingDir = "workflow-forecast"
-            environment = venv {
-            }
-            command = file {
-                filename = "forecast/check_forecast.py"
-                scriptArguments = "--response-path ../output-data.json --mapping-path ../model/input-data-mapping.json"
             }
         }
     }
