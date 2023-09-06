@@ -179,7 +179,7 @@ object ForecastChecker : BuildType({
             }
             command = file {
                 filename = "forecast/check_forecast.py"
-                scriptArguments = "--response-path ../output-data.json --mapping-path ../model/input-data-mapping.json"
+                scriptArguments = "--response-path ../output-data.json --mapping-path ../model/mappings/output-data-mapping.json"
             }
         }
         script {
