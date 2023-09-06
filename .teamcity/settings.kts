@@ -172,16 +172,6 @@ object ForecastChecker : BuildType({
             name = "Run forecast"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
         }
-        python {
-            name = "Check forecast"
-            workingDir = "workflow-forecast"
-            environment = venv {
-            }
-            command = file {
-                filename = "forecast/check_forecast.py"
-                scriptArguments = "--response-path x --mapping-path ../model/input-data-mapping.json"
-            }
-        }
         script {
             name = "Generate report"
             workingDir = "report-forecast"
