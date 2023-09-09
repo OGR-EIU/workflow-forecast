@@ -225,9 +225,9 @@ object ForecastComparer : BuildType({
                 options = listOf("CZ" to "cz", "EA" to "ea", "US" to "us"))
         param("matlab.code.report", "runner('../data-warehouse-client/input-data-1.json', '../data-warehouse-client/input-data-2.json', '../workflow-forecast/report/%workflow.config.country%-input-mapping.json', true);")
         text("workflow.dependencies.data-warehouse-client.commit", "HEAD", label = "Data Warehouse Client commit", description = "Commit id of the Data Warehouse Client repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
-        text("workflow.dependencies.iris-toolbox.commit", "HEAD", label = "IRIS toolbox commit", description = "Commit id of the IRIS toolbox repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.config.timestamp-1", "", label = "Snapshot time of the 1st database", description = "Timestamp of the 1st database requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ssZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ssZ")
+        text("workflow.dependencies.iris-toolbox.commit", "HEAD", label = "IRIS toolbox commit", description = "Commit id of the IRIS toolbox repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("email.recipients", "ngocnam.nguyen@ogresearch.com, jaromir.benes@ogresearch.com, sergey.plotnikov@ogresearch.com", label = "Email recipients", description = "List of notification email recipients", allowEmpty = false)
         text("workflow.config.timestamp-2", "", label = "Snapshot time of the 2nd database", description = "Timestamp of the 2nd database requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ssZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ssZ")
@@ -356,14 +356,14 @@ object ForecastInitializer : BuildType({
     """.trimIndent()
 
     params {
+        select("workflow.aforecast.model", "", label = "Model", description = "Model to run", display = ParameterDisplay.PROMPT,
+                options = listOf("CZ" to "model-cz", "EA" to "model-ea", "US" to "model-us"))
         text("env.DATA_WAREHOUSE_CLIENT_REPO", "data-warehouse-client", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.MODEL_REPO", "%workflow.forecast.model%", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-cz.commit", "HEAD", label = "Model CZ commit", description = "Commit id of the Model CZ repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.forecast.snapshot-time", "", label = "Snapshot time", description = "Snapshot time of the series requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ssZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ssZ")
         text("env.CI_EMAIL", "noreply@ogresearch.com", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        select("workflow.forecast.model", "", label = "Model", description = "Model to run", display = ParameterDisplay.PROMPT,
-                options = listOf("CZ" to "model-cz", "EA" to "model-ea", "US" to "model-us"))
         text("workflow.output.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.IRIS_TOOLBOX_REPO", "iris-toolbox", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-us.tag", "", label = "Model US tag", description = "Tag id of the Model US repo, if assigned, commit id will be ignored", display = ParameterDisplay.PROMPT, allowEmpty = true)
