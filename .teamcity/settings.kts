@@ -408,44 +408,39 @@ object ForecastInitializer : BuildType({
             scriptContent = """
                 #!/bin/bash
                 
-                data_warehouse_client=%workflow.dependencies.data-warehouse-client.commit%
-                iris_toolbox=%workflow.dependencies.iris-toolbox.commit%
-                workflow_forecast=%workflow.dependencies.workflow-forecast.commit%
-                toolset=%workflow.dependencies.toolset.commit%
-                model_infra=%workflow.dependencies.model-infra.commit%
-                model_cz=%workflow.dependencies.model-cz.commit%
-                model_ea=%workflow.dependencies.model-ea.commit%
-                model_us=%workflow.dependencies.model-us.commit%
-                tag_model_cz="%workflow.dependencies.model-cz.tag%"
-                tag_model_ea="%workflow.dependencies.model-ea.tag%"
-                tag_model_us="%workflow.dependencies.model-us.tag%"
-                model_folder=%env.MODEL_REPO%
+                data_warehouse_client_commitish=%workflow.dependencies.data-warehouse-client.commit%
+                iris_toolbox_commitish=%workflow.dependencies.iris-toolbox.commit%
+                workflow_forecast_commitish=%workflow.dependencies.workflow-forecast.commit%
+                toolset_commitish=%workflow.dependencies.toolset.commit%
+                model_infra_commitish=%workflow.dependencies.model-infra.commit%
                 
-                echo /////////////////////////////////////////////
-                cd ${'$'}model_folder
-                pwd
-                cd ..
-                echo /////////////////////////////////////////////
+                model_repo=%env.MODEL_REPO%
+                model_commitish=%workflow.dependencies.model.commitish%
+                
                 
                 cd data-warehouse-client
-                if [ ${'$'}data_warehouse_client != "HEAD" ]; then git checkout ${'$'}data_warehouse_client; fi
-                cd ../iris-toolbox
-                if [ ${'$'}iris_toolbox != "HEAD" ]; then git checkout ${'$'}iris_toolbox; fi
-                cd ../workflow-forecast
-                if [ ${'$'}workflow_forecast != "HEAD" ]; then git checkout ${'$'}workflow_forecast; fi
-                cd ../toolset
-                if [ ${'$'}toolset != "HEAD" ]; then git checkout ${'$'}toolset; fi
-                cd ../model-infra
-                if [ ${'$'}model_infra != "HEAD" ]; then git checkout ${'$'}model_infra; fi
-                cd ../model-cz
-                if [ ${'$'}tag_model_cz != "" ]; then git checkout tags/${'$'}tag_model_cz;
-                elif [ ${'$'}model_cz != "HEAD" ]; then git checkout ${'$'}model_cz; fi
-                cd ../model-ea
-                if [ ${'$'}tag_model_ea != "" ]; then git checkout tags/${'$'}tag_model_ea;
-                elif [ ${'$'}model_ea != "HEAD" ]; then git checkout ${'$'}model_ea; fi
-                cd ../model-us
-                if [ ${'$'}tag_model_us != "" ]; then git checkout tags/${'$'}tag_model_us;
-                elif [ ${'$'}model_us != "HEAD" ]; then git checkout ${'$'}model_us; fi
+                git checkout ${'$'}data_warehouse_client_commitish
+                cd ..
+                
+                cd iris-toolbox
+                git checkout ${'$'}iris_toolbox_commitish
+                cd ..
+                
+                cd workflow-forecast
+                git checkout ${'$'}workflow_forecast_commitish
+                cd ..
+                
+                cd toolset
+                git checkout ${'$'}toolset_commitish
+                cd ..
+                
+                cd model-infra
+                git checkout ${'$'}model_infra_commitish
+                cd ..
+                
+                cd ${'$'}model_repo
+                git checkout ${'$'}model_commitish
+                cd ..
             """.trimIndent()
         }
         script {
