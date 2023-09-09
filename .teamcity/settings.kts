@@ -351,7 +351,7 @@ object ForecastInitializer : BuildType({
     name = "Forecast initializer"
 
     artifactRules = """
-        workflow-forecast/artifact => %workflow.output.forecast-branch-name%.zip
+        workflow-forecast/artifact => %workflow.output.forecast-branch-name%-ANALYST.zip
         build-params.json
     """.trimIndent()
     publishArtifacts = PublishMode.SUCCESSFUL
