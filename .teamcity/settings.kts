@@ -420,6 +420,9 @@ object ForecastInitializer : BuildType({
                 tag_model_ea="%workflow.dependencies.model-ea.tag%"
                 tag_model_us="%workflow.dependencies.model-us.tag%"
                 
+                echo /////////////////////////////////////////////
+                echo /////////////////////////////////////////////
+                
                 cd data-warehouse-client
                 if [ ${'$'}data_warehouse_client != "HEAD" ]; then git checkout ${'$'}data_warehouse_client; fi
                 cd ../iris-toolbox
