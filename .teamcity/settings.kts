@@ -410,7 +410,7 @@ object ForecastInitializer : BuildType({
                 model_infra_commitish=%workflow.dependencies.model-infra.commit%
                 
                 model_repo=%env.MODEL_REPO%
-                model_commitish=%workflow.dependencies.model.commitish%
+                model_commitish=%workflow.dependencies.amodel.commitish%
                 
                 
                 cd data-warehouse-client
