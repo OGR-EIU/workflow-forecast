@@ -363,7 +363,6 @@ object ForecastInitializer : BuildType({
         text("env.CI_EMAIL", "noreply@ogresearch.com", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.IRIS_TOOLBOX_REPO", "iris-toolbox", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        text("workflow.dependencies.model-us.tag", "", label = "Model US tag", description = "Tag id of the Model US repo, if assigned, commit id will be ignored", display = ParameterDisplay.PROMPT, allowEmpty = true)
         text("workflow.output.rel-config-path", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-cz.tag", "", label = "Model CZ tag", description = "Tag id of the Model CZ repo, if assigned, commit id will be ignored", display = ParameterDisplay.PROMPT, allowEmpty = true)
         text("workflow.aforecast.snapshot-time", "", label = "Snapshot time", description = "Snapshot time of the series requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ssZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
