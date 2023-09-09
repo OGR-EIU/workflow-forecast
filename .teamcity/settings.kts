@@ -371,7 +371,7 @@ object ForecastInitializer : BuildType({
         text("env.CI_AUTHOR", "Production workflow", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.data-warehouse-client.commitish", "HEAD", label = "Data Warehouse Client version", description = "Commitish (SHA, tag, branch, ...) of the Data Warehouse Client repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.TOOLSET_REPO", "toolset", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        text("workflow.dependencies.workflow-forecast.commitish", "HEAD", label = "Workflow forecast commit", description = "Commitish (SHA, tag, branch, ...) of the Workflow forecast repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text("workflow.dependencies.workflow-forecast.commitish", "HEAD", label = "Workflow version", description = "Commitish (SHA, tag, branch, ...) of the Workflow forecast repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.WORKFLOW_FORECAST_REPO", "workflow-forecast", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commitish", "HEAD", label = "Model Infrastructure version", description = "Commitish (SHA, tag, branch, ...) of the Model infrastructure repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
