@@ -359,10 +359,10 @@ object ForecastInitializer : BuildType({
         select("workflow.aforecast.model", "", label = "Model", description = "Model to run", display = ParameterDisplay.PROMPT,
                 options = listOf("CZ" to "model-cz", "EA" to "model-ea", "US" to "model-us"))
         text("env.DATA_WAREHOUSE_CLIENT_REPO", "data-warehouse-client", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("env.MODEL_REPO", "%workflow.aforecast.model%", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-cz.commit", "HEAD", label = "Model CZ commit", description = "Commit id of the Model CZ repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.forecast.snapshot-time", "", label = "Snapshot time", description = "Snapshot time of the series requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ssZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ssZ")
-        text("env.MODEL_REPO", "%workflow.aforecast.model%", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.CI_EMAIL", "noreply@ogresearch.com", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.IRIS_TOOLBOX_REPO", "iris-toolbox", display = ParameterDisplay.HIDDEN, allowEmpty = true)
@@ -453,7 +453,7 @@ object ForecastInitializer : BuildType({
                   timestamp=%workflow.forecast.snapshot-time%
                 fi
                 
-                forecast_branch_name="forecast-%workflow.forecast.model%-${'$'}timestamp"
+                forecast_branch_name="forecast-%workflow.aforecast.model%-${'$'}timestamp"
                 forecast_branch_name="${'$'}{forecast_branch_name//:/-}"
                 
                 echo "##teamcity[setParameter name='workflow.output.timestamp' value='${'$'}timestamp']"
