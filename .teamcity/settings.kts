@@ -421,6 +421,8 @@ object ForecastInitializer : BuildType({
                 
                 cd iris-toolbox
                 git checkout ${'$'}iris_toolbox_commitish
+                pwd
+                git log -n 1
                 cd ..
                 
                 cd workflow-forecast
