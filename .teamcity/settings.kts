@@ -359,6 +359,7 @@ object ForecastInitializer : BuildType({
         select("workflow.aforecast.model", "", label = "Model", description = "Model to run", display = ParameterDisplay.PROMPT,
                 options = listOf("CZ" to "model-cz", "EA" to "model-ea", "US" to "model-us"))
         text("env.DATA_WAREHOUSE_CLIENT_REPO", "data-warehouse-client", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("workflow.dependencies.iris-toolbox.commitish", "HEAD", label = "IRIS toolbox commit", description = "Commitish (SHA, tag, branch, ...) of the IRIS toolbox repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.MODEL_REPO", "%workflow.aforecast.model%", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.CI_EMAIL", "noreply@ogresearch.com", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.timestamp", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
@@ -372,7 +373,6 @@ object ForecastInitializer : BuildType({
         text("env.WORKFLOW_FORECAST_REPO", "workflow-forecast", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.amodel.commitish", "HEAD", label = "Model version", description = "Commitish (SHA, tag, branch, ...) of the selected model repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
-        text("workflow.dependencies.iris-toolbox.commit", "HEAD", label = "IRIS toolbox commit", description = "Commit id of the IRIS toolbox repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.model-infra.commit", "HEAD", label = "Model infrastructure commit", description = "Commit id of the Model infrastructure repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.toolset.commit", "HEAD", label = "Toolset commit", description = "Commit id of the Toolset repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.workflow-forecast.commit", "HEAD", label = "Workflow forecast commit", description = "Commit id of the Workflow forecast repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
