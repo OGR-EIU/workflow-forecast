@@ -374,7 +374,7 @@ object ForecastInitializer : BuildType({
         text("workflow.dependencies.workflow-forecast.commitish", "HEAD", label = "Workflow forecast commit", description = "Commitish (SHA, tag, branch, ...) of the Workflow forecast repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.WORKFLOW_FORECAST_REPO", "workflow-forecast", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        text("workflow.dependencies.model-infra.commitish", "HEAD", label = "Model infrastructure commit", description = "Commitish (SHA, tag, branch, ...) of the Model infrastructure repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text("workflow.dependencies.model-infra.commitish", "HEAD", label = "Model Infrastructure version", description = "Commitish (SHA, tag, branch, ...) of the Model infrastructure repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.amodel.commitish", "HEAD", label = "Model version", description = "Commitish (SHA, tag, branch, ...) of the selected model repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.MODEL_INFRA_REPO", "model-infra", display = ParameterDisplay.HIDDEN, allowEmpty = true)
     }
