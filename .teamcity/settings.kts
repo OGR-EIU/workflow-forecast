@@ -378,7 +378,6 @@ object ForecastInitializer : BuildType({
         text("workflow.dependencies.toolset.commit", "HEAD", label = "Toolset commit", description = "Commit id of the Toolset repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.workflow-forecast.commit", "HEAD", label = "Workflow forecast commit", description = "Commit id of the Workflow forecast repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.MODEL_INFRA_REPO", "model-infra", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        text("workflow.dependencies.model-ea.tag", "", label = "Model EA tag", description = "Tag id of the Model EA repo, if assigned, commit id will be ignored", display = ParameterDisplay.PROMPT, allowEmpty = true)
     }
 
     vcs {
