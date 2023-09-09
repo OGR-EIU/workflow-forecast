@@ -367,8 +367,8 @@ object ForecastInitializer : BuildType({
         text("workflow.aforecast.snapshot-time", "", label = "Snapshot time", description = "Snapshot time of the series requested from the data warehouse formatted as YYYY-MM-DDThh:mm:ssZ. Current datetime is used if not specified.", display = ParameterDisplay.PROMPT,
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ssZ")
         text("env.CI_AUTHOR", "Production workflow", display = ParameterDisplay.HIDDEN, allowEmpty = true)
+        text("workflow.dependencies.data-warehouse-client.commitish", "HEAD", label = "Data Warehouse Client version", description = "Commitish (SHA, tag, branch, ...) of the Data Warehouse Client repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.TOOLSET_REPO", "toolset", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        text("workflow.dependencies.data-warehouse-client.commit", "HEAD", label = "Data Warehouse Client commit", description = "Commit id of the Data Warehouse Client repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.WORKFLOW_FORECAST_REPO", "workflow-forecast", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.amodel.commitish", "HEAD", label = "Model version", description = "Commitish (SHA, tag, branch, ...) of the selected model repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
