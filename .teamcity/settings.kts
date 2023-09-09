@@ -409,7 +409,7 @@ object ForecastInitializer : BuildType({
                 toolset_commitish=%workflow.dependencies.toolset.commit%
                 model_infra_commitish=%workflow.dependencies.model-infra.commit%
                 
-                model_repo=%env.MODEL_REPO%
+                model=%env.MODEL_REPO%
                 model_commitish=%workflow.dependencies.amodel.commitish%
                 
                 
@@ -443,7 +443,7 @@ object ForecastInitializer : BuildType({
                 git log -n 1
                 cd ..
                 
-                cd ${'$'}model_repo
+                cd ${'$'}model
                 git checkout ${'$'}model_commitish
                 cd ..
             """.trimIndent()
