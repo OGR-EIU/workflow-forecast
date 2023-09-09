@@ -403,11 +403,11 @@ object ForecastInitializer : BuildType({
             scriptContent = """
                 #!/bin/bash
                 
-                data_warehouse_client_commitish=%workflow.dependencies.data-warehouse-client.commit%
-                iris_toolbox_commitish=%workflow.dependencies.iris-toolbox.commit%
-                workflow_forecast_commitish=%workflow.dependencies.workflow-forecast.commit%
-                toolset_commitish=%workflow.dependencies.toolset.commit%
-                model_infra_commitish=%workflow.dependencies.model-infra.commit%
+                data_warehouse_client_commitish=%workflow.dependencies.data-warehouse-client.commitish%%
+                iris_toolbox_commitish=%workflow.dependencies.iris-toolbox.commitish%
+                workflow_forecast_commitish=%workflow.dependencies.workflow-forecast.commitish%
+                toolset_commitish=%workflow.dependencies.toolset.commitish%
+                model_infra_commitish=%workflow.dependencies.model-infra.commitish%
                 
                 model=%env.MODEL_REPO%
                 model_commitish=%workflow.dependencies.amodel.commitish%
