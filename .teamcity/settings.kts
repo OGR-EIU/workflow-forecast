@@ -354,6 +354,7 @@ object ForecastInitializer : BuildType({
         workflow-forecast/artifact => %workflow.output.forecast-branch-name%.zip
         build-params.json
     """.trimIndent()
+    publishArtifacts = PublishMode.SUCCESSFUL
 
     params {
         select("workflow.aforecast.model", "", label = "Model", description = "Model to run", display = ParameterDisplay.PROMPT,
