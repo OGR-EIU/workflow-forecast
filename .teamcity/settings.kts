@@ -415,6 +415,8 @@ object ForecastInitializer : BuildType({
                 
                 cd data-warehouse-client
                 git checkout ${'$'}data_warehouse_client_commitish
+                pwd
+                git log -n 1
                 cd ..
                 
                 cd iris-toolbox
@@ -423,14 +425,20 @@ object ForecastInitializer : BuildType({
                 
                 cd workflow-forecast
                 git checkout ${'$'}workflow_forecast_commitish
+                pwd
+                git log -n 1
                 cd ..
                 
                 cd toolset
                 git checkout ${'$'}toolset_commitish
+                pwd
+                git log -n 1
                 cd ..
                 
                 cd model-infra
                 git checkout ${'$'}model_infra_commitish
+                pwd
+                git log -n 1
                 cd ..
                 
                 cd ${'$'}model_repo
