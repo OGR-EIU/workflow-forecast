@@ -351,9 +351,8 @@ object ForecastInitializer : BuildType({
     name = "Forecast initializer"
 
     artifactRules = """
-        build-params.json
-        workflow-forecast/artifact => artifact.zip
         workflow-forecast/artifact => %workflow.output.forecast-branch-name%.zip
+        build-params.json
     """.trimIndent()
 
     params {
