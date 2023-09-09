@@ -446,11 +446,11 @@ object ForecastInitializer : BuildType({
             scriptContent = """
                 #!/bin/bash
                 
-                if [ "%workflow.forecast.snapshot-time%" == "" ]; then
+                if [ "%workflow.aforecast.snapshot-time%" == "" ]; then
                   timestamp="${'$'}(date -uIseconds)"
                   timestamp="${'$'}{timestamp/+00:00/}Z"
                 else
-                  timestamp=%workflow.forecast.snapshot-time%
+                  timestamp=%workflow.aforecast.snapshot-time%
                 fi
                 
                 forecast_branch_name="forecast-%workflow.aforecast.model%-${'$'}timestamp"
