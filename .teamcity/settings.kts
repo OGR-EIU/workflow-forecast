@@ -419,8 +419,12 @@ object ForecastInitializer : BuildType({
                 tag_model_cz="%workflow.dependencies.model-cz.tag%"
                 tag_model_ea="%workflow.dependencies.model-ea.tag%"
                 tag_model_us="%workflow.dependencies.model-us.tag%"
+                model_folder=%env.MODEL_REPO%
                 
                 echo /////////////////////////////////////////////
+                cd ${'$'}model_folder
+                pwd
+                cd ..
                 echo /////////////////////////////////////////////
                 
                 cd data-warehouse-client
