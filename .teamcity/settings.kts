@@ -353,6 +353,7 @@ object ForecastInitializer : BuildType({
     artifactRules = """
         build-params.json
         workflow-forecast/artifact => artifact.zip
+        workflow-forecast/artifact => %workflow.output.forecast-branch-name%.zip
     """.trimIndent()
 
     params {
@@ -373,8 +374,8 @@ object ForecastInitializer : BuildType({
         text("env.TOOLSET_REPO", "toolset", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.workflow-forecast.commitish", "HEAD", label = "Workflow version", description = "Commitish (SHA, tag, branch, ...) of the Workflow forecast repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.WORKFLOW_FORECAST_REPO", "workflow-forecast", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.model-infra.commitish", "HEAD", label = "Model Infrastructure version", description = "Commitish (SHA, tag, branch, ...) of the Model infrastructure repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.dependencies.amodel.commitish", "HEAD", label = "Model version", description = "Commitish (SHA, tag, branch, ...) of the selected model repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.MODEL_INFRA_REPO", "model-infra", display = ParameterDisplay.HIDDEN, allowEmpty = true)
     }
