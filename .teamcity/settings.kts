@@ -368,7 +368,6 @@ object ForecastInitializer : BuildType({
               regex = """(^${'$'}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)""", validationMessage = "Should be empty or datetime formatted as YYYY-MM-DDThh:mm:ssZ")
         text("env.CI_AUTHOR", "Production workflow", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("env.TOOLSET_REPO", "toolset", display = ParameterDisplay.HIDDEN, allowEmpty = true)
-        text("workflow.dependencies.model-us.commit", "HEAD", label = "Model US commit", description = "Commit id of the Model US repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("workflow.dependencies.data-warehouse-client.commit", "HEAD", label = "Data Warehouse Client commit", description = "Commit id of the Data Warehouse Client repo", display = ParameterDisplay.PROMPT, allowEmpty = false)
         text("env.WORKFLOW_FORECAST_REPO", "workflow-forecast", display = ParameterDisplay.HIDDEN, allowEmpty = true)
         text("workflow.output.forecast-branch-name", "", display = ParameterDisplay.HIDDEN, allowEmpty = true)
