@@ -1,4 +1,4 @@
-%%%
+%%%%
 function [plan2, mdb2, jdb] = apply_new_judgment(model, plan1, mdb1, dates)
 
     %(
