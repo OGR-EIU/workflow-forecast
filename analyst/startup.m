@@ -12,6 +12,8 @@ iris.startup("silent", true);
 
 config = jsondecode(fileread("config.json"));
 
+forecast_id = string(config.forecast_branch_name);
+
 env_paths = struct();
 env_paths.this_dir = fileparts(mfilename("fullpath"));
 env_paths.model_dir = fullfile(env_paths.this_dir, config.model);
@@ -40,6 +42,7 @@ setappdata(0, "model", model);
 setappdata(0, "params", params);
 setappdata(0, "dates", dates);
 setappdata(0, "timestamp", string(config.timestamp));
+setappdata(0, "forecast_id", forecast_id);
 
 echo off
 
