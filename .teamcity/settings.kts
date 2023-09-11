@@ -801,7 +801,6 @@ object ForecastRunner : BuildType({
         }
         python {
             name = "Report step: Load settings"
-            enabled = false
             workingDir = "workflow-forecast/report"
             command = file {
                 filename = "create_input.py"
