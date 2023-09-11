@@ -636,6 +636,7 @@ object ForecastRunner : BuildType({
     name = "Forecast runner"
 
     artifactRules = """
+        report-forecast/results/forecast-*.html
         build-params.json
         output-data.json
         report-forecast/results/report-forecast.bundle.html
