@@ -639,8 +639,6 @@ object ForecastRunner : BuildType({
         report-forecast/results/forecast-*.html
         build-params.json
         output-data.json
-        report-forecast/results/report-forecast.bundle.html
-        workflow-forecast/report/adjusted-input-cfg.json
     """.trimIndent()
 
     params {
