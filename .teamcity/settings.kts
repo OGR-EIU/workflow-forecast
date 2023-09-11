@@ -767,7 +767,13 @@ object ForecastRunner : BuildType({
         }
         script {
             name = "Forecast step: Run forecast"
-            scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
+            scriptContent = """
+                cp ./workflow-forecast/artifact/config.json ./
+                cp ./workflow-forecast/analyst/run_forecast.m ./
+                cp ./workflow-forecast/analyst/apply_new_judgment.m ./cp
+                cp ./workflow-forecast/analyst/startup.m ./
+                matlab -nodisplay -nodesktop -nosplash -batch run_forecast
+            """.trimIndent()
         }
         python {
             name = "Forecast step: Check forecast"
