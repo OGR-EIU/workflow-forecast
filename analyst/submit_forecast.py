@@ -39,7 +39,7 @@ for file_name in _ANALYST_FILES:
     subprocess.run(["git", "add", file_name, ], cwd=_ANALYST_DIR, )
 
 subprocess.run(["git", "status"], cwd=_WORKFLOW_FORECAST_DIR, )
-subprocess.run(["git", "commit", "-m", "Submitting forecast", ], cwd=_WORKFLOW_FORECAST_DIR, )
+subprocess.run(["git", "commit", "-m", "FOR REVIEW", ], cwd=_WORKFLOW_FORECAST_DIR, )
 subprocess.run(["git", "push", "origin", branch_to_push, ], cwd=_WORKFLOW_FORECAST_DIR, )
 
 
