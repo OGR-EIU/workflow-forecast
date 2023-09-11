@@ -828,7 +828,8 @@ object ForecastRunner : BuildType({
                 matlab -nodisplay -nodesktop -nosplash -batch "%matlab.code.report%"
                 cd ../workflow-forecast
                 forecast_branch_name=${'$'}(git branch --show-current)
-                cd ../report-forecast
+                cd ../report-forecast/results
+                cp report-forecast.bundle.html ${'$'}forecast_branch_name.html
             """.trimIndent()
         }
         python {
