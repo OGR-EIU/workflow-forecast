@@ -817,6 +817,7 @@ object ForecastRunner : BuildType({
         }
         script {
             name = "Report step: Generate report"
+            enabled = false
             workingDir = "report-forecast"
             scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.report%"; exit ${'$'}?"""
         }
