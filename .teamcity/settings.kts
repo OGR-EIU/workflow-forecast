@@ -636,10 +636,9 @@ object ForecastRunner : BuildType({
     name = "Forecast runner"
 
     artifactRules = """
+        report-forecast/results/forecast-*.html
         build-params.json
         output-data.json
-        report-forecast/results/report-forecast.bundle.html
-        workflow-forecast/report/adjusted-input-cfg.json
     """.trimIndent()
 
     params {
@@ -824,7 +823,13 @@ object ForecastRunner : BuildType({
         script {
             name = "Report step: Generate report"
             workingDir = "report-forecast"
-            scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.report%"; exit ${'$'}?"""
+            scriptContent = """
+                matlab -nodisplay -nodesktop -nosplash -batch "%matlab.code.report%"
+                cd ../workflow-forecast
+                forecast_branch_name=${'$'}(git branch --show-current)
+                cd ../report-forecast/results
+                cp report-forecast.bundle.html ${'$'}forecast_branch_name.html
+            """.trimIndent()
         }
         python {
             name = "Report step: Send email"
