@@ -28,7 +28,8 @@ function [plan2, mdb2, jdb] = apply_new_judgment(model, plan1, mdb1, dates)
 
     %==================================================================
 
-    res_over.res_rgdp_gap(qq(2024,1)) = 0.0555;
+    res_over.res_rgdp_gap(qq(2024,1)) = 0.1;
+    res_over.res_roc_pgdp(qq(2024,3)) = -0.1;
 
     %==================================================================
 
