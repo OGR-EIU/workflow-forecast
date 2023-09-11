@@ -1,6 +1,9 @@
 
 function [plan2, mdb2, jdb] = apply_new_judgment(model, plan1, mdb1, dates)
 
+    % Specify judgmental adjustments between the "START JUDGMENT HERE" and
+    % "END JUDGMENT HERE" lines.
+
     %(
     plan2 = plan1;
     mdb2 = mdb1;
@@ -26,10 +29,19 @@ function [plan2, mdb2, jdb] = apply_new_judgment(model, plan1, mdb1, dates)
     end
     %)
 
-    %==================================================================
+    % START JUDGMENT HERE =============================================
+    %
+    % Use `res_over` for the values of residuals
+    %
+    % Use `res_addon` for additive adjustments to residuals
+    %
+    % Use a combination of (`var_exog`, `res_endog`) for exogenizing a
+    % variable and endogenizing a residual
+    %
 
 
-    %==================================================================
+
+    % END JUDGMENT HERE ===============================================
 
     %(
     res_addon = databank.clip(res_addon, dates.simulation_range);
