@@ -1,9 +1,9 @@
 {
-    "forecast_branch_name": "forecast-model-cz-2023-09-11T10-42-46Z",
-    "timestamp": "2023-09-11T10:42:46Z",
+    "forecast_branch_name": "forecast-model-cz-2023-09-11T12-25-39Z",
+    "timestamp": "2023-09-11T12:25:39Z",
     "model": "model-cz",
     "local-dependencies": {
-        "workflow-forecast": {"url": "git@github.com:OGR-EIU/workflow-forecast.git", "branch": "forecast-model-cz-2023-09-11T10-42-46Z-ANALYST", "commitish": null},
+        "workflow-forecast": {"url": "git@github.com:OGR-EIU/workflow-forecast.git", "branch": "forecast-model-cz-2023-09-11T12-25-39Z-ANALYST", "commitish": null},
         "end": null
     },
     "dependencies": {
