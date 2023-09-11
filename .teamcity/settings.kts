@@ -770,8 +770,11 @@ object ForecastRunner : BuildType({
             scriptContent = """
                 cp ./workflow-forecast/artifact/config.json ./
                 cp ./workflow-forecast/analyst/run_forecast.m ./
-                cp ./workflow-forecast/analyst/apply_new_judgment.m ./cp
+                cp ./workflow-forecast/analyst/apply_new_judgment.m ./
                 cp ./workflow-forecast/analyst/startup.m ./
+                echo ==============================================================
+                cat apply_new_judgment.m
+                echo ==============================================================
                 matlab -nodisplay -nodesktop -nosplash -batch run_forecast
             """.trimIndent()
         }
