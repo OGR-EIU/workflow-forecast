@@ -639,6 +639,7 @@ object ForecastRunner : BuildType({
         build-params.json
         output-data.json
         report-forecast/results/report-forecast.bundle.html
+        workflow-forecast/report/adjusted-input-cfg.json
     """.trimIndent()
 
     params {
@@ -731,6 +732,8 @@ object ForecastRunner : BuildType({
                 cd ../iris-toolbox
                 if [ ${'$'}iris_toolbox != "HEAD" ]; then git checkout ${'$'}iris_toolbox; fi
                 cd ../workflow-forecast
+                git branch
+                git log -n 1
                 if [ ${'$'}workflow_forecast != "HEAD" ]; then git checkout ${'$'}workflow_forecast; fi
                 cd ../toolset
                 if [ ${'$'}toolset != "HEAD" ]; then git checkout ${'$'}toolset; fi
@@ -765,7 +768,16 @@ object ForecastRunner : BuildType({
         }
         script {
             name = "Forecast step: Run forecast"
-            scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.forecast%"; exit ${'$'}?"""
+            scriptContent = """
+                cp ./workflow-forecast/artifact/config.json ./
+                cp ./workflow-forecast/analyst/run_forecast.m ./
+                cp ./workflow-forecast/analyst/apply_new_judgment.m ./
+                cp ./workflow-forecast/analyst/startup.m ./
+                echo ==============================================================
+                cat apply_new_judgment.m
+                echo ==============================================================
+                matlab -nodisplay -nodesktop -nosplash -batch run_forecast
+            """.trimIndent()
         }
         python {
             name = "Forecast step: Check forecast"
@@ -778,7 +790,7 @@ object ForecastRunner : BuildType({
             }
         }
         python {
-            name = "Forecast step: Submit daily data to data warehouse"
+            name = "Forecast step: Submit forecast data to data warehouse"
             workingDir = "data-warehouse-client"
             environment = venv {
                 requirementsFile = ""
@@ -789,11 +801,11 @@ object ForecastRunner : BuildType({
             }
         }
         python {
-            name = "Report step: Load settings"
+            name = "Report step: Create input data request"
             workingDir = "workflow-forecast/report"
             command = file {
                 filename = "create_input.py"
-                scriptArguments = """--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json --params-json '{"snapshot_time":"%workflow.config.timestamp%"}'"""
+                scriptArguments = "--config-path %workflow.config.country%-cfg-template.json --output-file adjusted-input-cfg.json"
             }
         }
         python {
