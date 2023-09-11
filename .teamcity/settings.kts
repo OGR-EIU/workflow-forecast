@@ -612,7 +612,7 @@ object ForecastMerger : BuildType({
 
     triggers {
         vcs {
-            triggerRules = "+:root=ExampleWorkflows_WorkflowForecast:/analyst/**;comment=FOR REVIEW:**"
+            triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
 
             branchFilter = "+:refs/heads/forecast-*Z-ANALYST"
         }
