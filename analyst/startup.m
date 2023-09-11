@@ -1,7 +1,16 @@
 
 restoredefaultpath();
-disp(mfilename("fullpath"));
-disp("Setting up forecast environment...");
+
+config = jsondecode(fileread("config.json"));
+forecast_id = string(config.forecast_branch_name);
+
+disp(" ")
+disp(" ")
+disp("==============================================================");
+disp("Setting up forecast environment for [" + forecast_id + "]");
+disp("Running " + mfilename("fullpath"));
+disp(" ")
+disp(" ")
 
 echo startup on
 
@@ -10,9 +19,6 @@ addpath(fullfile("toolset"), "-end");
 addpath(fullfile("model-infra"), "-end");
 iris.startup("silent", true);
 
-config = jsondecode(fileread("config.json"));
-
-forecast_id = string(config.forecast_branch_name);
 
 env_paths = struct();
 env_paths.this_dir = fileparts(mfilename("fullpath"));
@@ -45,4 +51,11 @@ setappdata(0, "timestamp", string(config.timestamp));
 setappdata(0, "forecast_id", forecast_id);
 
 echo off
+
+disp(" ")
+disp(" ")
+disp("==============================================================");
+disp("Forecast environment ready for [" + forecast_id + "]");
+disp(" ")
+disp(" ")
 
