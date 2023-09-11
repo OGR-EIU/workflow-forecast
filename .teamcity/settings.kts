@@ -824,7 +824,12 @@ object ForecastRunner : BuildType({
         script {
             name = "Report step: Generate report"
             workingDir = "report-forecast"
-            scriptContent = """matlab -nodisplay -nodesktop -nosplash -r "%matlab.code.report%"; exit ${'$'}?"""
+            scriptContent = """
+                matlab -nodisplay -nodesktop -nosplash -batch "%matlab.code.report%"
+                cd ../workflow-forecast
+                forecast_branch_name=${'$'}(git branch --show-current)
+                cd ../report-forecast
+            """.trimIndent()
         }
         python {
             name = "Report step: Send email"
