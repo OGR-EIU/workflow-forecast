@@ -790,7 +790,6 @@ object ForecastRunner : BuildType({
         }
         python {
             name = "Forecast step: Submit daily data to data warehouse"
-            enabled = false
             workingDir = "data-warehouse-client"
             environment = venv {
                 requirementsFile = ""
