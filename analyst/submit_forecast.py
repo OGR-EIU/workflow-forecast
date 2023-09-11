@@ -11,6 +11,7 @@ _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 _WORKFLOW_FORECAST_DIR = os.path.join(_THIS_DIR, "workflow-forecast", )
 _ANALYST_DIR = os.path.join(_WORKFLOW_FORECAST_DIR, "analyst", )
 
+
 _ANALYST_FILES = [
     "apply_new_judgment.m",
 ]

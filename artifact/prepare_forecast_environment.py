@@ -10,7 +10,6 @@ import argparse
 
 
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__), )
-_MODEL_DIR = os.path.join(_THIS_DIR, "model", )
 _WORKFLOW_FORECAST_DIR = os.path.join(_THIS_DIR, "workflow-forecast", )
 _ANALYST_DIR = os.path.join(_WORKFLOW_FORECAST_DIR, "analyst", )
 
@@ -115,7 +114,12 @@ if __name__ == "__main__":
         if folder and dep:
             _install_dependency(folder, dep, args.pat, )
 
-    request_path = os.path.join(_MODEL_DIR, "requests", "input-data-request.json", )
+    request_path = os.path.join(
+        _THIS_DIR,
+        config["model"],
+        "requests",
+        "input-data-request.json",
+    )
     with open(request_path, "r") as f:
         request = json.load(f)
 
