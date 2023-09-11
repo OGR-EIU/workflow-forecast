@@ -612,7 +612,10 @@ object ForecastMerger : BuildType({
 
     triggers {
         vcs {
-            triggerRules = "+:root=${DslContext.settingsRoot.id}:/analyst/**"
+            triggerRules = """
+                +:root=${DslContext.settingsRoot.id}:/analyst/**
+                -:comment=FOR REVIEW:**
+            """.trimIndent()
 
             branchFilter = "+:refs/heads/forecast-*Z-ANALYST"
         }
