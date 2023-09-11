@@ -810,7 +810,6 @@ object ForecastRunner : BuildType({
         }
         python {
             name = "Report step: Request data from data warehouse"
-            enabled = false
             workingDir = "data-warehouse-client"
             pythonVersion = customPython {
                 executable = "/usr/bin/python3.11"
