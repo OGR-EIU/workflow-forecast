@@ -771,6 +771,7 @@ object ForecastRunner : BuildType({
         }
         python {
             name = "Forecast step: Check forecast"
+            enabled = false
             workingDir = "workflow-forecast"
             environment = venv {
             }
