@@ -731,6 +731,7 @@ object ForecastRunner : BuildType({
                 cd ../iris-toolbox
                 if [ ${'$'}iris_toolbox != "HEAD" ]; then git checkout ${'$'}iris_toolbox; fi
                 cd ../workflow-forecast
+                git log -n 1
                 if [ ${'$'}workflow_forecast != "HEAD" ]; then git checkout ${'$'}workflow_forecast; fi
                 cd ../toolset
                 if [ ${'$'}toolset != "HEAD" ]; then git checkout ${'$'}toolset; fi
