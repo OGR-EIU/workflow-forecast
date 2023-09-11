@@ -3,21 +3,15 @@ import argparse
 from datetime import datetime
 
 
-def process_settings(config_path, output_file, params={}):
+def process_settings(config_path, output_file, params):
     # load json file with settings
     with open(config_path) as f:
         settings = json.load(f)
 
     # go through each item in the request list
-    for i in range(len(settings['json_request'])):
-
+    for s in settings['json_request']:
         for key in params:
-            settings['json_request'][i][key] = params[key]
-
-        # automatic value replacements
-        if 'snapshot_time' in settings['json_request'][i] \
-            and not settings['json_request'][i]['snapshot_time']:
-            settings['json_request'][i]['snapshot_time'] = datetime.utcnow().isoformat(timespec='milliseconds') + 'Z'
+            s[key] = params[key]
 
     print(f'Processed forecast report settings:')
     print(json.dumps(settings, indent=2))
@@ -36,4 +30,7 @@ if __name__ == '__main__':
     if args.output_file is None:
         args.output_file = f'adjusted-{args.config_path}'
     params = json.loads(args.params_json)
-    process_settings(args.config_path, args.output_file, params=params)
+    default_snapshot_time = datetime.utcnow().isoformat(timespec='milliseconds') + "Z"
+    if "snapshot_time" not in params:
+        params["snapshot_time"] = default_snapshot_time
+    process_settings(args.config_path, args.output_file, params)
