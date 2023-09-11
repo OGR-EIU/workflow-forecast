@@ -600,8 +600,8 @@ object ForecastMerger : BuildType({
                 
                 gh auth login --with-token <<< %gh.token%
                 gh pr create \
-                --title "Merging ${'$'}input_branch_name" \
-                --body "Merging ${'$'}input_branch_name to ${'$'}output_branch_name" \
+                --title "Requesting forecast review ${'$'}input_branch_name" \
+                --body "Review the forecast and accept by merging ${'$'}input_branch_name to ${'$'}output_branch_name" \
                 --base ${'$'}output_branch_name \
                 --head ${'$'}input_branch_name \
                 --assignee nul0m \
