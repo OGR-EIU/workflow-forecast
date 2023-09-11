@@ -1,4 +1,4 @@
-
+%%%%
 function [plan2, mdb2, jdb] = apply_new_judgment(model, plan1, mdb1, dates)
 
     %(
@@ -28,6 +28,8 @@ function [plan2, mdb2, jdb] = apply_new_judgment(model, plan1, mdb1, dates)
 
     %==================================================================
 
+    var_exog.rocy_rgdp(qq(2024,1:4)) = 1.01;
+    res_endog.res_rgdp_gap(qq(2024,1:4)) = true;
 
     %==================================================================
 
